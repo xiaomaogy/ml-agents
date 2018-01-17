@@ -1,0 +1,123 @@
+fileFormatVersion: 2
+guid: 599b585debbb441fcac25010687e0d17
+timeCreated: 1511324803
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    400000: //RootNode
+    2100000: swatch
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: BABY ROSCOE grumpy.024
+    7400000: BABY ROSCOE grumpy.024|4 - Walking.002
+    7400002: BABY ROSCOE grumpy.024|4 - Walking.003
+    7400004: BABY ROSCOE grumpy.024|4 - Walking.004
+    7400006: BABY ROSCOE grumpy.024|4 - Walking.005
+    7400008: BABY ROSCOE grumpy.024|4 - Walking.006
+    7400010: BABY ROSCOE grumpy.024|4 - Walking.007
+    7400012: BABY ROSCOE grumpy.024|4 - Walking.008
+    7400014: BABY ROSCOE grumpy.024|4 - Walking.009
+    7400016: BABY ROSCOE grumpy.024|4 - Walking.011
+    7400018: BABY ROSCOE grumpy.024|4 - Walking.012
+    7400020: BABY ROSCOE grumpy.024|4 - Walking.013
+    7400022: BABY ROSCOE grumpy.024|4 - Walking.014
+    7400024: BABY ROSCOE grumpy.024|4 - Walking.015
+    7400026: BABY ROSCOE grumpy.024|4 - Walking.016
+    7400028: BABY ROSCOE grumpy.024|4 - Walking.017
+    7400030: BABY ROSCOE grumpy.024|4 - Walking.021
+    7400032: BABY ROSCOE grumpy.024|4 - Walking.026
+    7400034: BABY ROSCOE grumpy.024|4 - Walking.028
+    7400036: BABY ROSCOE grumpy.024|4 - Walking.029
+    7400038: BABY ROSCOE grumpy.024|4 - Walking.030
+    7400040: BABY ROSCOE grumpy.024|4 - Walking.031
+    7400042: BABY ROSCOE grumpy.024|4 - Walking.032
+    7400044: BABY ROSCOE grumpy.024|4 - Walking.033
+    7400046: BABY ROSCOE grumpy.024|4 - Walking.034
+    7400048: BABY ROSCOE grumpy.024|4 - Walking.035
+    7400050: BABY ROSCOE grumpy.024|4 - Walking.041
+    7400052: BABY ROSCOE grumpy.024|Action
+    7400054: BABY ROSCOE grumpy.024|raccoon clock eyes
+    7400056: BABY ROSCOE grumpy.024|raccoon clock tail
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
