@@ -16,7 +16,7 @@ public class PushAgentBasic : Agent
     public GameObject block; 
 	[HideInInspector]
 	public GoalDetect goalDetect; //this script detects when the block touches the goal
-	public LayerMask groundLayer; //layer the ground is on. used for raycasts to detect when we've fallen off the edge of the platform. If we fall off we will penalize the agent
+	// public LayerMask groundLayer; //layer the ground is on. used for raycasts to detect when we've fallen off the edge of the platform. If we fall off we will penalize the agent
 	[HideInInspector]
 	public Rigidbody blockRB;  //set on initialization
 	[HideInInspector]
@@ -209,7 +209,8 @@ public class PushAgentBasic : Agent
         MoveAgent(act); //perform agent actions
 		reward -= .001f; // don't waste time
 		bool fail = false;  // did the agent or block get pushed off the edge?
-		if (!Physics.Raycast(agentRB.position, Vector3.down, 3, groundLayer)) //if the agent has gone over the edge, we done.
+		// if (!Physics.Raycast(agentRB.position, Vector3.down, 3, groundLayer)) //if the agent has gone over the edge, we done.
+		if (!Physics.Raycast(agentRB.position, Vector3.down, 3)) //if the agent has gone over the edge, we done.
 		{
 			fail = true; //fell off bro
 			reward -= 1f; // BAD AGENT
@@ -218,7 +219,8 @@ public class PushAgentBasic : Agent
 
 		}
 
-		if (!Physics.Raycast(blockRB.position, Vector3.down, 3, groundLayer)) //if the block has gone over the edge, we done.
+		// if (!Physics.Raycast(blockRB.position, Vector3.down, 3, groundLayer)) //if the block has gone over the edge, we done.
+		if (!Physics.Raycast(blockRB.position, Vector3.down, 3)) //if the block has gone over the edge, we done.
 		{
 			fail = true; //fell off bro
 			reward -= 1f; // BAD AGENT
