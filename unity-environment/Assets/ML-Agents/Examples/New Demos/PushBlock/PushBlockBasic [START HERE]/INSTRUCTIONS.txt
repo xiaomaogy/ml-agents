@@ -1,0 +1,43 @@
+INSTRUCTIONS
+
+
+Did you already import the TFSharp Plugin? If not you can find it here:
+https://s3.amazonaws.com/unity-agents/0.2/TFSharpPlugin.unitypackage
+
+
+See It Working
+1. After the TFSharp plugin is installed, from the editor select the Brain
+2. Choose BrainType>Internal
+3. Drag the PushBlockBasic tensorflow trained model into the Graph Model box
+4. Click the play button.
+*You should be seeing agents moving around now* 
+5. Click the play button again to stop the scene.
+
+
+How to train this scene:
+1. Select the brain
+2. Choose BrainType>External
+3. Click File>Build Settings
+4. In the Build Settings windows click "Add Open Scenes"
+5. Uncheck any other scenes in the Build Settings scene list. We just want the PushBlockBasic scene.
+6. Select the correct Target Platform. I'm training on a Mac so I choose Mac OS X.
+7. Click Build & save the file in the python directory in the cloned repo.
+8. You now have a built application of PushBlockBasic in your python directory. Time to train.
+9. Open a terminal/cmd prompt and browse to the python dir in this repo. You should see the app we just built.
+10. Run this command:
+
+python learn.py PushBlockBasic --train --max-steps=5e5 --summary-freq=500 --batch-size=4096 --buffer-size=8192 --time-horizon=64
+
+*A window should pop up with our scene. You should see the agents moving around*
+
+11. Watch the Mean Reward. Once it gets to ~ 0.90 you can press ctrl-c. A tensorflow model will be saved in the python>models>ppo folder. It will have the name of the app you built. Mine is called PushBlockBasic.
+12. Drag this trained model file into your unity project folder.
+13. Select the brain
+14. Choose BrainType>Internal
+15. Drag your trained model file into the Brain>Graph Model box.
+16. Click the play button.
+*You should be seeing agents moving around now* 
+17. Click the play button again to stop the scene.
+
+
+
