@@ -7382,6 +7382,11 @@ Prefab:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23478863231851590, guid: 317ffa03a48464f41be9cd13260f4912,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 00d852aac9443402984416f9dbcd22ea, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 317ffa03a48464f41be9cd13260f4912, type: 2}
   m_IsPrefabParent: 0
@@ -17561,6 +17566,7 @@ MonoBehaviour:
   blueBrainDefender: {fileID: 1661104744}
   blueBrainGoalie: {fileID: 1890643319}
   spawnAreaMarginMultiplier: 0.8
+  gravityMultiplier: 3
   maxAgentSteps: 1500
   agentRunSpeed: 3
   agentRotationSpeed: 20

@@ -82,7 +82,7 @@ public class AgentSoccer : Agent
 
   	public override List<float> CollectState()
     {
-		myState = area.playerStates[playerIndex].state; //states for all players are collected in the SoccerFieldArea script. we can pull this player's state by index
+		myState = area.playerStates[playerIndex].state; //states for all players are collected in the SoccerFieldArea script. we can pull this player's state by index. This will be useful when we are tracking other players
 		state.AddRange(myState);
 		return state;
 	}

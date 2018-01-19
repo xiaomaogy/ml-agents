@@ -11,6 +11,7 @@ public class SoccerAcademy : Academy {
     public Brain blueBrainDefender;
     public Brain blueBrainGoalie;
 	public float spawnAreaMarginMultiplier; //ex: .9 means 90% of spawn area will be used.... .1 margin will be left
+    public float gravityMultiplier = 1; //if ball looks floaty try adjusting this. it will be multiplied by gravity.  ex: 3 means gravity (-9.81) will be multiplied by 3 so gravity will be set to -29.43. 
 
 	public int maxAgentSteps; //max sim steps for agents. this is here so we only have to set it once and all agents can reference it
 
@@ -26,6 +27,11 @@ public class SoccerAcademy : Academy {
     public float goaliePunish; //if opponents score, goalie gets this neg reward (-1)
     public float goalieReward; //if team scores, goalie gets this reward (currently 0...no reward. can play with this later)
 
+    void Start()
+    {
+        Physics.gravity *= gravityMultiplier; //for soccer a multiplier of 3 looks good
+
+    }
 	public override void AcademyReset()
 	{
 	}
