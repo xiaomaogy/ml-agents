@@ -34,7 +34,8 @@ public class AgentSoccer : Agent
 		//we need to set up each player. most of this is unused right now but will be useful when we start collecting other player's states
         if(team == Team.red)
         {
-			brain = agentRole == AgentRole.striker? academy.redBrainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.redBrainGoalie;
+			// brain = agentRole == AgentRole.striker? academy.redBrainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.redBrainGoalie;
+			brain = agentRole == AgentRole.striker? academy.brainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.brainGoalie;
 			PlayerState playerState = new PlayerState();
 			playerState.teamFloat = 0;
 			teamFloat = 0;
@@ -54,7 +55,8 @@ public class AgentSoccer : Agent
         }
         else if(team == Team.blue)
         {
-			brain = agentRole == AgentRole.striker? academy.blueBrainStriker: agentRole == AgentRole.defender? academy.blueBrainDefender: academy.blueBrainGoalie;
+			// brain = agentRole == AgentRole.striker? academy.blueBrainStriker: agentRole == AgentRole.defender? academy.blueBrainDefender: academy.blueBrainGoalie;
+			brain = agentRole == AgentRole.striker? academy.brainStriker: agentRole == AgentRole.defender? academy.blueBrainDefender: academy.brainGoalie;
 			PlayerState playerState = new PlayerState();
 			playerState.teamFloat = 1;
 			teamFloat = 1;

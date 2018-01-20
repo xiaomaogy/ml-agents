@@ -14,7 +14,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/ML-Agents/Examples/Tennis/Tennis.unity
     guid: 25c0c9e81e55c4e129e1a5c0ac254100
-  - enabled: 1
-    path: Assets/ML-Agents/Examples/New Demos/PushBlock/PushArea Basic/Scenes/PushArea
-      Basic.unity
+  - enabled: 0
+    path: Assets/ML-Agents/Examples/New Demos/PushBlock/PushBlockBasic [START HERE]/Scenes
+      [OPEN THE SCENE IN THIS FOLDER]/PushBlockBasic.unity
     guid: ae8cc75939e3e4d07a79c8c6a08b54f4
+  - enabled: 1
+    path: Assets/ML-Agents/Examples/New Demos/Soccer/Scenes/SoccerFieldTesting.unity
+    guid: 2e5173b3e4c57483890465239e981965

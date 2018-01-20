@@ -6,6 +6,10 @@ TagManager:
   tags:
   - agent
   - iWall
+  - blueGoal
+  - redGoal
+  - ball
+  - wall
   layers:
   - Default
   - TransparentFX

@@ -18,22 +18,22 @@ public class SoccerBallController : MonoBehaviour {
 		rb = GetComponent<Rigidbody>();
 	}
 	
-	// // Update is called once per frame
-	// void Update () {
-	// 	// print (rb.velocity.sqrMagnitude);
+	// Update is called once per frame
+	void Update () {
+		// print (rb.velocity.sqrMagnitude);
 
-	// 	// if(rb.velocity.sqrMagnitude < .1f) //ball is almost completely stopped
-	// 	// {
-	// 	// 	if(area.canResetBall)
-	// 	// 	{
-	// 	// 		// area.AllPlayersDone(0);
-	// 	// 		// area.AllPlayersDone(-.1f);
-	// 	// 		// area.AllPlayersDone(-.5f);
-	// 	// 		area.ResetBall();
-	// 	// 	}
-	// 	// // reward = -1f; //lets see some hustle out there
-	// 	// }
-	// }
+		if(rb.velocity.sqrMagnitude < .1f) //ball is almost completely stopped
+		{
+			if(area.canResetBall)
+			{
+				// area.AllPlayersDone(0);
+				// area.AllPlayersDone(-.1f);
+				// area.AllPlayersDone(-.5f);
+				area.ResetBall();
+			}
+		// reward = -1f; //lets see some hustle out there
+		}
+	}
 
 	void OnCollisionEnter(Collision col)
 	{

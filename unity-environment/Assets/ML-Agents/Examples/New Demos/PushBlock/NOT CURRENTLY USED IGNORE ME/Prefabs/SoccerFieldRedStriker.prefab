@@ -74,11 +74,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4465621774671294}
   - component: {fileID: 33346221909216032}
-  - component: {fileID: 65243244935816306}
   - component: {fileID: 23678928065396626}
   - component: {fileID: 54959251192451078}
   - component: {fileID: 114724416599248044}
-  m_Layer: 12
+  - component: {fileID: 135381475523700082}
+  m_Layer: 0
   m_Name: Agent SoccerBlueDefender
   m_TagString: agent
   m_Icon: {fileID: 0}
@@ -235,12 +235,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4197306235652646}
   - component: {fileID: 33463581489962310}
-  - component: {fileID: 65412121998253400}
   - component: {fileID: 23116956450246092}
   - component: {fileID: 54397358371940578}
   - component: {fileID: 114044785445117724}
   - component: {fileID: 135295111020816368}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Agent  SoccerRed Striker
   m_TagString: agent
   m_Icon: {fileID: 0}
@@ -310,12 +309,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4594268675286338}
   - component: {fileID: 33573451869737756}
-  - component: {fileID: 65711397334502576}
   - component: {fileID: 23731813629241898}
   - component: {fileID: 54747193244141972}
   - component: {fileID: 114768492802684798}
-  - component: {fileID: 135937698260080608}
-  m_Layer: 12
+  - component: {fileID: 135667769553534630}
+  m_Layer: 0
   m_Name: Agent SoccerBlueGoalie
   m_TagString: agent
   m_Icon: {fileID: 0}
@@ -331,18 +329,17 @@ GameObject:
   m_Component:
   - component: {fileID: 4221421564281738}
   - component: {fileID: 33784981426101418}
-  - component: {fileID: 65043649034043474}
   - component: {fileID: 23028679382234268}
   - component: {fileID: 54114603016017162}
   - component: {fileID: 114601379059559114}
-  - component: {fileID: 135641280980236684}
-  m_Layer: 12
+  - component: {fileID: 135673639656828448}
+  m_Layer: 0
   m_Name: Agent SoccerBlueStriker
   m_TagString: agent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1379916634662274
 GameObject:
   m_ObjectHideFlags: 1
@@ -644,7 +641,7 @@ GameObject:
   - component: {fileID: 33557873704143720}
   - component: {fileID: 65601744816149604}
   - component: {fileID: 23521724714110158}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: SoccerField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -727,11 +724,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4366555924562020}
   - component: {fileID: 33355156751455242}
-  - component: {fileID: 65153639215645008}
   - component: {fileID: 23347009067055148}
   - component: {fileID: 54570500635118296}
   - component: {fileID: 114327029891951370}
-  m_Layer: 12
+  - component: {fileID: 135232495840152436}
+  m_Layer: 0
   m_Name: Agent  SoccerRed Defender
   m_TagString: agent
   m_Icon: {fileID: 0}
@@ -839,18 +836,17 @@ GameObject:
   m_Component:
   - component: {fileID: 4142177993665278}
   - component: {fileID: 33654072231855614}
-  - component: {fileID: 65432941506758410}
   - component: {fileID: 23705913328625780}
   - component: {fileID: 54118097322665256}
   - component: {fileID: 114865746161482246}
-  - component: {fileID: 135808408778537834}
-  m_Layer: 12
+  - component: {fileID: 135929577802700268}
+  m_Layer: 0
   m_Name: Agent  SoccerRed Goalie
   m_TagString: agent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1943068918438120
 GameObject:
   m_ObjectHideFlags: 1
@@ -1196,7 +1192,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1776486918322596}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -84}
+  m_LocalPosition: {x: 0, y: 0, z: 16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4144290336418264}
@@ -1512,7 +1508,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1116708502332348}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.41, y: 0.21, z: 0.00000025431316}
+  m_LocalPosition: {x: 0.425, y: 0.21, z: 0.00000025431316}
   m_LocalScale: {x: 0.123968005, y: 0.61491, z: 0.45344535}
   m_Children: []
   m_Father: {fileID: 4585187488497250}
@@ -2192,7 +2188,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: da4f326de5caf43e883d12f87d3898ff, type: 2}
+  - {fileID: 2100000, guid: 00d852aac9443402984416f9dbcd22ea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3319,7 +3315,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 15
   m_Drag: 2
-  m_AngularDrag: 0.1
+  m_AngularDrag: 0.5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -3334,7 +3330,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 15
   m_Drag: 2
-  m_AngularDrag: 0.1
+  m_AngularDrag: 0.5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -3364,7 +3360,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 15
   m_Drag: 2
-  m_AngularDrag: 0.1
+  m_AngularDrag: 0.5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -3394,7 +3390,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 15
   m_Drag: 2
-  m_AngularDrag: 0.1
+  m_AngularDrag: 0.5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -3409,7 +3405,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 15
   m_Drag: 2
-  m_AngularDrag: 0.1
+  m_AngularDrag: 0.5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -3424,7 +3420,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 15
   m_Drag: 2
-  m_AngularDrag: 0.1
+  m_AngularDrag: 0.5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -3442,18 +3438,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65043649034043474
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1369075232770364}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65102248637674640
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -3461,18 +3445,6 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1977888595761684}
   m_Material: {fileID: 13400000, guid: 4ed55169d81ee40a0a1f8be2420eba78, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65153639215645008
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1793213705277688}
-  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -3550,18 +3522,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65243244935816306
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1102680438897388}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65248193731765648
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -3616,30 +3576,6 @@ BoxCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1858472243346744}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65412121998253400
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1266003183656884}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65432941506758410
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1900751369067718}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 0
@@ -3727,18 +3663,6 @@ BoxCollider:
   m_Material: {fileID: 13400000, guid: 4ed55169d81ee40a0a1f8be2420eba78, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65711397334502576
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1363659144515966}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -3850,7 +3774,6 @@ MonoBehaviour:
   agentStoredAction: []
   memory: []
   id: 0
-  addOtherPlayerStates: 0
   team: 0
   agentRole: 0
   teamFloat: 0
@@ -3859,13 +3782,7 @@ MonoBehaviour:
   area: {fileID: 114640316302440940}
   agentRB: {fileID: 0}
   startingPos: {x: 0, y: 0, z: 0}
-  collectMyState: 0
-  collectMyTeamsState: 0
-  collectOtherTeamsState: 0
   myState: []
-  myTeamsState: []
-  otherTeamsState: []
-  stateToSubmitToBrain: []
 --- !u!114 &114118455071973044
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3960,7 +3877,6 @@ MonoBehaviour:
   agentStoredAction: []
   memory: []
   id: 0
-  addOtherPlayerStates: 0
   team: 0
   agentRole: 1
   teamFloat: 0
@@ -3969,13 +3885,7 @@ MonoBehaviour:
   area: {fileID: 114640316302440940}
   agentRB: {fileID: 0}
   startingPos: {x: 0, y: 0, z: 0}
-  collectMyState: 0
-  collectMyTeamsState: 0
-  collectOtherTeamsState: 0
   myState: []
-  myTeamsState: []
-  otherTeamsState: []
-  stateToSubmitToBrain: []
 --- !u!114 &114398379094138058
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3989,7 +3899,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   area: {fileID: 114640316302440940}
   lastTouchedBy: {fileID: 0}
-  wallTag: wall
   agentTag: agent
   redGoalTag: redGoal
   blueGoalTag: blueGoal
@@ -4017,7 +3926,6 @@ MonoBehaviour:
   agentStoredAction: []
   memory: []
   id: 0
-  addOtherPlayerStates: 0
   team: 1
   agentRole: 0
   teamFloat: 0
@@ -4026,13 +3934,7 @@ MonoBehaviour:
   area: {fileID: 114640316302440940}
   agentRB: {fileID: 0}
   startingPos: {x: 0, y: 0, z: 0}
-  collectMyState: 0
-  collectMyTeamsState: 0
-  collectOtherTeamsState: 0
   myState: []
-  myTeamsState: []
-  otherTeamsState: []
-  stateToSubmitToBrain: []
 --- !u!114 &114640316302440940
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4091,7 +3993,6 @@ MonoBehaviour:
   agentStoredAction: []
   memory: []
   id: 0
-  addOtherPlayerStates: 0
   team: 1
   agentRole: 1
   teamFloat: 0
@@ -4100,13 +4001,7 @@ MonoBehaviour:
   area: {fileID: 114640316302440940}
   agentRB: {fileID: 0}
   startingPos: {x: 0, y: 0, z: 0}
-  collectMyState: 0
-  collectMyTeamsState: 0
-  collectOtherTeamsState: 0
   myState: []
-  myTeamsState: []
-  otherTeamsState: []
-  stateToSubmitToBrain: []
 --- !u!114 &114768492802684798
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4131,7 +4026,6 @@ MonoBehaviour:
   agentStoredAction: []
   memory: []
   id: 0
-  addOtherPlayerStates: 0
   team: 1
   agentRole: 2
   teamFloat: 0
@@ -4140,13 +4034,7 @@ MonoBehaviour:
   area: {fileID: 114640316302440940}
   agentRB: {fileID: 0}
   startingPos: {x: 0, y: 0, z: 0}
-  collectMyState: 0
-  collectMyTeamsState: 0
-  collectOtherTeamsState: 0
   myState: []
-  myTeamsState: []
-  otherTeamsState: []
-  stateToSubmitToBrain: []
 --- !u!114 &114825911924394284
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4160,7 +4048,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   area: {fileID: 114640316302440940}
   lastTouchedBy: {fileID: 0}
-  wallTag: wall
   agentTag: agent
   redGoalTag: redGoal
   blueGoalTag: blueGoal
@@ -4188,7 +4075,6 @@ MonoBehaviour:
   agentStoredAction: []
   memory: []
   id: 0
-  addOtherPlayerStates: 0
   team: 0
   agentRole: 2
   teamFloat: 0
@@ -4197,13 +4083,7 @@ MonoBehaviour:
   area: {fileID: 114640316302440940}
   agentRB: {fileID: 0}
   startingPos: {x: 0, y: 0, z: 0}
-  collectMyState: 0
-  collectMyTeamsState: 0
-  collectOtherTeamsState: 0
   myState: []
-  myTeamsState: []
-  otherTeamsState: []
-  stateToSubmitToBrain: []
 --- !u!135 &135193574164507912
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -4215,6 +4095,18 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.11000001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &135232495840152436
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1793213705277688}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &135272001468938776
 SphereCollider:
@@ -4252,6 +4144,18 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &135381475523700082
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1102680438897388}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &135580969852171996
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -4264,7 +4168,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &135641280980236684
+--- !u!135 &135667769553534630
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1363659144515966}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &135673639656828448
 SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -4288,18 +4204,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &135808408778537834
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1900751369067718}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0.0000009536743, y: 0, z: 0}
 --- !u!135 &135845027375245492
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -4348,12 +4252,12 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &135937698260080608
+--- !u!135 &135929577802700268
 SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1363659144515966}
+  m_GameObject: {fileID: 1900751369067718}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1

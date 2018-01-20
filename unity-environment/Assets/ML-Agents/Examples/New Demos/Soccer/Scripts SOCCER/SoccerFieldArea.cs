@@ -273,13 +273,13 @@ public class SoccerFieldArea : MonoBehaviour {
 
         ps.state.Clear(); //instead of creating a new list each tick we will reuse this one
         // ps.state.Add(ps.playerID); //whoami 
-        // ps.state.Add(ps.teamFloat); //which team 
+        ps.state.Add(ps.teamFloat); //which team 
         // ps.state.Add(ps.agentRoleFloat);
         CollectVector3State(ps.state, ps.agentRB.velocity); //agent's vel
         CollectRotationState(ps.state, ps.agentRB.transform); //agent's rotation
         CollectVector3State(ps.state, playerPos); //dir from player to red goal
         CollectVector3State(ps.state, ballPos); //dir from player to red goal
-        CollectVector3State(ps.state, playerDirToBall); //dir from agent to ball
+        // CollectVector3State(ps.state, playerDirToBall); //dir from agent to ball
         CollectVector3State(ps.state, redGoalPosition);  //red goal abs position
         CollectVector3State(ps.state, blueGoalPosition); //blue goal abs position
         // CollectVector3State(ps.state, playerDirToTargetGoal); //dir from player to red goal

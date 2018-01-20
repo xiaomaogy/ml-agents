@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SoccerAcademy : Academy {
 
+    public Brain brainStriker;
+    public Brain brainGoalie;
     public Brain redBrainStriker;
     public Brain redBrainDefender;
     public Brain redBrainGoalie;
