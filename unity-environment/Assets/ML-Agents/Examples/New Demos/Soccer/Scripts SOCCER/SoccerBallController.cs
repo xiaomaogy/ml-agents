@@ -27,7 +27,7 @@ public class SoccerBallController : MonoBehaviour {
 			if(area.canResetBall)
 			{
 				// area.AllPlayersDone(0);
-				// area.AllPlayersDone(-.1f);
+				area.AllPlayersDone(-.1f);
 				// area.AllPlayersDone(-.5f);
 				area.ResetBall();
 			}
@@ -37,13 +37,13 @@ public class SoccerBallController : MonoBehaviour {
 
 	void OnCollisionEnter(Collision col)
 	{
-		// //who touched the ball last
-		if(col.gameObject.CompareTag(agentTag) && col.relativeVelocity.sqrMagnitude/1000 > 4)
-		{
-			lastTouchedBy = col.gameObject.GetComponent<AgentSoccer>();
-			lastTouchedBy.reward += .001f;//encourage touching the ball
-			// print("ball touched by " + lastTouchedBy.name);
-		}
+		// // //who touched the ball last
+		// if(col.gameObject.CompareTag(agentTag) && col.relativeVelocity.sqrMagnitude/1000 > 4)
+		// {
+		// 	lastTouchedBy = col.gameObject.GetComponent<AgentSoccer>();
+		// 	lastTouchedBy.reward += .001f;//encourage touching the ball
+		// 	// print("ball touched by " + lastTouchedBy.name);
+		// }
 
 		if(col.gameObject.CompareTag(redGoalTag)) //ball touched red goal
 		{

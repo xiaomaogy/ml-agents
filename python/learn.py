@@ -108,10 +108,14 @@ env = UnityEnvironment(file_name=env_name, worker_id=worker_id, curriculum=curri
 env.curriculum.set_lesson_number(lesson)
 print(str(env))
 
+
+
 tf.reset_default_graph()
 
 if not os.path.exists(model_path):
     os.makedirs(model_path)
+
+
 
 def get_progress():
     if curriculum_file is not None:
@@ -130,9 +134,18 @@ def get_progress():
     else:
         return None
 
+# reward_file_data = {}; #new data file
+
+# def create_reward_file():
+#   with open('reward_file.json', 'w') as outfile:  
+#     json.dump(reward_file_data, outfile)
+
+# create_reward_file(); # create a local file that will be read by unity
+
 try:
     with open("trainer_configurations.json") as data_file:
         trainer_configurations = json.load(data_file)
+
 except IOError:
     print("The file {0} could not be found. Will use default Hyperparameters".format("trainer_configurations.json"))
     trainer_configurations = {}
@@ -198,6 +211,10 @@ with tf.Session() as sess:
             for brain_name, trainer in trainers.items():
                 trainer.add_experiences(info, new_info, take_action_outputs[brain_name])
             info = new_info
+
+
+
+                
             for brain_name, trainer in trainers.items():
                 trainer.process_experiences(info)
                 if trainer.is_ready_update() and train_model:
@@ -205,6 +222,31 @@ with tf.Session() as sess:
                     trainer.update_model()
                 # Write training statistics to tensorboard.
                 trainer.write_summary(env.curriculum.lesson_number)
+                # trainer.write_reward_data()
+
+                
+
+
+
+
+
+            # reward_file_data = {}
+            # reward_file_data["rewardData"] = []
+            for brain_name, trainer in trainers.items():
+                trainer.write_reward_data()
+              # reward_file_data["rewardData"].append({brain_name, trainer.mean})
+
+            # write reward data to a file
+            # with open('currentRewardData.json', 'w') as outfile:  
+            #     json.dump(trainer)
+
+
+
+
+
+
+
+
                 if train_model:
                     global_step += 1
                     trainer.increment_step()

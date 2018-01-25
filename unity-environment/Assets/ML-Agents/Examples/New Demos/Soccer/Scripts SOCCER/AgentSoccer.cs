@@ -12,6 +12,7 @@ public class AgentSoccer : Agent
     {
         striker, defender, goalie
     }
+	// ReadRewardData readRewardData;
 	public Team team;
 	public AgentRole agentRole;
 	public float teamFloat;
@@ -29,13 +30,14 @@ public class AgentSoccer : Agent
     void Awake()
     {
 		academy = FindObjectOfType<SoccerAcademy>(); //get the academy
+		// readRewardData = FindObjectOfType<ReadRewardData>(); //get reward data script
 
 
 		//we need to set up each player. most of this is unused right now but will be useful when we start collecting other player's states
         if(team == Team.red)
         {
-			// brain = agentRole == AgentRole.striker? academy.redBrainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.redBrainGoalie;
-			brain = agentRole == AgentRole.striker? academy.brainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.brainGoalie;
+			brain = agentRole == AgentRole.striker? academy.redBrainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.redBrainGoalie;
+			// brain = agentRole == AgentRole.striker? academy.brainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.brainGoalie;
 			PlayerState playerState = new PlayerState();
 			playerState.teamFloat = 0;
 			teamFloat = 0;
@@ -55,8 +57,8 @@ public class AgentSoccer : Agent
         }
         else if(team == Team.blue)
         {
-			// brain = agentRole == AgentRole.striker? academy.blueBrainStriker: agentRole == AgentRole.defender? academy.blueBrainDefender: academy.blueBrainGoalie;
-			brain = agentRole == AgentRole.striker? academy.brainStriker: agentRole == AgentRole.defender? academy.blueBrainDefender: academy.brainGoalie;
+			brain = agentRole == AgentRole.striker? academy.blueBrainStriker: agentRole == AgentRole.defender? academy.blueBrainDefender: academy.blueBrainGoalie;
+			// brain = agentRole == AgentRole.striker? academy.brainStriker: agentRole == AgentRole.defender? academy.blueBrainDefender: academy.brainGoalie;
 			PlayerState playerState = new PlayerState();
 			playerState.teamFloat = 1;
 			teamFloat = 1;
@@ -106,7 +108,15 @@ public class AgentSoccer : Agent
 
 	public override void AgentStep(float[] act)
 	{
+		// print(readRewardData.currentMeanReward);
+		// reward -= .0005f; //hurry up
         MoveAgent(act); //perform agent actions
+		// print(brain.name);
+		// if(readRewardData.rewardDataDict.ContainsKey(brain.name) && readRewardData.rewardDataDict[brain.name].currentMeanReward > -.8)
+		// {
+
+		// 	// print("reward > .8");
+		// }
 	}
 
 	public override void AgentReset()

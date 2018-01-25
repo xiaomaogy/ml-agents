@@ -28,14 +28,24 @@ public class SoccerAcademy : Academy {
     public float defenderReward; //not currently used
     public float goaliePunish; //if opponents score, goalie gets this neg reward (-1)
     public float goalieReward; //if team scores, goalie gets this reward (currently 0...no reward. can play with this later)
+	ReadRewardData readRewardData;
+
+    public int currentLesson;
 
     void Start()
     {
         Physics.gravity *= gravityMultiplier; //for soccer a multiplier of 3 looks good
+	    readRewardData = FindObjectOfType<ReadRewardData>(); //get reward data script
 
     }
+
+    // void Update()
+    // {
+
+    // }
 	public override void AcademyReset()
 	{
+        currentLesson = (int)resetParameters["currentLesson"];
 	}
 
 	public override void AcademyStep()

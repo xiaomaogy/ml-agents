@@ -5,8 +5,11 @@ import os
 from trainers.buffer import *
 from trainers.ppo_models import *
 import logging
+import json
 logger = logging.getLogger("unityagents")
-
+# outFile = open('reward_file.json', 'w')
+reward_file_data = {}
+reward_file_data["rewardData"] = []
 
 
 class Trainer(object):
@@ -18,6 +21,8 @@ class Trainer(object):
         :param  trainer_parameters: The parameters for the trainer (dictionary).
         :param training: Whether the trainer is set for training.
         """
+        with open('currentRewardData.json', 'w') as outfile:  
+            json.dump({'brainName' : "", 'currentMeanReward' : -100}, outfile)
 
         self.use_recurrent = trainer_parameters["use_recurrent"]
         self.sequence_length = 1
@@ -159,7 +164,8 @@ class Trainer(object):
             else:
                 actions, a_dist, value, ent, learn_rate= self.sess.run(run_list, feed_dict=feed_dict)
                 memories = None
-        self.stats['value_estimate'].append(value)
+        # self.stats['value_estimate'].append(value)
+        self.stats['value_estimate'].append(value.mean())
         self.stats['entropy'].append(ent)
         self.stats['learning_rate'].append(learn_rate)
         return (actions, memories, value, (actions, epsi, a_dist, value))
@@ -305,6 +311,17 @@ class Trainer(object):
         self.stats['policy_loss'].append(total_p)
         self.training_buffer.reset_global()
 
+
+ 
+    def write_reward_data(self):
+        if self.get_step() % self.trainer_parameters['summary_freq'] == 0 and self.get_step() != 0 and self.is_training:
+            with open('currentRewardData.json', 'w') as outfile: 
+                # print(reward_file_data) 
+                json.dump(reward_file_data, outfile)
+                reward_file_data["rewardData"] = []
+
+        # reward_file_data = {}
+
     def write_summary(self, lesson_number):
         """
         Saves training statistics to Tensorboard.
@@ -314,12 +331,27 @@ class Trainer(object):
             steps = self.get_step()
             if len(self.stats['cumulative_reward']) > 0:
                 mean_reward = np.mean(self.stats['cumulative_reward'])
+                
+
+
+                # # write reward data to a file
+                # with open('currentRewardData.json', 'w') as outfile:  
+                #     json.dump({'brainName' : self.brain_name, 'currentMeanReward' : mean_reward}, outfile)
+
+                reward_file_data["rewardData"].append({'brainName' : self.brain_name, 'currentMeanReward' : mean_reward, 'currentStdDeviation' : np.std(self.stats['cumulative_reward'])})
+
+
+
                 print("{0} : Step: {1}. Mean Reward: {2}. Std of Reward: {3}."
                       .format(self.brain_name, steps, mean_reward, np.std(self.stats['cumulative_reward'])))
             summary = tf.Summary()
             for key in self.stats:
                 if len(self.stats[key]) > 0:
-                    stat_mean = float(np.mean(self.stats[key]))
+                    try:
+                        stat_mean = float(np.mean(self.stats[key]))
+                    except:
+                        print(self.stats[key])
+                        print(key)
                     summary.value.add(tag='Info/{}'.format(key), simple_value=stat_mean)
                     self.stats[key] = []
             summary.value.add(tag='Info/Lesson', simple_value=lesson_number)

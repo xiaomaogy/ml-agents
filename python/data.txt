@@ -1,0 +1,1 @@
+{"brain": "BrainSoccerStrikers", "mean_reward": -0.6608585656251403}

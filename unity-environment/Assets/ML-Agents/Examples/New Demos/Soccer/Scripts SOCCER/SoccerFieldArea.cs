@@ -24,6 +24,8 @@ public class SoccerFieldArea : MonoBehaviour {
     public GameObject blueGoal;
     public Material redScoredMaterial;
     public Material blueScoredMaterial;
+    public AgentSoccer redStriker;
+    public AgentSoccer blueStriker;
     public AgentSoccer redGoalie;
     public AgentSoccer blueGoalie;
     public GameObject ball;
@@ -89,7 +91,7 @@ public class SoccerFieldArea : MonoBehaviour {
     {
         foreach(PlayerState ps in playerStates)
         {
-            if(ps.agentScript.agentRole == AgentSoccer.AgentRole.striker || ps.agentScript.agentRole == AgentSoccer.AgentRole.defender)
+            if(ps.agentScript.gameObject.activeInHierarchy &&  ps.agentScript.agentRole == AgentSoccer.AgentRole.striker || ps.agentScript.agentRole == AgentSoccer.AgentRole.defender)
             {
                 if(reward != 0)
                 {
