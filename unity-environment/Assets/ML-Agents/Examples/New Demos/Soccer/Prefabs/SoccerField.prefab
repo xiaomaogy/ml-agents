@@ -249,7 +249,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1314028018972504
 GameObject:
   m_ObjectHideFlags: 1
@@ -831,7 +831,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1852622073977564
 GameObject:
   m_ObjectHideFlags: 1
@@ -946,8 +946,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1220988481813618}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0598353, y: 3.84, z: 0.47}
-  m_LocalScale: {x: 1.0692614, y: 7.888548, z: 0.095896}
+  m_LocalPosition: {x: -0.0598, y: 5.517, z: 0.47}
+  m_LocalScale: {x: 1.0692614, y: 11.129017, z: 0.09589609}
   m_Children: []
   m_Father: {fileID: 4294878885339032}
   m_RootOrder: 5
@@ -959,7 +959,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1815895732584180}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -36, y: 0, z: 96}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4965006585149804}
@@ -1001,8 +1001,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1607431387579654}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0598353, y: 3.84, z: -0.47658882}
-  m_LocalScale: {x: 1.0692611, y: 7.8885503, z: 0.09589552}
+  m_LocalPosition: {x: -0.0598, y: 5.517, z: -0.4766}
+  m_LocalScale: {x: 1.0692611, y: 11.129021, z: 0.09589561}
   m_Children: []
   m_Father: {fileID: 4294878885339032}
   m_RootOrder: 4
@@ -1079,8 +1079,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1852647467778858}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.6055463, y: 3.763122, z: -0.0067005157}
-  m_LocalScale: {x: 0.28493124, y: 8.011788, z: 1.0421532}
+  m_LocalPosition: {x: 0.6055463, y: 5.409, z: -0.0067005157}
+  m_LocalScale: {x: 0.28493124, y: 11.302882, z: 1.0421542}
   m_Children: []
   m_Father: {fileID: 4294878885339032}
   m_RootOrder: 2
@@ -1092,8 +1092,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1342453606479770}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.058, y: 10.12, z: -0.0030002594}
-  m_LocalScale: {x: 1.0692617, y: 5.2628765, z: 1.0163449}
+  m_LocalPosition: {x: -0.058, y: 11.75, z: -0.0030002594}
+  m_LocalScale: {x: 1.0692617, y: 2.0031295, z: 1.0163454}
   m_Children: []
   m_Father: {fileID: 4294878885339032}
   m_RootOrder: 3
@@ -1118,8 +1118,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1636701524727112}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0598353, y: 3.84, z: -0.47658882}
-  m_LocalScale: {x: 1.0692611, y: 7.8885503, z: 0.09589552}
+  m_LocalPosition: {x: -0.0598353, y: 5.467, z: -0.4766}
+  m_LocalScale: {x: 1.0692611, y: 11.032472, z: 0.095895566}
   m_Children: []
   m_Father: {fileID: 4923639907307952}
   m_RootOrder: 4
@@ -1363,8 +1363,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1650980693732244}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.058, y: 10.12, z: -0.0030002594}
-  m_LocalScale: {x: 1.0692617, y: 5.2628765, z: 1.0163449}
+  m_LocalPosition: {x: -0.058, y: 11.749, z: -0.0030002594}
+  m_LocalScale: {x: 1.0692617, y: 2, z: 1.0163454}
   m_Children: []
   m_Father: {fileID: 4923639907307952}
   m_RootOrder: 3
@@ -1415,8 +1415,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1614458754047812}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.6055463, y: 3.763122, z: -0.0067005157}
-  m_LocalScale: {x: 0.28493124, y: 8.011788, z: 1.0421532}
+  m_LocalPosition: {x: 0.6055463, y: 5.36, z: -0.0067005157}
+  m_LocalScale: {x: 0.28493124, y: 11.204825, z: 1.0421537}
   m_Children: []
   m_Father: {fileID: 4923639907307952}
   m_RootOrder: 2
@@ -1428,8 +1428,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1507509388604200}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0598353, y: 3.84, z: 0.47}
-  m_LocalScale: {x: 1.0692614, y: 7.888548, z: 0.095896}
+  m_LocalPosition: {x: -0.0598353, y: 5.467, z: 0.47}
+  m_LocalScale: {x: 1.0692614, y: 11.032469, z: 0.09589604}
   m_Children: []
   m_Father: {fileID: 4923639907307952}
   m_RootOrder: 5
@@ -1591,7 +1591,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1689741446328040}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.8894119, y: -0.73356485, z: 0.634552}
+  m_LocalPosition: {x: 1.2, y: -0.73356485, z: 0.634552}
   m_LocalScale: {x: 7.9560685, y: 7.956068, z: 7.956068}
   m_Children: []
   m_Father: {fileID: 4008400093827458}
@@ -4030,10 +4030,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efd705d0a5b1e405eb1869b7cbe47dda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  redGoal: {fileID: 1226120957320356}
-  blueGoal: {fileID: 1314028018972504}
-  redScoredMaterial: {fileID: 2100000, guid: 776dd8b57653342839c3fb5f46ce664e, type: 2}
-  blueScoredMaterial: {fileID: 2100000, guid: 260483cdfc6b14e26823a02f23bd8baa, type: 2}
+  redGoal: {fileID: 4923639907307952}
+  blueGoal: {fileID: 4294878885339032}
   redStriker: {fileID: 114083171953113286}
   blueStriker: {fileID: 114114461283197996}
   redGoalie: {fileID: 114344942504766676}
@@ -4042,8 +4040,6 @@ MonoBehaviour:
   ballRB: {fileID: 0}
   ground: {fileID: 1472291381025896}
   centerPitch: {fileID: 1811411153416516}
-  redPlayers: []
-  bluePlayers: []
   playerStates: []
   ballStartingPos: {x: 0, y: 0, z: 0}
   drawSpawnAreaGizmo: 0
@@ -4081,12 +4077,9 @@ MonoBehaviour:
   id: 0
   team: 0
   agentRole: 0
-  teamFloat: 0
-  playerID: 0
   playerIndex: 0
   area: {fileID: 114083027244644104}
   agentRB: {fileID: 0}
-  startingPos: {x: 0, y: 0, z: 0}
   myState: []
 --- !u!114 &114114461283197996
 MonoBehaviour:
@@ -4114,12 +4107,9 @@ MonoBehaviour:
   id: 0
   team: 1
   agentRole: 0
-  teamFloat: 0
-  playerID: 0
   playerIndex: 0
   area: {fileID: 114083027244644104}
   agentRB: {fileID: 0}
-  startingPos: {x: 0, y: 0, z: 0}
   myState: []
 --- !u!114 &114344942504766676
 MonoBehaviour:
@@ -4147,12 +4137,9 @@ MonoBehaviour:
   id: 0
   team: 0
   agentRole: 2
-  teamFloat: 0
-  playerID: 0
   playerIndex: 0
   area: {fileID: 114083027244644104}
   agentRB: {fileID: 0}
-  startingPos: {x: 0, y: 0, z: 0}
   myState: []
 --- !u!114 &114355690511006716
 MonoBehaviour:
@@ -4178,14 +4165,11 @@ MonoBehaviour:
   agentStoredAction: []
   memory: []
   id: 0
-  team: 1
+  team: 0
   agentRole: 2
-  teamFloat: 0
-  playerID: 0
   playerIndex: 0
   area: {fileID: 114083027244644104}
   agentRB: {fileID: 0}
-  startingPos: {x: 0, y: 0, z: 0}
   myState: []
 --- !u!114 &114539541003263014
 MonoBehaviour:
@@ -4227,14 +4211,11 @@ MonoBehaviour:
   agentStoredAction: []
   memory: []
   id: 0
-  team: 1
+  team: 0
   agentRole: 0
-  teamFloat: 0
-  playerID: 0
   playerIndex: 0
   area: {fileID: 114083027244644104}
   agentRB: {fileID: 0}
-  startingPos: {x: 0, y: 0, z: 0}
   myState: []
 --- !u!114 &114603987610111894
 MonoBehaviour:
@@ -4278,12 +4259,9 @@ MonoBehaviour:
   id: 0
   team: 0
   agentRole: 1
-  teamFloat: 0
-  playerID: 0
   playerIndex: 0
   area: {fileID: 114083027244644104}
   agentRB: {fileID: 0}
-  startingPos: {x: 0, y: 0, z: 0}
   myState: []
 --- !u!114 &114662517401143580
 MonoBehaviour:
@@ -4358,14 +4336,11 @@ MonoBehaviour:
   agentStoredAction: []
   memory: []
   id: 0
-  team: 1
+  team: 0
   agentRole: 1
-  teamFloat: 0
-  playerID: 0
   playerIndex: 0
   area: {fileID: 114083027244644104}
   agentRB: {fileID: 0}
-  startingPos: {x: 0, y: 0, z: 0}
   myState: []
 --- !u!135 &135041576504831760
 SphereCollider:

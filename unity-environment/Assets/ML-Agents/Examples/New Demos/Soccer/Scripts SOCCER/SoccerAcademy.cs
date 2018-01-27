@@ -12,8 +12,12 @@ public class SoccerAcademy : Academy {
     public Brain blueBrainStriker;
     public Brain blueBrainDefender;
     public Brain blueBrainGoalie;
+    public Material redMaterial;
+    public Material blueMaterial;
 	public float spawnAreaMarginMultiplier; //ex: .9 means 90% of spawn area will be used.... .1 margin will be left
     public float gravityMultiplier = 1; //if ball looks floaty try adjusting this. it will be multiplied by gravity.  ex: 3 means gravity (-9.81) will be multiplied by 3 so gravity will be set to -29.43. 
+    public bool randomizePlayersTeamForTraining = true; //randomly pick a player's team to generalize training. i.e.: an offensive player should know how to play for either team. This can be turned off after training
+    public bool randomizeFieldOrientationForTraining = true; //rotate the field after each goal to force a player to learn to find the goal wherever it is. This can be turned off after training
 
 	public int maxAgentSteps; //max sim steps for agents. this is here so we only have to set it once and all agents can reference it
 

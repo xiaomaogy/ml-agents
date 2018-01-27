@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AgentSoccer : Agent
 {
+
 	public enum Team
     {
         red, blue
@@ -15,68 +16,170 @@ public class AgentSoccer : Agent
 	// ReadRewardData readRewardData;
 	public Team team;
 	public AgentRole agentRole;
-	public float teamFloat;
-	public float playerID;
+	// public float teamFloat;
+	// public float playerID;
 	public int playerIndex;
 	public SoccerFieldArea area;
 	[HideInInspector]
 	public Rigidbody agentRB;
 	[HideInInspector]
-	public Vector3 startingPos;
+	// public Vector3 startingPos;
 
 	public List<float> myState = new List<float>(); //list for state data. to be updated every FixedUpdate in this script
 	SoccerAcademy academy;
+	Renderer renderer;
+
+
+	public void ChooseRandomTeam()
+	{
+		team = (Team)Random.Range(0,2);
+		renderer.material = team == Team.red? academy.redMaterial: academy.blueMaterial;
+	}
+
+	public void JoinRedTeam(AgentRole role)
+	{
+		agentRole = role;
+		team = Team.red;
+		// area.playerStates[playerIndex].a
+		renderer.material = academy.redMaterial;
+	}
+
+	public void JoinBlueTeam(AgentRole role)
+	{
+		agentRole = role;
+		team = Team.blue;
+		// area.playerStates[playerIndex].a
+		renderer.material = academy.blueMaterial;
+	}
 
     void Awake()
     {
+		renderer = GetComponent<Renderer>();
 		academy = FindObjectOfType<SoccerAcademy>(); //get the academy
 		// readRewardData = FindObjectOfType<ReadRewardData>(); //get reward data script
 
 
-		//we need to set up each player. most of this is unused right now but will be useful when we start collecting other player's states
-        if(team == Team.red)
-        {
-			brain = agentRole == AgentRole.striker? academy.redBrainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.redBrainGoalie;
-			// brain = agentRole == AgentRole.striker? academy.brainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.brainGoalie;
-			PlayerState playerState = new PlayerState();
-			playerState.teamFloat = 0;
-			teamFloat = 0;
-			playerState.agentRoleFloat = agentRole == AgentRole.striker? 0: agentRole == AgentRole.defender? 1: 2;
-			maxStep = academy.maxAgentSteps;
-			playerState.playerID = area.redPlayers.Count; //float id used to id individual
-			playerID = playerState.playerID;
-			playerState.agentRB = GetComponent<Rigidbody>(); //cache the RB
-			agentRB = GetComponent<Rigidbody>(); //cache the RB
-			playerState.startingPos = transform.position;
-			playerState.agentScript = this;
-            area.redPlayers.Add(playerState);
-            area.playerStates.Add(playerState);
-			playerIndex = area.playerStates.IndexOf(playerState);
-			playerState.playerIndex = playerIndex;
+		// brain = agentRole == AgentRole.striker? academy.redBrainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.redBrainGoalie;
+		brain = agentRole == AgentRole.striker? academy.brainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.brainGoalie;
+		PlayerState playerState = new PlayerState();
+		// playerState.teamFloat = 0;
+		// teamFloat = 0;
+		// playerState.agentRoleFloat = agentRole == AgentRole.striker? 0: agentRole == AgentRole.defender? 1: 2;
+		// playerState.currentTeamFloat = (float)Random.Range(0,2); //return either a 0 or 1 * max is exclusive ex: Random.Range(0,10) will pick a int between 0-9
+		// playerState.agentScript.team = (Team)Random.Range(0,2);
 
-        }
-        else if(team == Team.blue)
-        {
-			brain = agentRole == AgentRole.striker? academy.blueBrainStriker: agentRole == AgentRole.defender? academy.blueBrainDefender: academy.blueBrainGoalie;
-			// brain = agentRole == AgentRole.striker? academy.brainStriker: agentRole == AgentRole.defender? academy.blueBrainDefender: academy.brainGoalie;
-			PlayerState playerState = new PlayerState();
-			playerState.teamFloat = 1;
-			teamFloat = 1;
-			playerState.agentRoleFloat = agentRole == AgentRole.striker? 0: agentRole == AgentRole.defender? 1: 2;
-			maxStep = academy.maxAgentSteps;
-			playerState.playerID = area.bluePlayers.Count; //float id used to id individual
-			playerID = playerState.playerID;
-			playerState.agentRB = GetComponent<Rigidbody>(); //cache the RB
-			agentRB = GetComponent<Rigidbody>(); //cache the RB
-			playerState.startingPos = transform.position;
-			playerState.agentScript = this;
-            area.bluePlayers.Add(playerState);
-            area.playerStates.Add(playerState);
-			playerIndex = area.playerStates.IndexOf(playerState);
-			playerState.playerIndex = playerIndex;
-        }
+		// ChooseRandomTeam();
+		// SetPlayerColor();
+		maxStep = academy.maxAgentSteps;
+		// playerState.playerID = area.redPlayers.Count; //float id used to id individual
+		// playerID = playerState.playerID;
+		playerState.agentRB = GetComponent<Rigidbody>(); //cache the RB
+		agentRB = GetComponent<Rigidbody>(); //cache the RB
+		playerState.startingPos = transform.position;
+		playerState.agentScript = this;
+		// playerState.targetGoal = area.blueGoal;
+		// playerState.defendGoal = area.redGoal;
+		// area.redPlayers.Add(playerState);
+		area.playerStates.Add(playerState);
+		playerIndex = area.playerStates.IndexOf(playerState);
+		playerState.playerIndex = playerIndex;
 
-        startingPos = transform.position; //cache the starting pos in case we want to spawn players back at their startingpos
+		// //we need to set up each player. most of this is unused right now but will be useful when we start collecting other player's states
+        // if(team == Team.red)
+        // {
+		// 	// brain = agentRole == AgentRole.striker? academy.redBrainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.redBrainGoalie;
+		// 	// brain = agentRole == AgentRole.striker? academy.brainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.brainGoalie;
+		// 	// PlayerState playerState = new PlayerState();
+		// 	playerState.currentTeamFloat = 0;
+		// 	// teamFloat = 0;
+		// 	// playerState.agentRoleFloat = agentRole == AgentRole.striker? 0: agentRole == AgentRole.defender? 1: 2;
+		// 	// maxStep = academy.maxAgentSteps;
+		// 	// playerState.playerID = area.redPlayers.Count; //float id used to id individual
+		// 	// playerID = playerState.playerID;
+		// 	// playerState.agentRB = GetComponent<Rigidbody>(); //cache the RB
+		// 	// agentRB = GetComponent<Rigidbody>(); //cache the RB
+		// 	// playerState.startingPos = transform.position;
+		// 	// playerState.agentScript = this;
+		// 	// playerState.targetGoal = area.blueGoal;
+		// 	// playerState.defendGoal = area.redGoal;
+        //     // area.redPlayers.Add(playerState);
+        //     area.playerStates.Add(playerState);
+		// 	playerIndex = area.playerStates.IndexOf(playerState);
+		// 	playerState.playerIndex = playerIndex;
+
+        // }
+        // else if(team == Team.blue)
+        // {
+		// 	// brain = agentRole == AgentRole.striker? academy.blueBrainStriker: agentRole == AgentRole.defender? academy.blueBrainDefender: academy.blueBrainGoalie;
+		// 	brain = agentRole == AgentRole.striker? academy.brainStriker: agentRole == AgentRole.defender? academy.blueBrainDefender: academy.brainGoalie;
+		// 	PlayerState playerState = new PlayerState();
+		// 	playerState.currentTeamFloat = 1;
+		// 	teamFloat = 1;
+		// 	playerState.agentRoleFloat = agentRole == AgentRole.striker? 0: agentRole == AgentRole.defender? 1: 2;
+		// 	maxStep = academy.maxAgentSteps;
+		// 	playerState.playerID = area.bluePlayers.Count; //float id used to id individual
+		// 	playerID = playerState.playerID;
+		// 	playerState.agentRB = GetComponent<Rigidbody>(); //cache the RB
+		// 	agentRB = GetComponent<Rigidbody>(); //cache the RB
+		// 	playerState.startingPos = transform.position;
+		// 	playerState.agentScript = this;
+		// 	// playerState.targetGoal = area.redGoal;
+		// 	// playerState.defendGoal = area.blueGoal;
+        //     // area.bluePlayers.Add(playerState);
+        //     area.playerStates.Add(playerState);
+		// 	playerIndex = area.playerStates.IndexOf(playerState);
+		// 	playerState.playerIndex = playerIndex;
+        // }
+
+
+		// //we need to set up each player. most of this is unused right now but will be useful when we start collecting other player's states
+        // if(team == Team.red)
+        // {
+		// 	// brain = agentRole == AgentRole.striker? academy.redBrainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.redBrainGoalie;
+		// 	brain = agentRole == AgentRole.striker? academy.brainStriker: agentRole == AgentRole.defender? academy.redBrainDefender: academy.brainGoalie;
+		// 	PlayerState playerState = new PlayerState();
+		// 	playerState.teamFloat = 0;
+		// 	teamFloat = 0;
+		// 	playerState.agentRoleFloat = agentRole == AgentRole.striker? 0: agentRole == AgentRole.defender? 1: 2;
+		// 	maxStep = academy.maxAgentSteps;
+		// 	playerState.playerID = area.redPlayers.Count; //float id used to id individual
+		// 	playerID = playerState.playerID;
+		// 	playerState.agentRB = GetComponent<Rigidbody>(); //cache the RB
+		// 	agentRB = GetComponent<Rigidbody>(); //cache the RB
+		// 	playerState.startingPos = transform.position;
+		// 	playerState.agentScript = this;
+		// 	playerState.targetGoal = area.blueGoal;
+		// 	playerState.defendGoal = area.redGoal;
+        //     area.redPlayers.Add(playerState);
+        //     area.playerStates.Add(playerState);
+		// 	playerIndex = area.playerStates.IndexOf(playerState);
+		// 	playerState.playerIndex = playerIndex;
+
+        // }
+        // else if(team == Team.blue)
+        // {
+		// 	// brain = agentRole == AgentRole.striker? academy.blueBrainStriker: agentRole == AgentRole.defender? academy.blueBrainDefender: academy.blueBrainGoalie;
+		// 	brain = agentRole == AgentRole.striker? academy.brainStriker: agentRole == AgentRole.defender? academy.blueBrainDefender: academy.brainGoalie;
+		// 	PlayerState playerState = new PlayerState();
+		// 	playerState.teamFloat = 1;
+		// 	teamFloat = 1;
+		// 	playerState.agentRoleFloat = agentRole == AgentRole.striker? 0: agentRole == AgentRole.defender? 1: 2;
+		// 	maxStep = academy.maxAgentSteps;
+		// 	playerState.playerID = area.bluePlayers.Count; //float id used to id individual
+		// 	playerID = playerState.playerID;
+		// 	playerState.agentRB = GetComponent<Rigidbody>(); //cache the RB
+		// 	agentRB = GetComponent<Rigidbody>(); //cache the RB
+		// 	playerState.startingPos = transform.position;
+		// 	playerState.agentScript = this;
+		// 	playerState.targetGoal = area.redGoal;
+		// 	playerState.defendGoal = area.blueGoal;
+        //     area.bluePlayers.Add(playerState);
+        //     area.playerStates.Add(playerState);
+		// 	playerIndex = area.playerStates.IndexOf(playerState);
+		// 	playerState.playerIndex = playerIndex;
+        // }
+
+        // startingPos = transform.position; //cache the starting pos in case we want to spawn players back at their startingpos
     }
 
     public override void InitializeAgent()

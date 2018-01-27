@@ -8,22 +8,23 @@ public class PlayerState
 {
     //all of this gets setup in AgentSoccer.CS Awake()
     public int playerIndex; //index pos on the team
-    public float playerID; //index pos on the team
-    public float teamFloat; //1 = blue, 0 = red
+    // public float playerID; //index pos on the team
+    // public float currentTeamFloat; //1 = blue, 0 = red
     public List<float> state = new List<float>(); //list for state data. to be updated every FixedUpdate in this script
     public Rigidbody agentRB; //the agent's rb
     public Vector3 startingPos; //the agent's starting position
     public AgentSoccer agentScript; //this is the agent's script
-    public float agentRoleFloat; //for state
+    // public float agentRoleFloat; //for state
+    // public Transform targetGoal;
+    // public Transform defendGoal;
 }
 
 public class SoccerFieldArea : MonoBehaviour {
 
 
-    public GameObject redGoal;
-    public GameObject blueGoal;
-    public Material redScoredMaterial;
-    public Material blueScoredMaterial;
+    public Transform redGoal;
+    public Transform blueGoal;
+
     public AgentSoccer redStriker;
     public AgentSoccer blueStriker;
     public AgentSoccer redGoalie;
@@ -34,11 +35,11 @@ public class SoccerFieldArea : MonoBehaviour {
     public GameObject ground; //to be used to determine spawn areas
     public GameObject centerPitch; //to be used to determine spawn areas
     SoccerBallController ballController;
-    public List<PlayerState> redPlayers = new List<PlayerState>();
-    public List<PlayerState> bluePlayers = new List<PlayerState>();
+    // public List<PlayerState> redPlayers = new List<PlayerState>();
+    // public List<PlayerState> bluePlayers = new List<PlayerState>();
     public List<PlayerState> playerStates = new List<PlayerState>();
-    float blueTeamID; //1 if blue, 0 if red
-	float redTeamID; //1 if blue, 0 if red
+    // float blueTeamID; //1 if blue, 0 if red
+	// float redTeamID; //1 if blue, 0 if red
     [HideInInspector]
     public Vector3 ballStartingPos;
     Bounds areaBounds;
@@ -102,11 +103,80 @@ public class SoccerFieldArea : MonoBehaviour {
 
         }
     }
-    public void RedScores() //ball touched the blue goal
+
+
+
+
+    // public void GoalScored(string goalTag)
+    // {
+
+    // }
+    public void BlueGoalTouched() //ball touched the blue goal
     {
-        RewardOrPunishTeam(redPlayers, academy.strikerReward, academy.defenderReward, academy.goalieReward);
-        RewardOrPunishTeam(bluePlayers, academy.strikerPunish, academy.defenderPunish, academy.goaliePunish);
-		StartCoroutine(GoalScoredSwapGroundMaterial(redScoredMaterial, 2));
+        foreach(PlayerState ps in playerStates)
+        {
+            if (ps.agentScript.team == AgentSoccer.Team.blue) //if currently on the blue team you suck
+            {
+                RewardOrPunishPlayer(ps, academy.strikerPunish, academy.defenderPunish, academy.goaliePunish);
+            }
+            else if(ps.agentScript.team == AgentSoccer.Team.red) //if currently on the red team you get a reward
+            {
+                RewardOrPunishPlayer(ps, academy.strikerReward, academy.defenderReward, academy.goalieReward);
+            }
+
+            if(academy.randomizePlayersTeamForTraining)
+            {
+                ps.agentScript.ChooseRandomTeam();
+                // ps.currentTeamFloat = Random.Range(0,2); //return either a 0 or 1 * max is exclusive ex: Random.Range(0,10) will pick a int between 0-9
+            }
+        }
+
+        if(academy.randomizeFieldOrientationForTraining)
+        {
+            // print("rotating field");
+            ground.transform.Rotate(Vector3.up * Random.Range(0, 90));
+            // this.transform.rotation *= Quaternion.Euler(0, Random.Range(0, 360), 0); //rotate by a random amount on the y axis.
+        }
+
+
+        StartCoroutine(GoalScoredSwapGroundMaterial(academy.redMaterial, 2));
+        ResetBall();
+        if(goalTextUI)
+        {
+            StartCoroutine(ShowGoalUI());
+        }
+    }
+    
+
+    public void RedGoalTouched() //ball touched the blue goal
+    {
+        foreach(PlayerState ps in playerStates)
+        {
+            if (ps.agentScript.team == AgentSoccer.Team.blue) //if currently on the blue team you get a reward
+            {
+                RewardOrPunishPlayer(ps, academy.strikerReward, academy.defenderReward, academy.goalieReward);
+            }
+            else if(ps.agentScript.team == AgentSoccer.Team.red) //if currently on the red team you suck
+            {
+                RewardOrPunishPlayer(ps, academy.strikerPunish, academy.defenderPunish, academy.goaliePunish);
+            }
+            if(academy.randomizePlayersTeamForTraining)
+            {
+                ps.agentScript.ChooseRandomTeam();
+                // ps.currentTeamFloat = Random.Range(0,2); //return either a 0 or 1 * max is exclusive ex: Random.Range(0,10) will pick a int between 0-9
+            }
+        }
+
+        if(academy.randomizeFieldOrientationForTraining)
+        {
+                        // print("rotating field");
+
+            ground.transform.Rotate(Vector3.up * Random.Range(0, 90));
+
+            // transform.Rotate(new Vector3(0, Random.Range(0, 360), 0), Space.Self);
+            // this.transform.rotation *= Quaternion.Euler(0, Random.Range(0, 360), 0); //rotate by a random amount on the y axis.
+        }
+        StartCoroutine(GoalScoredSwapGroundMaterial(academy.blueMaterial, 2));
         ResetBall();
         if(goalTextUI)
         {
@@ -114,24 +184,39 @@ public class SoccerFieldArea : MonoBehaviour {
         }
     }
 
-    public void BlueScores() //ball touched the red goal
+
+
+
+    // public void RedScores() //ball touched the blue goal
+    // {
+    //     RewardOrPunishTeam(redPlayers, academy.strikerReward, academy.defenderReward, academy.goalieReward);
+    //     RewardOrPunishTeam(bluePlayers, academy.strikerPunish, academy.defenderPunish, academy.goaliePunish);
+	// 	StartCoroutine(GoalScoredSwapGroundMaterial(redScoredMaterial, 2));
+    //     ResetBall();
+    //     if(goalTextUI)
+    //     {
+    //         StartCoroutine(ShowGoalUI());
+    //     }
+    // }
+
+    // public void BlueScores() //ball touched the red goal
+    // {
+    //     RewardOrPunishTeam(bluePlayers, academy.strikerReward, academy.defenderReward, academy.goalieReward);
+    //     RewardOrPunishTeam(redPlayers, academy.strikerPunish, academy.defenderPunish, academy.goaliePunish);
+	// 	StartCoroutine(GoalScoredSwapGroundMaterial(blueScoredMaterial, 2));
+    //     ResetBall();
+    //     if(goalTextUI)
+    //     {
+    //         StartCoroutine(ShowGoalUI());
+    //     }
+    // }
+
+
+
+    public void RewardOrPunishPlayer(PlayerState ps, float striker, float defender, float goalie) //ball touched the red goal
     {
-        RewardOrPunishTeam(bluePlayers, academy.strikerReward, academy.defenderReward, academy.goalieReward);
-        RewardOrPunishTeam(redPlayers, academy.strikerPunish, academy.defenderPunish, academy.goaliePunish);
-		StartCoroutine(GoalScoredSwapGroundMaterial(blueScoredMaterial, 2));
-        ResetBall();
-        if(goalTextUI)
-        {
-            StartCoroutine(ShowGoalUI());
-        }
-    }
-
-
-
-    public void RewardOrPunishTeam(List<PlayerState> team, float striker, float defender, float goalie) //ball touched the red goal
-    {
-        foreach(PlayerState ps in team)
-        {
+        // foreach(PlayerState ps in team)
+        // {
             if(ps.agentScript.agentRole == AgentSoccer.AgentRole.striker)
             {
                 ps.agentScript.reward += striker;
@@ -145,9 +230,31 @@ public class SoccerFieldArea : MonoBehaviour {
                 ps.agentScript.reward += goalie;
             }
             ps.agentScript.done = true;  //all agents need to be reset
-        }
+        // }
 
     }
+
+
+    // public void RewardOrPunishTeam(List<PlayerState> team, float striker, float defender, float goalie) //ball touched the red goal
+    // {
+    //     foreach(PlayerState ps in team)
+    //     {
+    //         if(ps.agentScript.agentRole == AgentSoccer.AgentRole.striker)
+    //         {
+    //             ps.agentScript.reward += striker;
+    //         }
+    //         if(ps.agentScript.agentRole == AgentSoccer.AgentRole.defender)
+    //         {
+    //             ps.agentScript.reward += defender;
+    //         }
+    //         if(ps.agentScript.agentRole == AgentSoccer.AgentRole.goalie)
+    //         {
+    //             ps.agentScript.reward += goalie;
+    //         }
+    //         ps.agentScript.done = true;  //all agents need to be reset
+    //     }
+
+    // }
 
     public void PlayerScoredWrongGoal(AgentSoccer player)
     {
@@ -253,7 +360,27 @@ public class SoccerFieldArea : MonoBehaviour {
     void CollectPlayerState(PlayerState ps)
     {
 
-        // Vector3 playerDirToTargetGoal = ps.targetGoal.transform.position - ps.agentRB.position;
+        Vector3 playerDirToTargetGoal = Vector3.zero; //set the target goal based on which team this player is currently on
+        // var playerTeam = ps.tea
+        // if(ps.currentTeamFloat == 0)//I'm on the red team
+        if(ps.agentScript.team == AgentSoccer.Team.red)//I'm on the red team
+        {
+            playerDirToTargetGoal = blueGoal.position - ps.agentRB.position;
+        }
+        if(ps.agentScript.team == AgentSoccer.Team.blue)//I'm on the blue team
+        {
+            playerDirToTargetGoal = redGoal.position - ps.agentRB.position;
+        }
+
+        Vector3 playerDirToDefendGoal = Vector3.zero;//set the defend goal based on which team this player is currently on
+        if(ps.agentScript.team == AgentSoccer.Team.red)//I'm on the red team
+        {
+            playerDirToDefendGoal = redGoal.position - ps.agentRB.position;
+        }
+        if(ps.agentScript.team == AgentSoccer.Team.blue)//I'm on the blue team
+        {
+            playerDirToDefendGoal = blueGoal.position - ps.agentRB.position;
+        }
         // Vector3 playerDirToDefendGoal = ps.defendGoal.transform.position - ps.agentRB.position;
         Vector3 playerPos = ps.agentRB.position - ground.transform.position;
         Vector3 ballPos = ballRB.position - ground.transform.position;
@@ -266,8 +393,8 @@ public class SoccerFieldArea : MonoBehaviour {
         // float playerDistToBall = playerDirToBall.sqrMagnitude;
         // ps.state.Add(playerDistToBall);
 
-        Vector3 redGoalPosition = redGoal.transform.position - ground.transform.position;
-        Vector3 blueGoalPosition = blueGoal.transform.position - ground.transform.position;
+        // Vector3 redGoalPosition = redGoal.transform.position - ground.transform.position;
+        // Vector3 blueGoalPosition = blueGoal.transform.position - ground.transform.position;
         // Vector3 ballDirToRedGoal = redGoal.transform.position - ballRB.position;
         // Vector3 ballDirToBlueGoal = blueGoal.transform.position - ballRB.position;
         // Vector3 ballDirToTargetGoal = ps.targetGoal.transform.position - ballRB.position;
@@ -275,17 +402,17 @@ public class SoccerFieldArea : MonoBehaviour {
 
         ps.state.Clear(); //instead of creating a new list each tick we will reuse this one
         // ps.state.Add(ps.playerID); //whoami 
-        ps.state.Add(ps.teamFloat); //which team 
+        // ps.state.Add(ps.currentTeamFloat); //which team 
         // ps.state.Add(ps.agentRoleFloat);
         CollectVector3State(ps.state, ps.agentRB.velocity); //agent's vel
         CollectRotationState(ps.state, ps.agentRB.transform); //agent's rotation
         CollectVector3State(ps.state, playerPos); //dir from player to red goal
-        CollectVector3State(ps.state, ballPos); //dir from player to red goal
-        // CollectVector3State(ps.state, playerDirToBall); //dir from agent to ball
-        CollectVector3State(ps.state, redGoalPosition);  //red goal abs position
-        CollectVector3State(ps.state, blueGoalPosition); //blue goal abs position
-        // CollectVector3State(ps.state, playerDirToTargetGoal); //dir from player to red goal
-        // CollectVector3State(ps.state, playerDirToDefendGoal); //dir from player to blue goal
+        // CollectVector3State(ps.state, ballPos); //dir from player to red goal
+        CollectVector3State(ps.state, playerDirToBall); //dir from agent to ball
+        // CollectVector3State(ps.state, redGoalPosition);  //red goal abs position
+        // CollectVector3State(ps.state, blueGoalPosition); //blue goal abs position
+        CollectVector3State(ps.state, playerDirToTargetGoal); //dir from player to red goal
+        CollectVector3State(ps.state, playerDirToDefendGoal); //dir from player to blue goal
         // CollectVector3State(ps.state, ballDirToTargetGoal); //dir from ball to target goal
         // CollectVector3State(ps.state, ballDirToDefendGoal); //dir from ball to defend goal
 

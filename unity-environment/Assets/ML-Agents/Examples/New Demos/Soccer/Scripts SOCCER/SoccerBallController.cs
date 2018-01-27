@@ -45,13 +45,25 @@ public class SoccerBallController : MonoBehaviour {
 		// 	// print("ball touched by " + lastTouchedBy.name);
 		// }
 
+		// if(col.gameObject.CompareTag(redGoalTag) || col.gameObject.CompareTag(blueGoalTag)) //ball touched red goal
+		// {
+		// 	area.GoalScored();
+		// }
 		if(col.gameObject.CompareTag(redGoalTag)) //ball touched red goal
 		{
-			area.BlueScores();
+			area.RedGoalTouched();
 		}
 		if(col.gameObject.CompareTag(blueGoalTag)) //ball touched blue goal
 		{
-			area.RedScores();
+			area.BlueGoalTouched();
 		}
+		// if(col.gameObject.CompareTag(redGoalTag)) //ball touched red goal
+		// {
+		// 	area.BlueScores();
+		// }
+		// if(col.gameObject.CompareTag(blueGoalTag)) //ball touched blue goal
+		// {
+		// 	area.RedScores();
+		// }
 	}
 }

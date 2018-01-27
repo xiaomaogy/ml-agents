@@ -153,6 +153,8 @@ public class CurriculumController : MonoBehaviour {
 			// GoToLesson3();
 		}
 
+
+
 		//lesson 1 train the blue strikers
 		if(currentLesson == 1 && !lesson1)
 		// if(academy.currentLesson == 1 && !lesson1)
@@ -161,6 +163,8 @@ public class CurriculumController : MonoBehaviour {
 			lesson1 = true;
 			SetActiveBlueStrikers(true);
 			SetActiveRedStrikers(false);
+			SetActiveRedGoalies(false);
+
 			// academy.AcademyReset();
 			// GoToLesson1();
 			// StartCoroutine(TrainUntilThresholdReached(academy.brainStriker.name, .8f, currentLesson, lesson1));
@@ -174,42 +178,43 @@ public class CurriculumController : MonoBehaviour {
 			AllLessonsFalse();
 			lesson2 = true;
 
-			SetActiveRedStrikers(true);
-			SetActiveBlueStrikers(false);
+			SetActiveRedGoalies(true);
+			// SetActiveBlueStrikers(false);
 			// academy.AcademyReset();
 			// GoToLesson2();
 			// StartCoroutine(TrainUntilThresholdReached(academy.brainStriker.name, .8f, 2));
 		}
 
-		//lesson 3 train the red & blue strikers together
-		// if(academy.currentLesson == 3 && !lesson3)
-		if(currentLesson == 3 && !lesson3)
-		{
-			AllLessonsFalse();
-			lesson3 = true;
-			SetActiveBlueStrikers(true);
-			SetActiveRedStrikers(true);
-			// academy.AcademyReset();
-			// GoToLesson3();
-			// StartCoroutine(TrainForSeconds(academy.brainStriker.name, 500, 3));
-		}
 
-
-
-		//lesson 3 train the red goalie
-		//lesson 4 train the blue goalie
-
-
-
-		// //lesson 2 activate the goalies so they can train
-		// if(!lesson2 && brainsDict.ContainsKey(academy.brainStriker.name) && readRewardData.rewardDataDict.ContainsKey(academy.brainStriker.name) && readRewardData.rewardDataDict[academy.brainStriker.name].currentMeanReward > -.6)
+		// //lesson 2 train the red strikers
+		// // if(academy.currentLesson == 2 && !lesson2)
+		// if(currentLesson == 2 && !lesson2)
 		// {
-		// 	lesson1 = false;
+		// 	AllLessonsFalse();
 		// 	lesson2 = true;
-		// 	SetActiveBlueGoalies(true);
 
-		// 	// print("reward > .8");
+		// 	SetActiveRedStrikers(true);
+		// 	SetActiveBlueStrikers(false);
+		// 	// academy.AcademyReset();
+		// 	// GoToLesson2();
+		// 	// StartCoroutine(TrainUntilThresholdReached(academy.brainStriker.name, .8f, 2));
 		// }
+
+		// //lesson 3 train the red & blue strikers together
+		// // if(academy.currentLesson == 3 && !lesson3)
+		// if(currentLesson == 3 && !lesson3)
+		// {
+		// 	AllLessonsFalse();
+		// 	lesson3 = true;
+		// 	SetActiveBlueStrikers(true);
+		// 	SetActiveRedStrikers(true);
+		// 	// academy.AcademyReset();
+		// 	// GoToLesson3();
+		// 	// StartCoroutine(TrainForSeconds(academy.brainStriker.name, 500, 3));
+		// }
+
+
+
 		
 	}
 
