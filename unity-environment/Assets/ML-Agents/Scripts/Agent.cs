@@ -104,6 +104,9 @@ public abstract class Agent : MonoBehaviour
                 agentStoredAction = new float[1];
             }
             memory = new float[brain.brainParameters.memorySize];
+            state = new List<float>(brain.brainParameters.stateSize);
+            stackedStates = new List<float>(brain.brainParameters.stateSize * brain.brainParameters.stackedStates);
+            stackedStates.AddRange(new float[brain.brainParameters.stateSize * brain.brainParameters.stackedStates]);
         }
         InitializeAgent();
     }
@@ -133,6 +136,9 @@ public abstract class Agent : MonoBehaviour
             agentStoredAction = new float[1];
         }
         memory = new float[brain.brainParameters.memorySize];
+        state = new List<float>(brain.brainParameters.stateSize);
+        stackedStates = new List<float>(brain.brainParameters.stateSize * brain.brainParameters.stackedStates);
+        stackedStates.AddRange(new float[brain.brainParameters.stateSize * brain.brainParameters.stackedStates]);
     }
 
     /// When RemoveBrain is called, the agent unsubscribes from its brain.
@@ -153,9 +159,7 @@ public abstract class Agent : MonoBehaviour
 	*/
     public virtual void InitializeAgent()
     {
-        state = new List<float>(brain.brainParameters.stateSize);
-        stackedStates = new List<float>(brain.brainParameters.stateSize * brain.brainParameters.stackedStates);
-        stackedStates.AddRange(new float[brain.brainParameters.stateSize * brain.brainParameters.stackedStates]);
+
     }
 
     /// Collect the states of the agent with this method
@@ -167,7 +171,8 @@ public abstract class Agent : MonoBehaviour
 	 *  @returns state A list of floats corresponding to the state of the agent. 
 	*/
 
-    public List<float> ClearAndCollectState() {
+    public List<float> ClearAndCollectState()
+    {
         state.Clear();
         CollectState();
         stackedStates.RemoveRange(0, brain.brainParameters.stateSize);
@@ -214,14 +219,13 @@ public abstract class Agent : MonoBehaviour
     }
 
     /// Do not modify : Is used by the brain to reset the agent.
-    public void Reset()
+    public void _Reset()
     {
         memory = new float[brain.brainParameters.memorySize];
         stackedStates.Clear();
         stackedStates.AddRange(new float[brain.brainParameters.stateSize * brain.brainParameters.stackedStates]);
         stepCounter = 0;
         AgentReset();
-        CumulativeReward = -reward;
     }
 
     /// Do not modify : Is used by the brain to collect rewards.
@@ -232,10 +236,12 @@ public abstract class Agent : MonoBehaviour
 
     public void SetCumulativeReward()
     {
-        if (!done) {
+        if (!done)
+        {
             CumulativeReward += reward;
         }
-        else{
+        else
+        {
             CumulativeReward = 0f;
         }
     }

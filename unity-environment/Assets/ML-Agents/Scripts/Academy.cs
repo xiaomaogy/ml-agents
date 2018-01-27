@@ -42,12 +42,12 @@ public class ScreenConfiguration
 public abstract class Academy : MonoBehaviour
 {
 
-    [System.Serializable]
-    private struct ResetParameter
-    {
-        public string key;
-        public float value;
-    }
+    //[System.Serializable]
+    //private struct ResetParameter
+    //{
+    //    public string key;
+    //    public float value;
+    //}
 
 
 
@@ -73,9 +73,6 @@ public abstract class Academy : MonoBehaviour
     [SerializeField]
     [Tooltip("The engine-level settings which correspond to rendering quality and engine speed during Inference.")]
     private ScreenConfiguration inferenceConfiguration = new ScreenConfiguration(1280, 720, 5, 1.0f, 60);
-    [SerializeField]
-    [Tooltip("List of custom parameters that can be changed in the environment on reset.")]
-    private ResetParameter[] defaultResetParameters;
 
     /**< \brief Contains a mapping from parameter names to float values. */
     /**< You can specify the Default Reset Parameters in the Inspector of the
@@ -83,7 +80,7 @@ public abstract class Academy : MonoBehaviour
      * brain by passing a config dictionary at reset. Reference resetParameters
      * in your AcademyReset() or AcademyStep() to modify elements in your 
      * environment at reset time. */
-    public Dictionary<string, float> resetParameters;
+    public ResetParameters resetParameters;
 
 
     [HideInInspector]
@@ -119,11 +116,11 @@ public abstract class Academy : MonoBehaviour
 
     void Awake()
     {
-        resetParameters = new Dictionary<string, float>();
-        foreach (ResetParameter kv in defaultResetParameters)
-        {
-            resetParameters[kv.key] = kv.value;
-        }
+        //resetParameters = new Dictionary<string, float>();
+        //foreach (ResetParameter kv in defaultResetParameters)
+        //{
+        //    resetParameters[kv.key] = kv.value;
+        //}
 
         GetBrains(gameObject, brains);
         InitializeAcademy();
@@ -224,7 +221,7 @@ public abstract class Academy : MonoBehaviour
     }
 
     // Called before AcademyReset().
-    internal void Reset()
+    internal void _Reset()
     {
         currentStep = 0;
         episodeCount++;
@@ -234,7 +231,7 @@ public abstract class Academy : MonoBehaviour
 
         foreach (Brain brain in brains)
         {
-            brain.Reset();
+            brain._Reset();
             brain.ResetDoneAndReward();
         }
 
@@ -318,7 +315,7 @@ public abstract class Academy : MonoBehaviour
                     {
                         resetParameters[kv.Key] = kv.Value;
                     }
-                    Reset();
+                    _Reset();
                     externalCommand = ExternalCommand.STEP;
                     RunMdp();
                     return;
@@ -333,7 +330,7 @@ public abstract class Academy : MonoBehaviour
             {
                 if (done)
                 {
-                    Reset();
+                    _Reset();
                     RunMdp();
                     return;
                 }

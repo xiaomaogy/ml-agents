@@ -434,18 +434,18 @@ public class Brain : MonoBehaviour
                 }
                 else
                 {
-                    agent.Reset();
+                    agent._Reset();
                 }
             }
         }
     }
 
     /// Is used by the Academy to reset all agents 
-    public void Reset()
+    public void _Reset()
     {
         foreach (Agent agent in agents.Values)
         {
-            agent.Reset();
+            agent._Reset();
             agent.done = false;
         }
     }
