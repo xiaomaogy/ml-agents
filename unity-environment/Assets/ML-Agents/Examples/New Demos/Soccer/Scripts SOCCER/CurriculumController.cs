@@ -15,6 +15,7 @@ public class CurriculumController : MonoBehaviour {
 	public bool lesson3;
 	public bool lesson4;
 	public int currentLesson;
+	public GameObject fieldToLeaveOn;
 
 	// Use this for initialization
 	void Start () {
@@ -152,6 +153,28 @@ public class CurriculumController : MonoBehaviour {
 			currentLesson = 3;
 			// GoToLesson3();
 		}
+		if(Input.GetKeyDown(KeyCode.Alpha4))
+		{
+			AllLessonsFalse();
+			currentLesson = 4;
+			// GoToLesson3();
+		}
+
+		//debug turn all fields off except this one
+		if(Input.GetKeyDown(KeyCode.Alpha8))
+		{
+			EnableXFields(25);
+		}
+		//enable x num of fields
+		if(Input.GetKeyDown(KeyCode.Alpha9))
+		{
+			AllFieldsOffExcept(fieldToLeaveOn);
+		}
+		//debug turn all fields on
+		if(Input.GetKeyDown(KeyCode.Alpha0))
+		{
+			AllFieldsOn();
+		}
 
 
 
@@ -163,7 +186,42 @@ public class CurriculumController : MonoBehaviour {
 			lesson1 = true;
 			SetActiveBlueStrikers(true);
 			SetActiveRedStrikers(false);
+			// SetActiveRedStrikers(false);
 			SetActiveRedGoalies(false);
+			SetActiveBlueGoalies(false);
+
+			// academy.AcademyReset();
+			// GoToLesson1();
+			// StartCoroutine(TrainUntilThresholdReached(academy.brainStriker.name, .8f, currentLesson, lesson1));
+			// StartCoroutine(TrainUntilThresholdReached(academy.brainStriker.name, .8f, 1));
+		}
+
+		//lesson 1 train the blue strikers
+		if(currentLesson == 3 && !lesson3)
+		// if(academy.currentLesson == 1 && !lesson1)
+		{
+			AllLessonsFalse();
+			lesson3 = true;
+			SetActiveBlueStrikers(true);
+			SetActiveRedStrikers(true);
+			// SetActiveRedStrikers(false);
+			SetActiveRedGoalies(false);
+			SetActiveBlueGoalies(false);
+
+			// academy.AcademyReset();
+			// GoToLesson1();
+			// StartCoroutine(TrainUntilThresholdReached(academy.brainStriker.name, .8f, currentLesson, lesson1));
+			// StartCoroutine(TrainUntilThresholdReached(academy.brainStriker.name, .8f, 1));
+		}
+		if(currentLesson == 4 && !lesson4)
+		{
+			AllLessonsFalse();
+			lesson3 = true;
+			SetActiveBlueStrikers(true);
+			SetActiveRedStrikers(true);
+			// SetActiveRedStrikers(false);
+			SetActiveRedGoalies(true);
+			SetActiveBlueGoalies(true);
 
 			// academy.AcademyReset();
 			// GoToLesson1();
@@ -179,6 +237,9 @@ public class CurriculumController : MonoBehaviour {
 			lesson2 = true;
 
 			SetActiveRedGoalies(true);
+			SetActiveBlueStrikers(false);
+			SetActiveRedGoalies(false);
+			SetActiveBlueGoalies(false);
 			// SetActiveBlueStrikers(false);
 			// academy.AcademyReset();
 			// GoToLesson2();
@@ -216,6 +277,47 @@ public class CurriculumController : MonoBehaviour {
 
 
 		
+	}
+
+
+	void EnableXFields(int num)
+	{  
+		AllFieldsOff();
+		// int i
+		for(var i = 0; i < num; i++)
+		{
+			fields[i].transform.root.gameObject.SetActive(true);
+		}
+	}
+
+	//debug, turn all fields off except this one. 
+	void AllFieldsOffExcept (GameObject onlyField)
+	{
+		foreach(SoccerFieldArea field in fields)
+		{
+			if(field.transform.root.gameObject != onlyField)
+			{
+				field.transform.root.gameObject.SetActive(false);
+			}
+		}
+	}
+
+	//debug, turn all fields off except this one. 
+	void AllFieldsOff ()
+	{
+		foreach(SoccerFieldArea field in fields)
+		{
+			field.transform.root.gameObject.SetActive(false);
+		}
+	}
+
+	//debug turn all fields back on
+	void AllFieldsOn()
+	{
+		foreach(SoccerFieldArea field in fields)
+		{
+			field.transform.root.gameObject.SetActive(true);		
+		}
 	}
 
 	void SetActiveBlueGoalies(bool active)

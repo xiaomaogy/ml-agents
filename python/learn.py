@@ -7,6 +7,7 @@ from docopt import docopt
 import re
 import os
 import json
+import thread;
 from trainers.ppo_models import *
 from trainers.ppo_trainer import Trainer
 from unityagents import UnityEnvironment, UnityEnvironmentException
@@ -216,14 +217,37 @@ with tf.Session() as sess:
 
                 
             for brain_name, trainer in trainers.items():
+
                 trainer.process_experiences(info)
                 if trainer.is_ready_update() and train_model:
                     # Perform gradient descent with experience buffer
                     trainer.update_model()
-                # Write training statistics to tensorboard.
+
+                # if trainer.get_step() % trainer.trainer_parameters['summary_freq'] == 0 and trainer.get_step() != 0 and trainer.is_training:
+                #     # Write training statistics to tensorboard.
+                #     try:
+
+                #         thread.start_new_thread(trainer.write_summary(env.curriculum.lesson_number))
+                #     except:
+                #         print("couldn't start thread")
+
                 trainer.write_summary(env.curriculum.lesson_number)
                 # trainer.write_reward_data()
 
+
+            # for brain_name, trainer in trainers.items():
+            #     trainer.process_experiences(info)
+            #     if trainer.is_ready_update() and train_model:
+            #         # Perform gradient descent with experience buffer
+            #         trainer.update_model()
+            #     # Write training statistics to tensorboard.
+            #     try:
+            #         thread.start_new_thread(trainer.write_summary(env.curriculum.lesson_number))
+            #     except:
+            #         print("couldn't start thread")
+
+            #     # trainer.write_summary(env.curriculum.lesson_number)
+            #     # trainer.write_reward_data()
                 
 
 

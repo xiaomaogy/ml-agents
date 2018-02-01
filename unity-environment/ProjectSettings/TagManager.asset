@@ -10,6 +10,8 @@ TagManager:
   - redGoal
   - ball
   - wall
+  - goal
+  - walkableSurface
   layers:
   - Default
   - TransparentFX

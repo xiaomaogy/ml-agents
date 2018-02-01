@@ -55,21 +55,21 @@ public class PushAgentBasic : Agent
     }
 
 
-	//Takes a Vector3 and adds it to the state list
-    void CollectVector3State(List<float> state, Vector3 v)
-    {
-        state.Add(v.x);
-        state.Add(v.y);
-        state.Add(v.z);
-    }
+	// //Takes a Vector3 and adds it to the state list
+    // void CollectVector3State(List<float> state, Vector3 v)
+    // {
+    //     state.Add(v.x);
+    //     state.Add(v.y);
+    //     state.Add(v.z);
+    // }
 
-	//Takes a Transform and adds the rotation to the state list
-    void CollectRotationState(List<float> state, Transform t)
-    {
-		state.Add(t.rotation.eulerAngles.x/180.0f-1.0f);
-		state.Add(t.rotation.eulerAngles.y/180.0f-1.0f);
-		state.Add(t.rotation.eulerAngles.z/180.0f-1.0f);
-    }
+	// //Takes a Transform and adds the rotation to the state list
+    // void CollectRotationState(List<float> state, Transform t)
+    // {
+	// 	state.Add(t.rotation.eulerAngles.x/180.0f-1.0f);
+	// 	state.Add(t.rotation.eulerAngles.y/180.0f-1.0f);
+	// 	state.Add(t.rotation.eulerAngles.z/180.0f-1.0f);
+    // }
 
 	public override List<float> CollectState()
 	{
@@ -84,14 +84,14 @@ public class PushAgentBasic : Agent
 
 		//COLLECTING 18 STATES
 		// CollectVector3State(state, agentPos);  //pos of agent rel to ground
-		CollectVector3State(state, goalPos);  //pos of goal rel to ground
-		CollectVector3State(state, blockPos);  //pos of goal rel to ground
-		CollectVector3State(state, agentPosRelToGoal);  //vector to agent from goal
-		CollectVector3State(state, blockPosRelToGoal); //vector to blockRB from goal
-		CollectVector3State(state, blockPosRelToAgent);  //vector to blockRB from agent
-		CollectVector3State(state, blockRB.velocity); //block's vel
-		CollectVector3State(state, agentRB.velocity); //agent's vel
-		CollectRotationState(state, agentRB.transform); //agent's rotation
+		MLAgentsHelpers.CollectVector3State(state, goalPos);  //pos of goal rel to ground
+		MLAgentsHelpers.CollectVector3State(state, blockPos);  //pos of goal rel to ground
+		MLAgentsHelpers.CollectVector3State(state, agentPosRelToGoal);  //vector to agent from goal
+		MLAgentsHelpers.CollectVector3State(state, blockPosRelToGoal); //vector to blockRB from goal
+		MLAgentsHelpers.CollectVector3State(state, blockPosRelToAgent);  //vector to blockRB from agent
+		MLAgentsHelpers.CollectVector3State(state, blockRB.velocity); //block's vel
+		MLAgentsHelpers.CollectVector3State(state, agentRB.velocity); //agent's vel
+		MLAgentsHelpers.CollectRotationState(state, agentRB.transform); //agent's rotation
 		// state.Add(blockPosRelToGoal.sqrMagnitude);
 
 

@@ -199,12 +199,46 @@ public class AgentSoccer : Agent
         if (brain.brainParameters.actionSpaceType == StateType.continuous)
         {
 
-			Vector3 directionX = Vector3.right * Mathf.Clamp(act[0], -1f, 1f);  //go left or right in world space
-            Vector3 directionZ = Vector3.forward * Mathf.Clamp(act[1], -1f, 1f); //go forward or back in world space
+			if(act[0] != 0)
+			{
+				float energyConservationPentalty = Mathf.Abs(act[0])/1000;
+				// print("act[0] = " + act[0]);
+				reward -= energyConservationPentalty;
+				// reward -= .0001f;
+			}
+			if(act[1] != 0)
+			{
+				float energyConservationPentalty = Mathf.Abs(act[1])/1000;
+				// print("act[1] = " + act[1]);
+				reward -= energyConservationPentalty;
+			}
+			// if(act[2] != 0)
+			// {
+			// 	float energyConservationPentalty = Mathf.Abs(act[2])/1000;
+			// 	// print("act[2] = " + act[2]);
+			// 	reward -= energyConservationPentalty;
+			// }
+			// Vector3 directionX = Vector3.right * Mathf.Clamp(act[0], -1f, 1f);  //go left or right in world space
+            // Vector3 directionZ = Vector3.forward * Mathf.Clamp(act[1], -1f, 1f); //go forward or back in world space
+        	// Vector3 dirToGo = directionX + directionZ; //the dir we want to go
+			// agentRB.AddForce(dirToGo * academy.agentRunSpeed, ForceMode.VelocityChange); //GO
+
+			// agentRB.AddTorque(transform.up * Mathf.Clamp(act[2], -1f, 1f) * academy.agentRotationSpeed, ForceMode.VelocityChange); //turn right or left
+			
+			
+			Vector3 directionX = Vector3.right * act[0];  //go left or right in world space
+            Vector3 directionZ = Vector3.forward * act[1]; //go forward or back in world space
         	Vector3 dirToGo = directionX + directionZ; //the dir we want to go
 			agentRB.AddForce(dirToGo * academy.agentRunSpeed, ForceMode.VelocityChange); //GO
+			if(dirToGo != Vector3.zero)
+			{
+				agentRB.rotation = Quaternion.Lerp(agentRB.rotation, Quaternion.LookRotation(dirToGo), Time.deltaTime * academy.agentRotationSpeed);
+				// agentRB.rotation = Quaternion.LookRotation(dirToGo);
+			}
 
-			agentRB.AddTorque(transform.up * act[2] * academy.agentRotationSpeed, ForceMode.VelocityChange); //turn right or left
+			// agentRB.transform.LookAt(dirToGo);
+
+			// agentRB.AddTorque(transform.up * act[2] * ascademy.agentRotationSpeed, ForceMode.VelocityChange); //turn right or left
 
         }
     }
@@ -212,6 +246,7 @@ public class AgentSoccer : Agent
 	public override void AgentStep(float[] act)
 	{
 		// print(readRewardData.currentMeanReward);
+		// reward += .0001f; //mainly for goalies. not sure how this will affect offense. idea is to stay alive longer
 		// reward -= .0005f; //hurry up
         MoveAgent(act); //perform agent actions
 		// print(brain.name);

@@ -92,7 +92,8 @@ public class SoccerFieldArea : MonoBehaviour {
     {
         foreach(PlayerState ps in playerStates)
         {
-            if(ps.agentScript.gameObject.activeInHierarchy &&  ps.agentScript.agentRole == AgentSoccer.AgentRole.striker || ps.agentScript.agentRole == AgentSoccer.AgentRole.defender)
+            // if(ps.agentScript.gameObject.activeInHierarchy &&  ps.agentScript.agentRole == AgentSoccer.AgentRole.striker || ps.agentScript.agentRole == AgentSoccer.AgentRole.defender)
+            if(ps.agentScript.gameObject.activeInHierarchy)
             {
                 if(reward != 0)
                 {

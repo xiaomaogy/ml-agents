@@ -22,13 +22,13 @@ public class SoccerBallController : MonoBehaviour {
 	void Update () {
 		// print (rb.velocity.sqrMagnitude);
 
-		if(rb.velocity.sqrMagnitude < .1f) //ball is almost completely stopped
+		if(rb.velocity.sqrMagnitude < .05f) //ball is almost completely stopped
 		{
 			if(area.canResetBall)
 			{
 				// area.AllPlayersDone(0);
-				area.AllPlayersDone(-.1f);
-				// area.AllPlayersDone(-.5f);
+				// area.AllPlayersDone(-.1f);
+				area.AllPlayersDone(-.5f);
 				area.ResetBall();
 			}
 		// reward = -1f; //lets see some hustle out there
@@ -43,6 +43,15 @@ public class SoccerBallController : MonoBehaviour {
 		// 	lastTouchedBy = col.gameObject.GetComponent<AgentSoccer>();
 		// 	lastTouchedBy.reward += .001f;//encourage touching the ball
 		// 	// print("ball touched by " + lastTouchedBy.name);
+		// }
+
+		// if(col.gameObject.CompareTag(agentTag))
+		// {
+		// 	lastTouchedBy = col.gameObject.GetComponent<AgentSoccer>();
+		// 	var colReward = col.relativeVelocity.sqrMagnitude/10000;
+		// 	lastTouchedBy.reward += colReward;//encourage touching the ball
+		// 	// lastTouchedBy.reward += .001f;//encourage touching the ball
+		// 	// // print("ball touched by " + lastTouchedBy.name);
 		// }
 
 		// if(col.gameObject.CompareTag(redGoalTag) || col.gameObject.CompareTag(blueGoalTag)) //ball touched red goal
