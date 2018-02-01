@@ -37,6 +37,8 @@ public class WallJumpAgent : Agent
 	public bool grounded;
 	public bool performingGroundCheck;
 	public float groundCheckRadius; //the radius from transform.position to check
+	public Vector3 groundCheckOffset; //offset groundcheck pos. useful for tweaking groundcheck box
+	// public Vector3 groundCheckBoxSize; //offset groundcheck pos. useful for tweaking groundcheck box
 	public float groundCheckFrequency; //perform a groundcheck every x sec. ex: .5 will do a groundcheck every .5 sec.
 	Vector3 jumpTargetPos; //target this position during jump. it will be 
 	Vector3 jumpStartingPos; //target this position during jump. it will be 
@@ -95,7 +97,7 @@ public class WallJumpAgent : Agent
 		// jumpTargetPos = agentRB.position + Vector3.up * jumpHeight;
 		yield return new WaitForSeconds(jumpTime);
 		jumping = false;
-		StartCoroutine(Falling());//should be falling now
+		// StartCoroutine(Falling());//should be falling now
 	}
 
 
@@ -109,15 +111,38 @@ public class WallJumpAgent : Agent
 		}
 	}
 
-	// public void StopGroundCheck() 
-	// {
-	// 	CancelInvoke("DoGroundCheck"); //stop doing ground check;
-	// 	performingGroundCheck = false;
-	// }
+	public void StopGroundCheck() 
+	{
+		CancelInvoke("DoGroundCheck"); //stop doing ground check;
+		performingGroundCheck = false;
+	}
 
 	// GROUND CHECK
 	public void DoGroundCheck()
 	{
+
+		// Vector3 groundCheckDirForward = transform.forward - transform.up;
+		// Vector3 groundCheckDirBack = -transform.forward - transform.up;
+		// Vector3 groundCheckDirLeft = -transform.right - transform.up;
+		// Vector3 groundCheckDirRight = transform.right - transform.up;
+		// Vector3 rayOrigin = agentRB.position + transform.up; //start ray from "head"
+		// // Vector3 rayOrigin = agentRB.position + (transform.up * 2); //start ray from "head"
+		// if(DrawDebugRays)
+		// {
+		// 	Debug.DrawRay(rayOrigin, groundCheckDirForward * ledgeRaycastDist, Color.green, 0f, true);
+		// 	Debug.DrawRay(rayOrigin, groundCheckDirBack * ledgeRaycastDist, Color.green, 0f, true);
+		// 	Debug.DrawRay(rayOrigin, groundCheckDirLeft * ledgeRaycastDist, Color.green, 0f, true);
+		// 	Debug.DrawRay(rayOrigin, groundCheckDirRight * ledgeRaycastDist, Color.green, 0f, true);
+		// }
+		// bool noGroundFront = Physics.Raycast(rayOrigin, groundCheckDirForward, ledgeRaycastDist, groundLayer);
+		// bool noGroundBack = Physics.Raycast(rayOrigin, groundCheckDirBack, ledgeRaycastDist, groundLayer);
+		// bool noGroundLeft = Physics.Raycast(rayOrigin, groundCheckDirLeft, ledgeRaycastDist, groundLayer);
+		// bool noGroundRight = Physics.Raycast(rayOrigin, groundCheckDirRight, ledgeRaycastDist, groundLayer);
+
+
+		// if(noGroundBack || noGr oundFront || noGroundLeft || noGroundRight){reward -= .005f;}
+
+		// if(!Physics.Raycast(transform.up, groundCheckDirForward, 2f, groundLayer)){}
 		// print("doing groundcheck");
 		// hitG
 		// RaycastHit hit;
@@ -133,9 +158,15 @@ public class WallJumpAgent : Agent
 		// 	grounded = true;
 			
 		// }
-		Vector3 posToUse = new Vector3(agentRB.position.x, agentRB.position.y - .3f, agentRB.position.z);
-		int numberGroundCollidersHit = Physics.OverlapSphereNonAlloc(posToUse, .4f, hitGroundColliders); //chose .6 radius because this should make a sphere a little bit bigger than our cube that is a scale of 1 unit. sphere will be 1.2 units. 
-		if (numberGroundCollidersHit > 0 )
+		// foreach(Collider col in hitGroundColliders)
+		// {
+		// 	col = none;
+		// }
+		// Vector3 posToUse = new Vector3(agentRB.position.x, agentRB.position.y - .3f, agentRB.position.z);
+		Vector3 posToUse = agentRB.position + groundCheckOffset;
+		int numberGroundCollidersHit = Physics.OverlapSphereNonAlloc(posToUse, groundCheckRadius, hitGroundColliders); //chose .6 radius because this should make a sphere a little bit bigger than our cube that is a scale of 1 unit. sphere will be 1.2 units. 
+		// print(numberGroundCollidersHit);
+		if (numberGroundCollidersHit > 1 )
 		{
 			grounded = false;
 			foreach(Collider col in hitGroundColliders)
@@ -143,10 +174,15 @@ public class WallJumpAgent : Agent
 				if(col != null && col.transform != this.transform && col.CompareTag("walkableSurface"))
 				{
 					grounded = true;
+					// StopGroundCheck();
 					break;
 				}
 			}
 			// grounded = true;
+		}
+		else
+		{
+			grounded = false;
 		}
 				
 		// // hitGroundColliders = Physics.OverlapBox(agentRB.position, new Vector3(.4f, .6f, .4f)); 
@@ -186,7 +222,9 @@ public class WallJumpAgent : Agent
 		if(visualizeGroundCheckSphere)
 		{
 			Gizmos.color = Color.red;
-			Gizmos.DrawSphere(transform.position, groundCheckRadius);
+			Gizmos.DrawWireSphere(transform.position + groundCheckOffset, groundCheckRadius);
+			// Gizmos.color = Color.green;
+			// Gizmos.DrawWireCube(agentRB.position + groundCheckOffset, groundCheckBoxSize);
 		}
 	}
 
@@ -427,8 +465,13 @@ public class WallJumpAgent : Agent
 			// agentRB.AddForce(Vector3.up * jumpVelocity, ForceMode.VelocityChange);
 		}
 
+		if(!jumping && !grounded)
+		{
+			agentRB.AddForce(Vector3.down * fallingForce, ForceMode.Acceleration);
+		}
+
 		// if (!Physics.Raycast(agentRB.position, Vector3.down, 3, groundLayer)) //if the agent has gone over the edge, we done.
-		if (!Physics.Raycast(agentRB.position, Vector3.down, 7)) //if the agent has gone over the edge, we done.
+		if (!Physics.Raycast(agentRB.position, Vector3.down, 20)) //if the agent has gone over the edge, we done.
 		{
 			fail = true; //fell off bro
 			reward -= 1f; // BAD AGENT
@@ -437,7 +480,7 @@ public class WallJumpAgent : Agent
 		}
 
 		// if (!Physics.Raycast(blockRB.position, Vector3.down, 3, groundLayer)) //if the block has gone over the edge, we done.
-		if (!Physics.Raycast(blockRB.position, Vector3.down, 7)) //if the block has gone over the edge, we done.
+		if (!Physics.Raycast(blockRB.position, Vector3.down, 20)) //if the block has gone over the edge, we done.
 		{
 			fail = true; //fell off bro
 			reward -= 1f; // BAD AGENT

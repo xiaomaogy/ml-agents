@@ -813,19 +813,37 @@ MonoBehaviour:
   observations: []
   maxStep: 1024
   resetOnDone: 1
-  state: []
-  reward: 0
+  state:
+  - -0.2992472
+  - 1
+  - -0.9969015
+  - 0.9008722
+  - 0.361
+  - 0.85057116
+  - -0.3541632
+  - 1.5000249
+  - 0.70807886
+  - 0
+  - 0
+  - 0
+  - -1
+  - -0.22871178
+  - -1
+  reward: -0.002
   done: 0
   value: 0
-  CumulativeReward: 0
-  stepCounter: 0
-  agentStoredAction: []
+  CumulativeReward: -0.9049993
+  stepCounter: 907
+  agentStoredAction:
+  - 0
+  - 0
+  - 0
   memory: []
-  id: 0
+  id: 15262
   ground: {fileID: 1260682664}
   areaBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
+    m_Center: {x: 0, y: 0, z: -4}
+    m_Extent: {x: 10, y: 0.5, z: 10}
   goal: {fileID: 1728919207}
   block: {fileID: 965129336}
   jumping: 0
@@ -838,11 +856,13 @@ MonoBehaviour:
   visualizeGroundCheckSphere: 0
   grounded: 0
   performingGroundCheck: 0
-  groundCheckRadius: 0.6
+  groundCheckRadius: 0.45
+  groundCheckOffset: {x: 0, y: -0.4, z: 0}
+  groundCheckBoxSize: {x: 0.5, y: 0.4, z: 0.5}
   groundCheckFrequency: 0.4
   jumpHeight: 3
   jumpVelocity: 777
-  jumpVelocityMaxChange: 3
+  jumpVelocityMaxChange: 10
 --- !u!1 &965129336
 GameObject:
   m_ObjectHideFlags: 0
