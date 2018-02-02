@@ -12,13 +12,17 @@ public class WallJumpAcademy : Academy {
     public Material failMaterial; //when fail, the ground will use this material for a few seconds. 
 
 	public float gravityMultiplier; //use ~3 to make things less floaty
-	public float minWallHeight;
-    public float maxWallHeight;
+	public float currentWallHeight;
+	// public float minWallHeight;
+    // public float maxWallHeight;
+	public float wallHeight;
 
 	public override void AcademyReset()
 	{
-        minWallHeight = (float)resetParameters["min_wall_height"];
-        maxWallHeight = (float)resetParameters["max_wall_height"];
+		wallHeight = 
+        wallHeight = (float)resetParameters["wall_height"];
+        // minWallHeight = (float)resetParameters["min_wall_height"];
+        // maxWallHeight = (float)resetParameters["max_wall_height"];
 	}
 	// Use this for initialization
 	void Start () {

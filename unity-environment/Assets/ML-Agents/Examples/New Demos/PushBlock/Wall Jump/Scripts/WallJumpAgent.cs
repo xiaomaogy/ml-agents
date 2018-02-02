@@ -14,6 +14,7 @@ public class WallJumpAgent : Agent
 
 	public GameObject goal; //goal to push the block to
     public GameObject block; //the orange block we are going to be pushing
+    public GameObject wall; //
 	// [HideInInspector]
 	// public GoalDetect goalDetect; //this script detects when the block touches the goal
 	// public LayerMask groundLayer; //layer the ground is on. used for raycasts to detect when we've fallen off the edge of the platform. If we fall off we will penalize the agent
@@ -53,6 +54,7 @@ public class WallJumpAgent : Agent
 		academy = FindObjectOfType<WallJumpAcademy>();
 		goalStartingPos = goal.transform.position; //cached goal starting Pos in case we want to remember that
 		brain = FindObjectOfType<Brain>(); //only one brain in the scene so this should find our brain. BRAAAINS.
+		
 		// if (brain.brainParameters.actionSpaceType == StateType.continuous)
         // {
 		// 	brain.brainParameters.actionSize = 3;
@@ -279,6 +281,26 @@ public class WallJumpAgent : Agent
 		MLAgentsHelpers.CollectRotationState(state, agentRB.transform); //agent's rotation
 		// state.Add(blockPosRelToGoal.sqrMagnitude);
 
+		RaycastHit hit;
+		float didWeHitSomething = 0; //1 if yes, 0 if no
+		float hitDistance = 10; //how far away was it. if nothing was hit then this will return our max raycast dist (which is 10 right now)
+		if (Physics.Raycast(agentRB.position, transform.forward, out hit, 10)) // raycast forward to look for walls
+		{
+			if(hit.collider.CompareTag("walkableSurface"))
+			{
+				didWeHitSomething = 1;
+				hitDistance = hit.distance;
+				// print(hit.collider.name + hit.distance);
+			}
+		}
+
+		state.Add(didWeHitSomething);
+		state.Add(hitDistance);
+		// else
+		// {
+		// 	didWeHitSomething = 0;
+		// 	hitDistance = 10;
+		// }
 
 		return state;
 		// CollectVector3State(state, agentPosRelToGoal.normalized); 
@@ -369,7 +391,7 @@ public class WallJumpAgent : Agent
 				// print("act[1] = " + act[1]);
 				reward -= energyConservationPentalty;
 			}
-			// if(act[2] != 0)
+			// if(act[2] > 0)
 			// {
 			// 	float energyConservationPentalty = Mathf.Abs(act[2])/1000;
 			// 	// print("act[2] = " + act[2]);
@@ -390,6 +412,7 @@ public class WallJumpAgent : Agent
 			if(act[2] > 0 && !jumping && grounded)
 			{
 				//jump
+				reward -= .001f; //energy conservation penalty
 				StartCoroutine(Jump());
 			}
 			// else
@@ -516,7 +539,10 @@ public class WallJumpAgent : Agent
 	public override void AgentReset()
 	{
 		ResetBlock();
-		goal.transform.position = GetRandomGoalPos();
+		transform.position =  GetRandomSpawnPos();
+		wall.transform.localScale = new Vector3(wall.transform.localScale.x, academy.wallHeight, wall.transform.localScale.z);
+
+		// goal.transform.position = GetRandomGoalPos();
 	}
 }
 
