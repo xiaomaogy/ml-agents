@@ -458,7 +458,8 @@ public class WallJumpAgent : Agent
 
 		if(jumping)
 		{
-			jumpTargetPos = new Vector3(agentRB.position.x,  jumpStartingPos.y + jumpHeight, agentRB.position.z);
+			// jumpTargetPos = transform.forward
+			jumpTargetPos = new Vector3(agentRB.position.x,  jumpStartingPos.y + jumpHeight, agentRB.position.z) + transform.forward/4; 
 
 			MoveTowards(jumpTargetPos, agentRB, jumpVelocity, jumpVelocityMaxChange);
 			// agentRB.AddForce(Vector3.up * jumpHeight, ForceMode.VelocityChange);
