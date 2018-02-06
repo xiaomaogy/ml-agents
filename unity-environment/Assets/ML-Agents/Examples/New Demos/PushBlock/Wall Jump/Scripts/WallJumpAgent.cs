@@ -175,9 +175,13 @@ public class WallJumpAgent : Agent
 			{
 				if(col != null && col.transform != this.transform && col.CompareTag("walkableSurface"))
 				{
-					grounded = true;
-					// StopGroundCheck();
-					break;
+					Vector3 raycastPos = agentRB.position + agentRB.transform.forward * Random.Range(-.4f, .4f); //
+					if (Physics.Raycast(raycastPos, Vector3.down, .6f))
+					{
+						grounded = true;
+						// StopGroundCheck();
+						break;
+					}
 				}
 			}
 			// grounded = true;
@@ -378,9 +382,13 @@ public class WallJumpAgent : Agent
 				//If it chooses .42 then it will go a little bit right
 				//If it chooses -.8 then it will go left (well...80% left)
 			
+
+			float speedX = 0;
+			float speedZ = 0;
 			if(act[0] != 0)
 			{
 				float energyConservationPentalty = Mathf.Abs(act[0])/1000;
+				speedX = grounded? act[0]: act[0]/4; //if we are in the air, our move speed should be a fraction of normal speed.
 				// print("act[0] = " + act[0]);
 				reward -= energyConservationPentalty;
 				// reward -= .0001f;
@@ -388,6 +396,7 @@ public class WallJumpAgent : Agent
 			if(act[1] != 0)
 			{
 				float energyConservationPentalty = Mathf.Abs(act[1])/1000;
+				speedZ= grounded? act[1]: act[1]/4; //if we are in the air, our move speed should be a fraction of normal speed.
 				// print("act[1] = " + act[1]);
 				reward -= energyConservationPentalty;
 			}
@@ -405,14 +414,14 @@ public class WallJumpAgent : Agent
 			// agentRB.AddTorque(transform.up * Mathf.Clamp(act[2], -1f, 1f) * academy.agentRotationSpeed, ForceMode.VelocityChange); //turn right or left
 			
 			
-			Vector3 directionX = Vector3.right * act[0];  //go left or right in world space
-            Vector3 directionZ = Vector3.forward * act[1]; //go forward or back in world space
+			Vector3 directionX = Vector3.right * speedX;  //go left or right in world space
+            Vector3 directionZ = Vector3.forward * speedZ; //go forward or back in world space
         	Vector3 dirToGo = directionX + directionZ; //the dir we want to go
 
 			if(act[2] > 0 && !jumping && grounded)
 			{
 				//jump
-				reward -= .001f; //energy conservation penalty
+				reward -= .005f; //energy conservation penalty
 				StartCoroutine(Jump());
 			}
 			// else
