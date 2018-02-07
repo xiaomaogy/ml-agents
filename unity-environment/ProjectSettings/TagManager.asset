@@ -12,6 +12,7 @@ TagManager:
   - wall
   - goal
   - walkableSurface
+  - seed
   layers:
   - Default
   - TransparentFX

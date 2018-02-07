@@ -1,0 +1,434 @@
+-debug
+-target:library
+-nowarn:0169
+-langversion:6
+-out:'Temp/Assembly-CSharp.dll'
+-unsafe
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEditor.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.CoreModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AccessibilityModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ParticleSystemModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.PhysicsModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.VehiclesModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ClothModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AnimationModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TextRenderingModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UIModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TerrainPhysicsModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.IMGUIModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ClusterInputModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ClusterRendererModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UNETModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.DirectorModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityAnalyticsModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.PerformanceReportingModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityConnectModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.WebModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ARModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.VRModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UIElementsModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.StyleSheetsModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AssetBundleModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AudioModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.CrashReportingModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.GameCenterModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.GridModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ImageConversionModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.InputModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.JSONSerializeModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ParticlesLegacyModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.Physics2DModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.ScreenCaptureModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.SharedInternalsModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.SpriteMaskModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.SpriteShapeModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TerrainModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.TilemapModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityWebRequestModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityWebRequestAudioModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityWebRequestTextureModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.UnityWebRequestWWWModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.VideoModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.WindModule.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/TestRunner/net35/unity-custom/nunit.framework.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Timeline/RuntimeEditor/UnityEngine.Timeline.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Timeline/Editor/UnityEditor.Timeline.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UIAutomation/UnityEngine.UIAutomation.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UIAutomation/Editor/UnityEditor.UIAutomation.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityGoogleAudioSpatializer/Editor/UnityEditor.GoogleAudioSpatializer.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityGoogleAudioSpatializer/RuntimeEditor/UnityEngine.GoogleAudioSpatializer.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Editor/UnityEditor.HoloLens.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnitySpatialTracking/Editor/UnityEditor.SpatialTracking.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Managed/UnityEditor.Graphs.dll'
+-r:'/Applications/Unity/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll'
+-r:'/Applications/Unity/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll'
+-r:'Assets/ML-Agents/Plugins/System.Numerics.dll'
+-r:'Assets/ML-Agents/Plugins/System.ValueTuple.dll'
+-r:'Assets/ML-Agents/Plugins/Android/TensorFlowSharp.Android.dll'
+-r:'Assets/ML-Agents/Plugins/Computer/TensorFlowSharp.dll'
+-r:'Assets/ML-Agents/Plugins/JSON/Newtonsoft.Json.dll'
+-r:'/Users/brandonh/Library/Unity/cache/packages/packages.unity.com/com.unity.ads@2.0.3/UnityEngine.Advertisements.dll'
+-r:'/Users/brandonh/Library/Unity/cache/packages/packages.unity.com/com.unity.ads@2.0.3/Editor/UnityEditor.Advertisements.dll'
+-r:'/Users/brandonh/Library/Unity/cache/packages/packages.unity.com/com.unity.analytics@2.0.13/UnityEngine.Analytics.dll'
+-r:'/Users/brandonh/Library/Unity/cache/packages/packages.unity.com/com.unity.analytics@2.0.13/Editor/UnityEditor.Analytics.dll'
+-r:'/Users/brandonh/Library/Unity/cache/packages/packages.unity.com/com.unity.purchasing@0.0.19/UnityEngine.Purchasing.dll'
+-r:'/Users/brandonh/Library/Unity/cache/packages/packages.unity.com/com.unity.purchasing@0.0.19/Editor/UnityEditor.Purchasing.dll'
+-r:'/Users/brandonh/Library/Unity/cache/packages/packages.unity.com/com.unity.standardevents@1.0.10/UnityEngine.StandardEvents.dll'
+-define:UNITY_5_3_OR_NEWER
+-define:UNITY_5_4_OR_NEWER
+-define:UNITY_5_5_OR_NEWER
+-define:UNITY_5_6_OR_NEWER
+-define:UNITY_2017_1_OR_NEWER
+-define:UNITY_2017_2_OR_NEWER
+-define:UNITY_2017_3_OR_NEWER
+-define:UNITY_2017_3_0
+-define:UNITY_2017_3
+-define:UNITY_2017
+-define:PLATFORM_ARCH_64
+-define:UNITY_64
+-define:ENABLE_AUDIO
+-define:ENABLE_CACHING
+-define:ENABLE_CLOTH
+-define:ENABLE_DUCK_TYPING
+-define:ENABLE_GENERICS
+-define:ENABLE_PVR_GI
+-define:ENABLE_MICROPHONE
+-define:ENABLE_MULTIPLE_DISPLAYS
+-define:ENABLE_PHYSICS
+-define:ENABLE_SPRITERENDERER_FLIPPING
+-define:ENABLE_SPRITES
+-define:ENABLE_GRID
+-define:ENABLE_TILEMAP
+-define:ENABLE_TERRAIN
+-define:ENABLE_RAKNET
+-define:ENABLE_DIRECTOR
+-define:ENABLE_UNET
+-define:ENABLE_LZMA
+-define:ENABLE_UNITYEVENTS
+-define:ENABLE_WEBCAM
+-define:ENABLE_WWW
+-define:ENABLE_CLOUD_SERVICES_COLLAB
+-define:ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS
+-define:ENABLE_CLOUD_SERVICES_ADS
+-define:ENABLE_CLOUD_HUB
+-define:ENABLE_CLOUD_PROJECT_ID
+-define:ENABLE_CLOUD_SERVICES_USE_WEBREQUEST
+-define:ENABLE_CLOUD_SERVICES_UNET
+-define:ENABLE_CLOUD_SERVICES_BUILD
+-define:ENABLE_CLOUD_LICENSE
+-define:ENABLE_EDITOR_HUB
+-define:ENABLE_EDITOR_HUB_LICENSE
+-define:ENABLE_WEBSOCKET_CLIENT
+-define:ENABLE_DIRECTOR_AUDIO
+-define:ENABLE_DIRECTOR_TEXTURE
+-define:ENABLE_TIMELINE
+-define:ENABLE_EDITOR_METRICS
+-define:ENABLE_EDITOR_METRICS_CACHING
+-define:ENABLE_NATIVE_ARRAY
+-define:ENABLE_SPRITE_MASKING
+-define:INCLUDE_DYNAMIC_GI
+-define:INCLUDE_GI
+-define:ENABLE_MONO_BDWGC
+-define:PLATFORM_SUPPORTS_MONO
+-define:RENDER_SOFTWARE_CURSOR
+-define:INCLUDE_PUBNUB
+-define:ENABLE_PLAYMODE_TESTS_RUNNER
+-define:ENABLE_VIDEO
+-define:ENABLE_RMGUI
+-define:ENABLE_PACKMAN
+-define:ENABLE_CUSTOM_RENDER_TEXTURE
+-define:ENABLE_STYLE_SHEETS
+-define:ENABLE_LOCALIZATION
+-define:PLATFORM_STANDALONE_OSX
+-define:PLATFORM_STANDALONE
+-define:UNITY_STANDALONE_OSX
+-define:UNITY_STANDALONE
+-define:ENABLE_SUBSTANCE
+-define:ENABLE_GAMECENTER
+-define:ENABLE_RUNTIME_GI
+-define:ENABLE_MOVIES
+-define:ENABLE_NETWORK
+-define:ENABLE_CRUNCH_TEXTURE_COMPRESSION
+-define:ENABLE_UNITYWEBREQUEST
+-define:ENABLE_CLOUD_SERVICES
+-define:ENABLE_CLOUD_SERVICES_ANALYTICS
+-define:ENABLE_CLOUD_SERVICES_PURCHASING
+-define:ENABLE_CLOUD_SERVICES_CRASH_REPORTING
+-define:ENABLE_CLOUD_SERVICES_NATIVE_CRASH_REPORTING
+-define:ENABLE_CLUSTERINPUT
+-define:ENABLE_VR
+-define:ENABLE_AR
+-define:ENABLE_SPATIALTRACKING
+-define:ENABLE_WEBSOCKET_HOST
+-define:ENABLE_MONO
+-define:NET_4_6
+-define:ENABLE_PROFILER
+-define:DEBUG
+-define:TRACE
+-define:UNITY_ASSERTIONS
+-define:UNITY_EDITOR
+-define:UNITY_EDITOR_64
+-define:UNITY_EDITOR_OSX
+-define:ENABLE_NATIVE_ARRAY_CHECKS
+-define:UNITY_TEAM_LICENSE
+-define:ENABLE_TENSORFLOW
+-define:UNITY_POST_PROCESSING_STACK_V1
+'Assets/ML-Agents/Examples/3DBall/Scripts/Ball3DAcademy.cs'
+'Assets/ML-Agents/Examples/3DBall/Scripts/Ball3DAgent.cs'
+'Assets/ML-Agents/Examples/3DBall/Scripts/Ball3DDecision.cs'
+'Assets/ML-Agents/Examples/Area/Scripts/Area.cs'
+'Assets/ML-Agents/Examples/Area/Scripts/AreaAgent.cs'
+'Assets/ML-Agents/Examples/Area/Scripts/AreaDecision.cs'
+'Assets/ML-Agents/Examples/Area/Scripts/GoalInteract.cs'
+'Assets/ML-Agents/Examples/Area/Scripts/Push/PushAcademy.cs'
+'Assets/ML-Agents/Examples/Area/Scripts/Push/PushAgent.cs'
+'Assets/ML-Agents/Examples/Area/Scripts/Push/PushArea.cs'
+'Assets/ML-Agents/Examples/Area/Scripts/Wall/WallAcademy.cs'
+'Assets/ML-Agents/Examples/Area/Scripts/Wall/WallAgent.cs'
+'Assets/ML-Agents/Examples/Area/Scripts/Wall/WallArea.cs'
+'Assets/ML-Agents/Examples/Basic/Scripts/BasicAcademy.cs'
+'Assets/ML-Agents/Examples/Basic/Scripts/BasicAgent.cs'
+'Assets/ML-Agents/Examples/Basic/Scripts/BasicDecision.cs'
+'Assets/ML-Agents/Examples/Crawler/Scripts/CameraFollow.cs'
+'Assets/ML-Agents/Examples/Crawler/Scripts/CrawlerAcademy.cs'
+'Assets/ML-Agents/Examples/Crawler/Scripts/CrawlerAgentConfigurable.cs'
+'Assets/ML-Agents/Examples/Crawler/Scripts/CrawlerBodyContact.cs'
+'Assets/ML-Agents/Examples/Crawler/Scripts/CrawlerLegContact.cs'
+'Assets/ML-Agents/Examples/GridWorld/Scripts/GridAcademy.cs'
+'Assets/ML-Agents/Examples/GridWorld/Scripts/GridAgent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineBlendListCamera.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineBrain.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineClearShot.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineCollider.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineConfiner.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineDollyCart.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineExternalCamera.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineFollowZoom.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineFreeLook.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineMixingCamera.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachinePath.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachinePipeline.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineSmoother.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineSmoothPath.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineStateDrivenCamera.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineTargetGroup.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Behaviours/CinemachineVirtualCamera.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Components/CinemachineBasicMultiChannelPerlin.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Components/CinemachineComposer.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Components/CinemachineFramingTransposer.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Components/CinemachineGroupComposer.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Components/CinemachineHardLockToTarget.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Components/CinemachineHardLookAt.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Components/CinemachineOrbitalTransposer.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Components/CinemachinePOV.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Components/CinemachineSameAsFollowObject.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Components/CinemachineTrackedDolly.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Components/CinemachineTransposer.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/AxisState.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/CameraState.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/CinemachineBlend.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/CinemachineBlenderSettings.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/CinemachineComponentBase.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/CinemachineCore.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/CinemachineDebugLogger.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/CinemachineExtension.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/CinemachinePathBase.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/CinemachinePropertyAttribute.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/CinemachineVirtualCameraBase.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/GaussianFilter.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/ICinemachineCamera.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/ICinemachineComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/LensSettings.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/NoiseSettings.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/Predictor.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/ReflectionHelpers.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/SplineHelpers.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Base/Runtime/Core/UnityVectorExtensions.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/PostFX/CinemachinePostFX.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/PostFX/CinemachinePostProcessing.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Timeline/CinemachineMixer.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Timeline/CinemachineShot.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/Cinemachine/Timeline/CinemachineTrack.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/MLAgentsHelpers.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Attributes/GetSetAttribute.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Attributes/MinAttribute.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Attributes/TrackballAttribute.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Attributes/TrackballGroupAttribute.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/AmbientOcclusionComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/BloomComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/BuiltinDebugViewsComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/ChromaticAberrationComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/ColorGradingComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/DepthOfFieldComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/DitheringComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/EyeAdaptationComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/FogComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/FxaaComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/GrainComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/MotionBlurComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/ScreenSpaceReflectionComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/TaaComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/UserLutComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Components/VignetteComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/AmbientOcclusionModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/AntialiasingModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/BloomModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/BuiltinDebugViewsModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/ChromaticAberrationModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/ColorGradingModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/DepthOfFieldModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/DitheringModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/EyeAdaptationModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/FogModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/GrainModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/MotionBlurModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/ScreenSpaceReflectionModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/UserLutModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Models/VignetteModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/PostProcessingBehaviour.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/PostProcessingComponent.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/PostProcessingContext.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/PostProcessingModel.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/PostProcessingProfile.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Utils/ColorGradingCurve.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Utils/GraphicsUtils.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Utils/MaterialFactory.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Runtime/Utils/RenderTextureFactory.cs'
+'Assets/ML-Agents/Examples/New Demos/Helper Assets/PostProcessing/Utilities/CustomMotionTexture/ExampleWheelController.cs'
+'Assets/ML-Agents/Examples/New Demos/PushBlock/NOT CURRENTLY USED IGNORE ME/PushAgentBasicBK.cs'
+'Assets/ML-Agents/Examples/New Demos/PushBlock/PushBlockBasic [START HERE]/Scripts/GoalDetect.cs'
+'Assets/ML-Agents/Examples/New Demos/PushBlock/PushBlockBasic [START HERE]/Scripts/PushAgentBasic.cs'
+'Assets/ML-Agents/Examples/New Demos/PushBlock/PushBlockBasic [START HERE]/Scripts/PushBlockAcademy.cs'
+'Assets/ML-Agents/Examples/New Demos/PushBlock/Wall Jump/Scripts/WallJumpAcademy.cs'
+'Assets/ML-Agents/Examples/New Demos/PushBlock/Wall Jump/Scripts/WallJumpAgent.cs'
+'Assets/ML-Agents/Examples/New Demos/PushBlock/Wall Jump/Scripts/WallJumpCurriculum.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/NOT CURRENTLY USED/Scripts Not Currently Used/AgentSoccerBlue.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/NOT CURRENTLY USED/Scripts Not Currently Used/AgentSoccerRed.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/NOT CURRENTLY USED/Scripts Not Currently Used/PushAgentRaycaster.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/NOT CURRENTLY USED/Scripts Not Currently Used/SoccerAgent.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/NOT CURRENTLY USED/Scripts Not Currently Used/SoccerGoal.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/NOT CURRENTLY USED/Scripts Not Currently Used/SoccerStateCollector.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/NOT CURRENTLY USED/Scripts Not Currently Used/SoccerWallTouchPenalty.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/NOT CURRENTLY USED/Scripts Not Currently Used/TrainingDuplicator.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/Resources/textAsset.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/Scripts SOCCER/AgentSoccer.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/Scripts SOCCER/CameraZoom.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/Scripts SOCCER/CurriculumController.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/Scripts SOCCER/ReadRewardData.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/Scripts SOCCER/ScriptableObjectTest.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/Scripts SOCCER/SoccerAcademy.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/Scripts SOCCER/SoccerBallController.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/Scripts SOCCER/SoccerFieldArea.cs'
+'Assets/ML-Agents/Examples/New Demos/Soccer/Scripts SOCCER/SoccerPlayers.cs'
+'Assets/ML-Agents/Examples/Reacher/Scripts/FlyCamera.cs'
+'Assets/ML-Agents/Examples/Reacher/Scripts/ReacherAcademy.cs'
+'Assets/ML-Agents/Examples/Reacher/Scripts/ReacherAgent.cs'
+'Assets/ML-Agents/Examples/Reacher/Scripts/ReacherDecision.cs'
+'Assets/ML-Agents/Examples/Reacher/Scripts/ReacherGoal.cs'
+'Assets/ML-Agents/Examples/Tennis/Scripts/hitWall.cs'
+'Assets/ML-Agents/Examples/Tennis/Scripts/TennisAcademy.cs'
+'Assets/ML-Agents/Examples/Tennis/Scripts/TennisAgent.cs'
+'Assets/ML-Agents/Examples/Tennis/Scripts/TennisArea.cs'
+'Assets/ML-Agents/Scripts/Academy.cs'
+'Assets/ML-Agents/Scripts/Agent.cs'
+'Assets/ML-Agents/Scripts/Brain.cs'
+'Assets/ML-Agents/Scripts/Communicator.cs'
+'Assets/ML-Agents/Scripts/CoreBrain.cs'
+'Assets/ML-Agents/Scripts/CoreBrainExternal.cs'
+'Assets/ML-Agents/Scripts/CoreBrainHeuristic.cs'
+'Assets/ML-Agents/Scripts/CoreBrainInternal.cs'
+'Assets/ML-Agents/Scripts/CoreBrainPlayer.cs'
+'Assets/ML-Agents/Scripts/Decision.cs'
+'Assets/ML-Agents/Scripts/ExternalCommunicator.cs'
+'Assets/ML-Agents/Scripts/Monitor.cs'
+'Assets/ML-Agents/Scripts/UnityAgentsException.cs'
+'Assets/ML-Agents/Template/Scripts/TemplateAcademy.cs'
+'Assets/ML-Agents/Template/Scripts/TemplateAgent.cs'
+'Assets/ML-Agents/Template/Scripts/TemplateDecision.cs'
+'Assets/Unity Technologies/Recorder/Extensions/FCIntegration/BaseFCRecorderSettings.cs'
+'Assets/Unity Technologies/Recorder/Extensions/FCIntegration/EXR/EXRRecorder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/FCIntegration/EXR/EXRRecorderSettings.cs'
+'Assets/Unity Technologies/Recorder/Extensions/FCIntegration/GIF/GIFRecorder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/FCIntegration/GIF/GIFRecorderSettings.cs'
+'Assets/Unity Technologies/Recorder/Extensions/FCIntegration/MP4/MP4Recorder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/FCIntegration/MP4/MP4RecorderSettings.cs'
+'Assets/Unity Technologies/Recorder/Extensions/FCIntegration/PNG/PNGRecorder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/FCIntegration/PNG/PNGRecorderSettings.cs'
+'Assets/Unity Technologies/Recorder/Extensions/FCIntegration/WEBM/WEBMRecorder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/FCIntegration/WEBM/WEBMRecorderSettings.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/AudioRecorder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/Encoder/AudioEncoder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/Encoder/EncoderBase.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/Encoder/ExrEncoder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/Encoder/fcAPI.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/Encoder/FlacEncoder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/Encoder/GifEncoder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/Encoder/MovieEncoder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/Encoder/MP4Encoder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/Encoder/OggEncoder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/Encoder/PngEncoder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/Encoder/WaveEncoder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/Encoder/WebMEncoder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/GBufferRecorder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/Misc/Bool.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/Misc/DataPath.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/MovieRecorder.cs'
+'Assets/Unity Technologies/Recorder/Extensions/UTJ/FrameCapturer/Scripts/RecorderBase.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/BaseRenderTextureInput.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/FileNameGenerator.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/FrameRateHelper.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/GenericRecorder.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/ImageInputSettings.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/ImageRecorderSettings.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/InputBinder.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/InputSettings.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/InputSettingsComponent.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/InputSettingsList.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/OutputPath.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/Recorder.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/RecorderAttribute.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/RecorderComponent.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/RecorderInput.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/RecorderSettings.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/RecordersInventory.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/RecorderVersion.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/RecordingSession.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/SceneHook.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/TextureFlipper.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/Timeline/RecorderClip.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/Timeline/RecorderPlayableBehaviour.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/Timeline/RecorderTrack.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/Timeline/WaitForEndOfFrameComponent.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/UnityHelpers.cs'
+'Assets/Unity Technologies/Recorder/Framework/Core/Engine/Verbose.cs'
+'Assets/Unity Technologies/Recorder/Framework/Inputs/Camera360/Engine/Camera360Input.cs'
+'Assets/Unity Technologies/Recorder/Framework/Inputs/Camera360/Engine/Camera360InputSettings.cs'
+'Assets/Unity Technologies/Recorder/Framework/Inputs/CBRenderTexture/Engine/CBRenderTextureInput.cs'
+'Assets/Unity Technologies/Recorder/Framework/Inputs/CBRenderTexture/Engine/CBRenderTextureInputSettings.cs'
+'Assets/Unity Technologies/Recorder/Framework/Inputs/CBRenderTexture/Engine/GameViewSize.cs'
+'Assets/Unity Technologies/Recorder/Framework/Inputs/RenderTexture/Engine/RenderTextureInput.cs'
+'Assets/Unity Technologies/Recorder/Framework/Inputs/RenderTexture/Engine/RenderTextureInputSettings.cs'
+'Assets/Unity Technologies/Recorder/Framework/Inputs/RenderTextureSampler/Engine/RenderTextureSampler.cs'
+'Assets/Unity Technologies/Recorder/Framework/Inputs/RenderTextureSampler/Engine/RenderTextureSamplerSettings.cs'
+'Assets/Unity Technologies/Recorder/Framework/Inputs/ScreenCapture/Engine/ScreenCaptureInput.cs'
+'Assets/Unity Technologies/Recorder/Framework/Inputs/ScreenCapture/Engine/ScreenCaptureInputSettings.cs'
+'Assets/Unity Technologies/Recorder/Framework/Recorders/ImageRecorder/Engine/ImageRecorder.cs'
+'Assets/Unity Technologies/Recorder/Framework/Recorders/ImageRecorder/Engine/ImageRecorderSettings.cs'
+-r:'/Applications/Unity/Unity.app/Contents/MonoBleedingEdge/lib/mono/4.5/System.Runtime.Serialization.dll'
+-r:'/Applications/Unity/Unity.app/Contents/MonoBleedingEdge/lib/mono/4.5/System.Xml.Linq.dll'
+-r:'/Applications/Unity/Unity.app/Contents/MonoBleedingEdge/lib/mono/4.5/UnityScript.dll'
+-r:'/Applications/Unity/Unity.app/Contents/MonoBleedingEdge/lib/mono/4.5/UnityScript.Lang.dll'
+-r:'/Applications/Unity/Unity.app/Contents/MonoBleedingEdge/lib/mono/4.5/Boo.Lang.dll'
+-sdk:4.6
