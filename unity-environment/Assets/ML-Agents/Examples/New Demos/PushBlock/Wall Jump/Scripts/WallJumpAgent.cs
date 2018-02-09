@@ -186,8 +186,10 @@ public class WallJumpAgent : Agent
 			{
 				if(col != null && col.transform != this.transform && col.CompareTag("walkableSurface"))
 				{
-					Vector3 raycastPos = agentRB.position + agentRB.transform.forward * Random.Range(-.4f, .4f); //
-					if (Physics.Raycast(raycastPos, Vector3.down, .6f))
+					Vector3 randomRaycastPos = agentRB.position;
+					randomRaycastPos += agentRB.transform.forward * Random.Range(-.4f, .4f); //
+					randomRaycastPos += agentRB.transform.right * Random.Range(-.4f, .4f); //
+					if (Physics.Raycast(randomRaycastPos, Vector3.down, .6f))
 					{
 						grounded = true;
 						// StopGroundCheck();
@@ -510,7 +512,7 @@ public class WallJumpAgent : Agent
 	{
 
         MoveAgent(act); //perform agent actions
-		reward -= .001f; // don't waste time
+		// reward -= .001f; // don't waste time
 		bool fail = false;  // did the agent or block get pushed off the edge?
 
 		//debug
@@ -529,7 +531,7 @@ public class WallJumpAgent : Agent
 			// agentRB.AddForce(Vector3.up * jumpVelocity, ForceMode.VelocityChange);
 		}
 
-		if(!jumping && !grounded)
+		if(!jumping && !grounded) //add some downward force so it's not floaty
 		{
 			agentRB.AddForce(Vector3.down * fallingForce, ForceMode.Acceleration);
 		}

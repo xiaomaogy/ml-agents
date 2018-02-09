@@ -1023,8 +1023,8 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "-Change BrainType to External.\n-Build the scene to the python folder in
-    this repo.\n\nTraining Settings: \npython learn.py PushAreaBasic --train --max-steps=1e5\n
-    --batch-size=4096 --buffer-size=8192 --time-horizon=64\n\n"
+    this repo.\n\nTraining Settings: \npython learn.py WallJump --train --max-steps=5e5
+    \n--batch-size=4096 --buffer-size=8192 --time-horizon=64\n\n"
 --- !u!114 &114185114505916178
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1096,7 +1096,7 @@ MonoBehaviour:
 
     2. Don''t push the Orange Cube off the edge.
 
-    3. Push the Orange Cube to the goal.'
+    3. Use the Orange Cube to jump over the wall.'
 --- !u!114 &114246846321354420
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1187,9 +1187,9 @@ MonoBehaviour:
 
     Orange Cube falls off: -1
 
-    Existential Pain: -.001 Every Tick (Hurry Up)
+    Energy Conservation: (notes in script)
 
-    Orange Cube touches goal: +1
+    Blue agent touches goal: +1
 
 '
 --- !u!114 &114763019968714510
@@ -1224,7 +1224,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: PushBlock Basic
+  m_Text: Wall Jump
 --- !u!114 &114853288875511916
 MonoBehaviour:
   m_ObjectHideFlags: 1
