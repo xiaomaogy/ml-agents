@@ -1,177 +1,294 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
 using UnityEngine;
 
-
-[HelpURL("https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Agents-Editor-Interface.md#agent")]
-/** Generic functions for parent Agent class.
- * Contains all logic for Brain-Agent communication and Agent-Environment 
- * interaction.
- */
+/// <summary>
+/// Agent Monobehavior class that is attached to a Unity GameObject, making it
+/// an Agent. An agent produces observations and takes actions in the 
+/// environment. Observations are determined by the cameras attached 
+/// to the agent in addition to the vector observations implemented by the
+/// user in <see cref="CollectState"/>. On the other hand, actions
+/// are determined by decisions produced by a linked Brain. Currently, this
+/// class is expected to be extended to implement the desired agent behavior.
+/// </summary>
+/// <remarks>
+/// Simply speaking, an agent roams through an environment and at each step
+/// of the environment extracts its current observation, sends them to its
+/// linked brain and in return receives an action from its brain. In practice,
+/// however, an agent need not send its observation at every step since very
+/// little may have changed between sucessive steps. Currently, how often an
+/// agent updates its brain with a fresh observation is determined by the
+/// Academy. 
+/// 
+/// At any step, an agent may be considered <see cref="done"/>. 
+/// This could occur due to a variety of reasons:
+///     - The agent reached an end state within its environment.
+///     - The agent reached the maximum # of steps (i.e. timed out).
+///     - The academy reached the maximum # of steps (forced agent to be done).
+/// 
+/// Here, an agent reaches an end state if it completes its task successfully
+/// or somehow fails along the way. In the case where an agent is done before
+/// the academy, it either resets and restarts, or just lingers until the
+/// academy is done.
+/// 
+/// An important note regarding steps and episodes is due. Here, an agent step
+/// corresponds to an academy step, which also corresponds to Unity
+/// environment step (i.e. each FixedUpdate call). This is not the case for
+/// episodes. The academy controls the global episode count and each agent 
+/// controls its own local episode count and can reset and start a new local
+/// episode independently (based on its own experience). Thus an academy
+/// (global) episode can be viewed as the upper-bound on an agents episode
+/// length and that within a single global episode, an agent may have completed
+/// multiple local episodes. Consequently, if an agent <see cref="maxStep"/> is
+/// set to a value larger than the academy max steps value, then the academy
+/// value takes precedence (since the agent max step will never be reached).
+/// 
+/// Lastly, note that at any step the brain linked to the agent is allowed to
+/// change programmatically with <see cref="GiveBrain"/>.
+/// 
+/// Implementation-wise, it is recommended that this class is extended and the
+/// virtual methods overridden. For sample implementations of agent behavior,
+/// see the Examples/ directory within this Unity project.
+/// </remarks>
+[HelpURL("https://github.com/Unity-Technologies/ml-agents/blob/" +
+         "master/docs/Agents-Editor-Interface.md#agent")]
 public abstract class Agent : MonoBehaviour
 {
-    [Tooltip("The brain to register this agent to. Can be dragged into the inspector using the Editor.")]
-    /**<  \brief  The brain that will control this agent. */
-    /**< Use the inspector to drag the desired brain gameObject into
-	 * the Brain field */
+    [Tooltip("The Brain to register this Agent to. Can be dragged into " +
+             "the inspector using the Editor.")]
+    /// <summary>
+    /// The Brain attached to this agent. A brain can
+    /// be attached either directly from the Inspector or programmatically
+    /// through <see cref="GiveBrain"/>. It is OK for an agent to not have
+    /// a brain, as long as no decision is requested.
+    /// </summary>
     public Brain brain;
 
     [Tooltip("A list of Cameras which will be used to generate observations.")]
-    /**<  \brief  The list of the cameras the Agent uses as observations. */
-    /**< These cameras will be used to generate the observations */
+    /// <summary>
+    /// The list of the Camera GameObjects the agent uses for visual
+    /// observations.
+    /// </summary>
     public List<Camera> observations;
 
-    [Tooltip("The per-agent maximum number of steps.")]
-    /**<  \brief  The number of steps the agent takes before being done. */
-    /**< If set to 0, the agent can only be set to done via a script.
-    * If set to any positive integer, the agent will be set to done after that
-    * many steps each episode. */
+    [Tooltip("The maximum number of steps allowed for the Agent.")]
+    /// <summary>
+    /// The maximum number of steps the agent takes before being done. 
+    /// </summary>
+    /// <remarks>
+    /// If set to 0, the agent can only be set to done programmatically (or
+    /// when the Academy is done).
+    /// If set to any positive integer, the agent will be set to done after
+    /// that many steps. Note that setting the max step to a value greater
+    /// than the academy max step value renders it useless.
+    /// </remarks>
     public int maxStep;
 
-    [Tooltip("If checked, the agent will reset on done. Else, AgentOnDone() will be called.")]
-    /**<  \brief Determines the behaviour of the Agent when done.*/
-    /**< If true, the agent will reset when done. 
-	 * If not, the agent will remain done, and no longer take actions.*/
+    [Tooltip("Specifies whether the Agent should reset when it is done " +
+             "or wait for the Academy to complete the episode.")]
+    /// <summary>
+    /// Determines the behaviour of the agent when done.
+    /// </summary>
+    /// <remarks>
+    /// If true, the agent will reset when done and start a new episode.
+    /// Otherwise, the agent will remain done and its behavior will be
+    /// dictated by the <see cref="AgentOnDone"/> method.
+    /// </remarks>
     public bool resetOnDone = true;
 
-    // State list for the agent.
+    /// Most recent agent vector (i.e. numeric) observation.
     [HideInInspector]
     public List<float> state;
 
-    //List of last n states.
+    /// The previous agent vector observations, stacked. The length of the
+    /// history (i.e. number of vector observations to stack) is specified
+    /// in the Brain parameters.
     [HideInInspector]
     public List<float> stackedStates;
 
-    /**< \brief Describes the reward for the given step of the agent.*/
-    /**< It is reset to 0 at the beginning of every step. 
-    * Modify in AgentStep(). 
-    * Should be set to positive to reinforcement desired behavior, and
-    * set to a negative value to punish undesireable behavior.
-    * Additionally, the magnitude of the reward should not exceed 1.0 */
+    /// Represents the reward the agent accumulated during the current step.
+    /// It is reset to 0 at the beginning of every step.
+    /// Should be set to a positive value when the agent performs a "good"
+    /// action that we wish to reinforce/reward, and set to a negative value
+    /// when the agent performs a "bad" action that we wish to punish/deter.
     [HideInInspector]
     public float reward;
 
-    /**< \brief Whether or not the agent is done*/
-    /**< Set to true when the agent has acted in some way which ends the 
-     * episode for the given agent. */
+    /// Whether or not the agent has completed the episode. This may be due
+    /// to either reaching a success or fail state, or reaching the maximum
+    /// number of steps (i.e. timing out).
     [HideInInspector]
     public bool done;
 
-    /**< \brief Whether or not the max step is reached*/
+    /// Whether or not the agent reached the maximum number of steps.
     [HideInInspector]
     public bool maxStepReached;
 
-    /**< \brief The current value estimate of the agent */
-    /**<  When using an External brain, you can pass value estimates to the
-     * agent at every step using env.Step(actions, values).
-     * If AgentMonitor is attached to the Agent, this value will be displayed.*/
+    /// The current value estimate of the agent. An external Brain can pass
+    /// the value estimate to the agent at every step. If Monitor is
+    /// attached to the agent, this value will be visualized in the 
+    /// Unity Editor during inference mode.
     [HideInInspector]
     public float value;
 
-    /**< \brief Do not modify: This keeps track of the cumulative reward.*/
+    /// Keeps track of the cumulative reward in this episode.
     [HideInInspector]
-    public float CumulativeReward;
+    public float cumulativeReward;
 
-    /**< \brief Do not modify: This keeps track of the number of steps taken by
-     * the agent each episode.*/
+    /// Keeps track of the number of steps taken by the agent in this episode.
+    /// Note that this value is different for each agent, and may not overlap
+    /// with the step counter in the Academy, since agents reset based on
+    /// their own experience.
     [HideInInspector]
     public int stepCounter;
 
-    /**< \brief Do not modify: This keeps track of the last actions decided by
-     * the brain.*/
+    /// Keeps track of the last action taken by the Brain.
     [HideInInspector]
     public float[] agentStoredAction;
 
-    /**< \brief Do not modify directly: This is used by the brain to store 
-     * information about the previous states of the agent*/
+    /// Used by the Trainer to store information about the agent. This data
+    /// structure is not consumed or modified by the agent directly, they are
+    /// just the owners of their trainiers memory. Currently, however, the
+    /// size of the memory is in the Inspector properties for the Brain.
     [HideInInspector]
     public float[] memory;
 
-    /**< \brief Do not modify : This is the unique Identifier each agent 
-     * receives at initialization. It is used by the brain to identify
-     * the agent.*/
+    /// Unique identifier each agent receives at initialization. It is used
+    /// to separate between different agents in the environment.
     [HideInInspector]
     public int id;
 
+    /// Monobehavior function that is called when the attached GameObject
+    /// becomes enabled or active.
     void OnEnable()
     {
         id = gameObject.GetInstanceID();
-        if (brain != null)
-        {
-            brain.agents.Add(id, gameObject.GetComponent<Agent>());
-            if (brain.brainParameters.actionSpaceType == StateType.continuous)
-            {
-                agentStoredAction = new float[brain.brainParameters.actionSize];
-            }
-            else
-            {
-                agentStoredAction = new float[1];
-            }
-            memory = new float[brain.brainParameters.memorySize];
-        }
+        AttachAgentToBrain(gameObject.GetComponent<Agent>(), brain);
+        ResetData();
         InitializeAgent();
     }
 
-    void OnDisable()
-    {
-        //Remove the agent from the list of agents of the brain
-        brain.agents.Remove(id);
-    }
-
-    /// When GiveBrain is called, the agent unsubscribes from its 
-    /// previous brain and subscribes to the one passed in argument.
-    /** Use this method to provide a brain to the agent via script. 
-	 * Do not modify brain directly.
-	@param b The Brain component the agent will subscribe to.*/
-    public void GiveBrain(Brain b)
-    {
-        RemoveBrain();
-        brain = b;
-        brain.agents.Add(id, gameObject.GetComponent<Agent>());
-        if (brain.brainParameters.actionSpaceType == StateType.continuous)
-        {
-            agentStoredAction = new float[brain.brainParameters.actionSize];
-        }
-        else
-        {
-            agentStoredAction = new float[1];
-        }
-        memory = new float[brain.brainParameters.memorySize];
-    }
-
-    /// When RemoveBrain is called, the agent unsubscribes from its brain.
-    /** Use this method to give a brain to an agent via script. 
-	 * Do not modify brain directly.
-	 * If an agent does not have a brain, it will not update its actions.*/
-    public void RemoveBrain()
+    /// Helper function that resets all the data structures associated with
+    /// the agent. Typically used when the agent is being initialized or reset
+    /// at the end of an episode.
+    void ResetData()
     {
         if (brain != null)
         {
-            brain.agents.Remove(id);
+            // retrieve data structure sizes
+            int actionSize = 1;
+            if (brain.brainParameters.actionSpaceType == StateType.continuous)
+            {
+                actionSize = brain.brainParameters.actionSize;
+            }
+            int stateSize = brain.brainParameters.stateSize;
+            int stackDepth = brain.brainParameters.stackedStates;
+            int memorySize = brain.brainParameters.memorySize;
+
+            // initialize and reset data structures
+            agentStoredAction = new float[actionSize];
+            memory = new float[memorySize];
+            if (state == null || stackedStates == null)
+            {
+                state = new List<float>(stateSize);
+                stackedStates = new List<float>(stateSize * stackDepth);
+            }
+            else
+            {
+                state.Clear();
+                stackedStates.Clear();
+            }
+            stackedStates.AddRange(new float[stateSize * stackDepth]);
         }
     }
 
-    /// Initialize the agent with this method
-    /** Must be implemented in agent-specific child class.
-	 *  This method called only once when the agent is enabled.
-	*/
-    public virtual void InitializeAgent()
+    /// Monobehavior function that is called when the attached GameObject
+    /// becomes disabled or inactive.
+    void OnDisable()
     {
-        state = new List<float>(brain.brainParameters.stateSize);
-        stackedStates = new List<float>(brain.brainParameters.stateSize * brain.brainParameters.stackedStates);
-        stackedStates.AddRange(new float[brain.brainParameters.stateSize * brain.brainParameters.stackedStates]);
+        DetachAgentFromBrain(id, brain);
     }
 
-    /// Collect the states of the agent with this method
-    /** Must be implemented in agent-specific child class.
-	 *  This method called at every step and collects the state of the agent.
-	 *  The lenght of the output must be the same length as the state size field
-	 *  in the brain parameters of the brain the agent subscribes to.
-	 *  Note : The order of the elements in the state list is important.
-	 *  @returns state A list of floats corresponding to the state of the agent. 
-	*/
+    /// <summary>
+    /// Updates the Brain for the agent. Any brain currently assigned to the
+    /// agent will be replaced with the provided one.
+    /// </summary>
+    /// <remarks>
+    /// The agent unsubscribes from its current brain (if it has one) and
+    /// subscribes to the provided brain. This enables contextual brains, that
+    /// is, updating the behaviour (hence brain) of the agent depending on
+    /// the context of the game. For example, we may utilize one (wandering)
+    /// brain when an agent is randomly exploring an open world, but switch
+    /// to another (fighting) brain when it comes into contact with an enemy.
+    /// </remarks>
+    /// <param name="newBrain">New brain to subscribe this agent to</param>
+    public void GiveBrain(Brain newBrain)
+    {
+        SwapBrain(newBrain);
+        ResetData();
+    }
 
-    public List<float> ClearAndCollectState() {
+    /// <summary>
+    /// Helper method that detaches an agent from a Brain.
+    /// </summary>
+    /// <param name="agentId">The agents unique identifier</param>
+    /// <param name="brain">The brain that the agent should detach from</param>
+    static void DetachAgentFromBrain(int agentId, Brain brain)
+    {
+        if (brain != null)
+        {
+            brain.agents.Remove(agentId);
+        }
+    }
+
+    /// <summary>
+    /// Helper method that attaches an agent to a Brain.
+    /// </summary>
+    /// <param name="agent">The agent reference</param>
+    /// <param name="brain">The brain that the agent should attach to</param>
+    static void AttachAgentToBrain(Agent agent, Brain brain)
+    {
+        if (brain != null)
+        {
+            brain.agents.Add(agent.id, agent);
+        }
+    }
+
+    /// <summary>
+    /// Swaps the current Brain attached to the agent with the provided one.
+    /// Swapping involves first detatching any brain currently linked to the
+    /// agent and then attaching the agent to the new, provided brain.
+    /// </summary>
+    /// <param name="newBrain">New brain to attach to the agent.</param>
+    void SwapBrain(Brain newBrain)
+    {
+        DetachAgentFromBrain(id, brain);
+        brain = newBrain;
+        AttachAgentToBrain(gameObject.GetComponent<Agent>(), newBrain);
+    }
+
+    /// <summary>
+    /// Initializes the agent, called once when the agent is enabled. Can be
+    /// left empty if there is no special, unique set-up behavior for the
+    /// agent.
+    /// </summary>
+    /// <remarks>
+    /// One sample use is to store local references to other objects in the
+    /// scene which would facilitate computing this agents observation.
+    /// </remarks>
+    public virtual void InitializeAgent()
+    {
+    }
+
+    /// <summary>
+    /// Updates the stacked observation object with a fresh current
+    /// observation.
+    /// </summary>
+    /// <returns>
+    /// Stacked observation with the latest current observation
+    /// </returns>
+    public List<float> ClearAndCollectState()
+    {
         state.Clear();
         CollectState();
         stackedStates.RemoveRange(0, brain.brainParameters.stateSize);
@@ -179,84 +296,121 @@ public abstract class Agent : MonoBehaviour
         return stackedStates;
     }
 
+    /// <summary>
+    /// Collects the vector observation (here, called state) of the agent.
+    /// The agent observation numerically describes the current environment
+    /// from the perspective of the agent. When overriding this method, ensure
+    /// that the <see cref="state"/> variable is both modified and returned.
+    /// </summary>
+    /// <remarks>
+    /// Simply, an agents observation is any environment
+    /// information that helps the Agent acheive its goal. For example, for 
+    /// a fighting Agent, its observation could include distances to friends
+    /// or enemies, or the current level of ammunition at its disposal.
+    /// </remarks>
+    /// <returns>
+    /// Agent observation. The length of the returned list must match the state
+    /// size specified in the attached Brain. For  discrete state spaces,
+    /// the length of the array should be 1.
+    /// </returns>
     public virtual List<float> CollectState()
     {
         return state;
     }
 
-    /// Defines agent-specific behavior at every step depending on the action.
-    /** Must be implemented in agent-specific child class.
-	 *  Note: If your state is discrete, you need to convert your 
-	 *  state into a list of float with length 1.
-	 *  @param action The action the agent receives from the brain. 
-	*/
+    /// <summary>
+    /// Specifies the agent behavior at every step based on the provided
+    /// action.
+    /// </summary>
+    /// <param name="action">
+    /// Action to take. Note that for discrete actions, the provided array
+    /// will be of length 1.
+    /// </param>
     public virtual void AgentStep(float[] action)
     {
 
     }
 
-
-    /// Defines agent-specific behaviour when done
-    /** Must be implemented in agent-specific child class. 
-	 *  Is called when the Agent is done if ResetOneDone is false.
-	 *  The agent will remain done.
-	 *  You can use this method to remove the agent from the scene. 
-	*/
+    /// <summary>
+    /// Specifies the agent behavior when done and <see cref="resetOnDone"/>
+    /// is false. This method can be used to remove the agent from the scene.
+    /// </summary>
     public virtual void AgentOnDone()
     {
 
     }
 
-    /// Defines agent-specific reset logic
-    /** Must be implemented in agent-specific child class. 
-	 *  Is called when the academy is done.  
-	 *  Is called when the Agent is done if ResetOneDone is true.
-	*/
+    /// <summary>
+    /// Specifies the agent behavior when being reset, which can be due to
+    /// the agent or Academy being done (i.e. completion of local or global
+    /// episode).
+    /// </summary>
     public virtual void AgentReset()
     {
 
     }
 
-    /// Do not modify : Is used by the brain to reset the agent.
+    /// <summary>
+    /// An internal reset method that updates internal data structures in
+    /// addition to calling <see cref="AgentReset"/>.
+    /// </summary>
     public void Reset()
     {
-        memory = new float[brain.brainParameters.memorySize];
-        stackedStates.Clear();
-        stackedStates.AddRange(new float[brain.brainParameters.stateSize * brain.brainParameters.stackedStates]);
+        ResetData();
         stepCounter = 0;
         AgentReset();
-        CumulativeReward = -reward;
+        cumulativeReward = -reward;
     }
 
-    /// Do not modify : Is used by the brain to collect rewards.
+    /// <summary>
+    /// Returns the current agent reward, <see cref="reward"/>.
+    /// </summary>
+    /// <returns>The reward.</returns>
     public float CollectReward()
     {
         return reward;
     }
 
+    /// <summary>
+    /// Updates the cumulative reward, <see cref="cumulativeReward"/>.
+    /// </summary>
     public void SetCumulativeReward()
     {
-        if (!done) {
-            CumulativeReward += reward;
+        if (!done)
+        {
+            cumulativeReward += reward;
         }
-        else{
-            CumulativeReward = 0f;
+        else
+        {
+            cumulativeReward = 0f;
         }
     }
 
-    /// Do not modify : Is used by the brain to collect done.
+    /// <summary>
+    /// Returns the agents done flag, <see cref="done"/>.
+    /// </summary>
+    /// <returns>whether the agent is done or not.</returns>
     public bool CollectDone()
     {
         return done;
     }
 
-    /// Do not modify : Is used by the brain give new action to the agent.
-    public void UpdateAction(float[] a)
+    /// <summary>
+    /// Updates the agent action. Must be called before <see cref="Step"/>
+    /// to ensure that the provided action is used when stepping.
+    /// </summary>
+    /// <param name="action">New agent action.</param>
+    public void UpdateAction(float[] action)
     {
-        agentStoredAction = a;
+        agentStoredAction = action;
     }
 
-    /// Do not modify : Is used by the brain to make the agent perform a step.
+    /// <summary>
+    /// An internal step method that is called by the Brain to indicate that
+    /// an environment step has occured. In addition to updating internal
+    /// variables, the <see cref="AgentStep"/> method is called with the
+    /// latest action.
+    /// </summary>
     public void Step()
     {
         AgentStep(agentStoredAction);
@@ -268,10 +422,12 @@ public abstract class Agent : MonoBehaviour
         }
     }
 
-    /// Do not modify : Is used by the brain to reset the Reward.
+    /// <summary>
+    /// Resets the agents reward. This is necessary before each new
+    /// agent step.
+    /// </summary>
     public void ResetReward()
     {
         reward = 0;
     }
-
 }
