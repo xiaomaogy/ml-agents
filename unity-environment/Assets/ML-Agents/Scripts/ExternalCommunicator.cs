@@ -1,18 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.IO;
 
+using UnityEngine;
+
+using Newtonsoft.Json;
 
 /// Responsible for communication with Python API.
 public class ExternalCommunicator : Communicator
 {
-
     Academy academy;
 
     Dictionary<string, List<int>> current_agents;
@@ -30,7 +28,7 @@ public class ExternalCommunicator : Communicator
     const int defaultNumObservations = 32;
 
     // For Messages
-    List<float> concatenatedStates = new List<float>(defaultNumAgents*defaultNumObservations);
+    List<float> concatenatedStates = new List<float>(defaultNumAgents * defaultNumObservations);
     List<float> concatenatedRewards = new List<float>(defaultNumAgents);
     List<float> concatenatedMemories = new List<float>(defaultNumAgents * defaultNumObservations);
     List<bool> concatenatedDones = new List<bool>(defaultNumAgents);
@@ -191,10 +189,9 @@ public class ExternalCommunicator : Communicator
         sender.Send(Encoding.ASCII.GetBytes("CONFIG_REQUEST"));
         Receive();
         var resetParams = JsonConvert.DeserializeObject<ResetParametersMessage>(rMessage);
-        academy.isInference = !resetParams.train_model;
+        academy.SetInference(!resetParams.train_model);
         return resetParams.parameters;
     }
-
 
     /// Used to read Python-provided environment parameters
     private void ReadArgs()
@@ -234,12 +231,14 @@ public class ExternalCommunicator : Communicator
     }
 
     /// Receives a message and can reconstruct a message if was too long
-    private string ReceiveAll(){
-		sender.Receive(lengthHolder);
+    private string ReceiveAll()
+    {
+        sender.Receive(lengthHolder);
         int totalLength = System.BitConverter.ToInt32(lengthHolder, 0);
         int location = 0;
         rMessage = "";
-        while (location != totalLength){
+        while (location != totalLength)
+        {
             int fragment = sender.Receive(messageHolder);
             location += fragment;
             rMessage += Encoding.ASCII.GetString(messageHolder, 0, fragment);
@@ -324,7 +323,7 @@ public class ExternalCommunicator : Communicator
         if (hasSentState.Values.All(x => x))
         {
             // if all the brains listed have sent their state
-            sender.Send(Encoding.ASCII.GetBytes((academy.done ? "True" : "False")));
+            sender.Send(Encoding.ASCII.GetBytes((academy.IsDone() ? "True" : "False")));
             List<string> brainNames = hasSentState.Keys.ToList();
             foreach (string k in brainNames)
             {
@@ -368,7 +367,7 @@ public class ExternalCommunicator : Communicator
 
                     memoryDict.Add(current_agents[brainName][i],
     agentMessage.memory[brainName].GetRange(i * brain.brainParameters.memorySize, brain.brainParameters.memorySize).ToArray());
-                    
+
                     valueDict.Add(current_agents[brainName][i],
     agentMessage.value[brainName][i]);
 

@@ -1,215 +1,339 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
 using UnityEngine;
 
 /*! \mainpage ML-Agents Index Page
  * Welcome to Unity Machine Learning Agents documentation.
  */
 
-
+/// <summary>
+/// Wraps the environment-level parameters that are provided within the
+/// Inspector. These parameters can be provided for training and inference
+/// modes separately and represent screen resolution, rendering quality and
+/// frame rate.
+/// </summary>
 [System.Serializable]
-public class ScreenConfiguration
+public class EnvironmentConfiguration
 {
     [Tooltip("Width of the environment window in pixels.")]
     public int width;
-    [Tooltip("Height of the environment window in pixels")]
+
+    [Tooltip("Height of the environment window in pixels.")]
     public int height;
-    [Tooltip("Rendering quality of environment. (Higher is better quality)")]
+
+    [Tooltip("Rendering quality of environment. (Higher is better quality.)")]
     [Range(0, 5)]
     public int qualityLevel;
-    [Tooltip("Speed at which environment is run. (Higher is faster)")]
+
+    [Tooltip("Speed at which environment is run. (Higher is faster.)")]
     [Range(1f, 100f)]
     public float timeScale;
-    [Tooltip("FPS engine attempts to maintain.")]
+
+    [Tooltip("Frames per second (FPS) engine attempts to maintain.")]
     public int targetFrameRate;
 
-    public ScreenConfiguration(int w, int h, int q, float ts, int tf)
+    /// Initializes a new instance of the 
+    /// <see cref="EnvironmentConfiguration"/> class.
+    /// <param name="width">Width of environment window (pixels).</param>
+    /// <param name="height">Height of environment window (pixels).</param>
+    /// <param name="qualityLevel">
+    /// Rendering quality of environment. Ranges from 0 to 5, with higher.
+    /// </param>
+    /// <param name="timeScale">
+    /// Speed at which environment is run. Ranges from 1 to 100, with higher
+    /// values representing faster speed.
+    /// </param>
+    /// <param name="targetFrameRate">
+    /// Target frame rate (per second) that the engine tries to maintain.
+    /// </param>
+    public EnvironmentConfiguration(
+        int width, int height, int qualityLevel,
+        float timeScale, int targetFrameRate)
     {
-        width = w;
-        height = h;
-        qualityLevel = q;
-        timeScale = ts;
-        targetFrameRate = tf;
+        this.width = width;
+        this.height = height;
+        this.qualityLevel = qualityLevel;
+        this.timeScale = timeScale;
+        this.targetFrameRate = targetFrameRate;
     }
 }
 
 
-[HelpURL("https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Agents-Editor-Interface.md#academy")]
-/** Create a child class to implement InitializeAcademy(), AcademyStep() 
- * and AcademyReset(). The child class script must be attached to an empty game
- * object in your scene, and there can only be one such object within the scene.
- */
+/// <summary>
+/// An Academy is where Agent objects go to train their behaviors. More 
+/// specifically, an academy is a collection of Brain objects and each agent
+/// in a scene is attached to one brain (a single brain may be attached to 
+/// multiple agents). Currently, this class is expected to be extended to
+/// implement the desired academy behavior.
+/// </summary>
+/// <remarks>
+/// When an academy is run, it can either be in inference or training mode.
+/// The mode is determined by the presence or absence of a Communicator. In
+/// the presence of a communicator, the academy is run in training mode where
+/// the states and observations of each agent are sent through the
+/// communicator. In the absence of a communciator, the academy is run in
+/// inference mode where the agent behavior is determined by the brain
+/// attached to it (which may be internal, heuristic or player).
+/// </remarks>
+[HelpURL("https://github.com/Unity-Technologies/ml-agents/blob/master/" +
+         "docs/Agents-Editor-Interface.md#academy")]
 public abstract class Academy : MonoBehaviour
 {
-
+    /// Struct used to enable specifiying the reset parameters (as key-value 
+    /// pairs) within the Inspector.
     [System.Serializable]
-    private struct ResetParameter
+    struct ResetParameter
     {
         public string key;
         public float value;
     }
 
-
+    [SerializeField]
+    [Tooltip("Total number of steps per episode.\n" +
+             "0 corresponds to episodes without a maximum number of steps.\n" +
+             "Once the step counter reaches maximum, the environment" +
+             " will reset.")]
+    int maxSteps;
 
     [SerializeField]
-    [Tooltip("Total number of steps per episode. \n" +
-             "0 corresponds to episodes without a maximum number of steps. \n" +
-             "Once the step counter reaches maximum, the environment will reset.")]
-    private int maxSteps;
+    [Tooltip("How many steps of the environment to skip before asking" +
+             " Brains for decisions.")]
+    int stepsToSkip;
+
     [SerializeField]
-    [Tooltip("How many steps of the environment to skip before asking Brains for decisions.")]
-    private int frameToSkip;
+    [Tooltip("How many seconds to wait between steps when running in" +
+             " Inference.")]
+    float waitTime;
+
     [SerializeField]
-    [Tooltip("How many seconds to wait between steps when running in Inference.")]
-    private float waitTime;
-    [HideInInspector]
-    public bool isInference = true;
-    /**< \brief Do not modify : If true, the Academy will use inference 
-     * settings. */
-    private bool _isCurrentlyInference;
+    [Tooltip("The engine-level settings which correspond to rendering" +
+             " quality and engine speed during Training.")]
+    EnvironmentConfiguration trainingConfiguration =
+        new EnvironmentConfiguration(80, 80, 1, 100.0f, -1);
+
     [SerializeField]
-    [Tooltip("The engine-level settings which correspond to rendering quality and engine speed during Training.")]
-    private ScreenConfiguration trainingConfiguration = new ScreenConfiguration(80, 80, 1, 100.0f, -1);
+    [Tooltip("The engine-level settings which correspond to rendering" +
+             " quality and engine speed during Inference.")]
+    EnvironmentConfiguration inferenceConfiguration =
+        new EnvironmentConfiguration(1280, 720, 5, 1.0f, 60);
+
     [SerializeField]
-    [Tooltip("The engine-level settings which correspond to rendering quality and engine speed during Inference.")]
-    private ScreenConfiguration inferenceConfiguration = new ScreenConfiguration(1280, 720, 5, 1.0f, 60);
-    [SerializeField]
-    [Tooltip("List of custom parameters that can be changed in the environment on reset.")]
-    private ResetParameter[] defaultResetParameters;
-
-    /**< \brief Contains a mapping from parameter names to float values. */
-    /**< You can specify the Default Reset Parameters in the Inspector of the
-     * Academy. You can modify these parameters when training with an External 
-     * brain by passing a config dictionary at reset. Reference resetParameters
-     * in your AcademyReset() or AcademyStep() to modify elements in your 
-     * environment at reset time. */
-    public Dictionary<string, float> resetParameters;
-
-
-    [HideInInspector]
-    private List<Brain> brains = new List<Brain>();
-
-    ExternalCommand externalCommand;
-
-    private bool acceptingSteps;
-    private int framesSinceAction;
-    private bool skippingFrames = true;
-
-    /**< \brief The done flag of the Academy. */
-    /**< When set to true, the Academy will call AcademyReset() instead of 
-    * AcademyStep() at step time.
-    * If true, all agents done flags will be set to true.*/
-    [HideInInspector]
-    public bool done;
+    [Tooltip("List of custom parameters that can be changed in the" +
+             " environment on reset.")]
+    ResetParameter[] defaultResetParameters;
 
     /// <summary>
-    /// The max step reached.
+    /// Contains a mapping from parameter names to float values. They are
+    /// used in <see cref="AcademyReset"/> and <see cref="AcademyStep"/>
+    /// to modify elements in the environment at reset time.
+    /// <summary/>
+    /// <remarks>
+    /// Default reset parameters are specified in the academy Inspector via
+    /// <see cref="defaultResetParameters"/>. 
+    /// They can be modified when training with an external Brain by passing
+    /// a config dictionary at reset. 
+    /// </remarks>
+    public Dictionary<string, float> resetParameters;
+
+    /// If true, the Academy will use inference settings. This field is 
+    /// initialized in <see cref="Awake"/> depending on the presence
+    /// or absence of a communicator. Furthermore, it can be modified by an
+    /// external Brain during reset via <see cref="SetInference"/>.
+    bool isInference = true;
+
+    /// List of Brains represented in the academy. These will be the brains
+    /// that are specified as children of the academy in the Inspector.
+    List<Brain> brains = new List<Brain>();
+
+    /// Stores the last command received from the Communicator.
+    ExternalCommand externalCommand;
+
+    /// Number of environment steps that have elapsed since the brains last
+    /// made a decision.
+    int stepsSinceDecision;
+
+    /// Boolean flag indicating whether the current step of the environment
+    /// will be skipped or the not. A skipped step means that the brains will
+    /// not make a decision.
+    bool skippingStep = true;
+
+    /// Boolean flag indicating whether a communicator is accessible by the
+    /// environment. This also specifies whether the environment is in
+    /// Training or Inference mode.
+    bool isCommunicatorOn;
+
+    /// The time at the beginning of an environment step.
+    float timeAtStep;
+
+    /// The done flag of the academy. When set to true, the academy will
+    /// call <see cref="AcademyReset"/> instead of <see cref="AcademyStep"/>
+    /// at step time. If true, all agents done flags will be set to true.
+    bool done;
+
+    /// Whether the academy has reached the maximum number of steps for the
+    /// current episode.
+    bool maxStepReached;
+
+    /// The number of episodes completed by the environment. Incremented 
+    /// each time the environment is reset.
+    int episodeCount;
+
+    /// The number of steps completed within the current episide. Incremented
+    /// each time a step is taken in the environment. Is reset to 0 during 
+    /// <see cref="AcademyReset"/>.
+    int currentStep;
+
+    /// <summary>
+    /// Flag that indicates whether the inference/training mode of the
+    /// environment was switched by the external Brain. This impacts the
+    /// engine settings at the next environment step.
     /// </summary>
-    [HideInInspector]
-    public bool maxStepReached;
+    bool modeSwitched;
 
-    /**< \brief Increments each time the environment is reset. */
-    [HideInInspector]
-    public int episodeCount;
-
-    /**< \brief Increments each time a step is taken in the environment. Is
-    * reset to 0 during AcademyReset(). */
-    [HideInInspector]
-    public int currentStep;
-
-    /**< \brief Do not modify : pointer to the communicator currently in 
-     * use by the Academy. */
+    /// Pointer to the communicator currently in use by the Academy.
     public Communicator communicator;
 
-    private float timeAtStep;
-
+    /// <summary>
+    /// Monobehavior function called at the very beginning of environment
+    /// creation. Academy uses this time to initialize internal data
+    /// structures, initialize the environment and check for the existence
+    /// of a communicator.
+    /// </summary>
     void Awake()
     {
-        resetParameters = new Dictionary<string, float>();
-        foreach (ResetParameter kv in defaultResetParameters)
-        {
-            resetParameters[kv.key] = kv.value;
-        }
+        // Load in default parameters (provided in Inspector).
+        LoadResetParameters(defaultResetParameters, this.resetParameters);
 
-        GetBrains(gameObject, brains);
+        // Initialize Academy and Brains.
         InitializeAcademy();
-
-        communicator = new ExternalCommunicator(this);
-        if (!communicator.CommunicatorHandShake())
-        {
-            communicator = null;
-        }
-
+        LoadBrains(gameObject, brains);
         foreach (Brain brain in brains)
         {
             brain.InitializeBrain();
         }
-        if (communicator != null)
+
+        // Initialize communicator (if possible)
+        communicator = new ExternalCommunicator(this);
+        if (communicator.CommunicatorHandShake())
         {
+            isCommunicatorOn = true;
             communicator.InitializeCommunicator();
+            // Retrieve first command from external communicator (expected
+            // to be a RESET command)
             externalCommand = communicator.GetCommand();
         }
-            
-        isInference = (communicator == null);
-        _isCurrentlyInference = !isInference;
+
+        // If a communicator is enabled/provided, then we assume we are in
+        // training mode. In the absence of a communicator, we assume we are
+        // in inference mode.
+        isInference = !isCommunicatorOn;
+
         done = true;
-        acceptingSteps = true;
+
+        // Configure the environment using the configurations provided by
+        // the developer in the Inspector.
+        ConfigureEnvironment();
     }
 
-    /// Environment specific initialization.
-    /**
-	* Implemented in environment-specific child class. 
-	* This method is called once when the environment is loaded.
-	*/
+    /// <summary>
+    /// Initializes the academy and environment. Called during the waking-up
+    /// phase of the environment before any of the scene objects/agents have
+    /// been initialized.
+    /// </summary>
     public virtual void InitializeAcademy()
     {
 
     }
 
-
-    private void ConfigureEngine()
+    /// <summary>
+    /// Configures the environment settings depending on the training/inference
+    /// mode and the corresponding parameters passed in the Inspector.
+    /// </summary>
+    void ConfigureEnvironment()
     {
-        if ((!isInference))
+        if (isInference)
         {
-            Screen.SetResolution(trainingConfiguration.width, trainingConfiguration.height, false);
-            QualitySettings.SetQualityLevel(trainingConfiguration.qualityLevel, true);
-            Time.timeScale = trainingConfiguration.timeScale;
-            Application.targetFrameRate = trainingConfiguration.targetFrameRate;
-            QualitySettings.vSyncCount = 0;
-            Monitor.SetActive(false);
+            ConfigureEnvironmentHelper(inferenceConfiguration);
+            Monitor.SetActive(true);
         }
         else
         {
-            Screen.SetResolution(inferenceConfiguration.width, inferenceConfiguration.height, false);
-            QualitySettings.SetQualityLevel(inferenceConfiguration.qualityLevel, true);
-            Time.timeScale = inferenceConfiguration.timeScale;
-            Application.targetFrameRate = inferenceConfiguration.targetFrameRate;
+            ConfigureEnvironmentHelper(trainingConfiguration);
+            QualitySettings.vSyncCount = 0;
+            Monitor.SetActive(false);
         }
     }
 
-    /// Environment specific step logic.
-    /**
-	 * Implemented in environment-specific child class. 
-	 * This method is called at every step. 
-	*/
+    /// <summary>
+    /// Helper method for initializing the environment based on the provided
+    /// configuration.
+    /// </summary>
+    /// <param name="config">
+    /// Environment configuration (specified in the Inspector).
+    /// </param>
+    static void ConfigureEnvironmentHelper(EnvironmentConfiguration config)
+    {
+        Screen.SetResolution(config.width, config.height, false);
+        QualitySettings.SetQualityLevel(config.qualityLevel, true);
+        Time.timeScale = config.timeScale;
+        Application.targetFrameRate = config.targetFrameRate;
+    }
+
+    /// <summary>
+    /// Specifies the academy behavior at every step of the environment.
+    /// </summary>
     public virtual void AcademyStep()
     {
 
     }
 
-    /// Environment specific reset logic.
-    /**
-	* Implemented in environment-specific child class. 
-	* This method is called everytime the Academy resets (when the global done
-	* flag is set to true).
-	*/
+    /// <summary>
+    /// Specifies the academy behavior when being reset (i.e. at the completion
+    /// of a global episode).
+    /// </summary>
     public virtual void AcademyReset()
     {
 
     }
 
+    /// <summary>
+    /// Sets the <see cref="isInference"/> flag to the provided value. If
+    /// the new flag differs from the current flag value, this signals that
+    /// the environment configuration needs to be updated.
+    /// </summary>
+    /// <param name="isInference">
+    /// Environment mode, if true then inference, otherwise training.
+    /// </param>
+    public void SetInference(bool isInference)
+    {
+        if (this.isInference != isInference)
+        {
+            this.isInference = isInference;
 
-    // Called after AcademyStep().
+            // This signals to the academy that at the next environment step
+            // the engine configurations need updating to the respective mode
+            // (i.e. training vs inference) configuraiton.
+            modeSwitched = true;
+        }
+    }
+
+    /// <summary>
+    /// Returns whether or not the academy is done.
+    /// </summary>
+    /// <returns>
+    /// <c>true</c>, if academy is done, <c>false</c> otherwise.
+    /// </returns>
+    public bool IsDone()
+    {
+        return done;
+    }
+
+    /// <summary>
+    /// Internal step method, that is called with each environment step
+    /// when a decision is made. Unlike <see cref="AcademyStep"/> which is
+    /// called with each environment step, this method is called whenever a
+    /// decision needs to be made, which depends on <see cref="stepsToSkip"/>.
+    /// </summary>
     internal void Step()
     {
         // Reset all agents whose flags are set to done.
@@ -227,10 +351,13 @@ public abstract class Academy : MonoBehaviour
 
             brain.ResetDoneAndReward();
         }
-
     }
 
-    // Called before AcademyReset().
+    /// <summary>
+    /// Resets the academy and also calls the user-defined
+    /// <see cref="AcademyReset"/> method. The academy is reset each time a
+    /// global episode is completed.
+    /// </summary>
     internal void Reset()
     {
         currentStep = 0;
@@ -239,19 +366,19 @@ public abstract class Academy : MonoBehaviour
         maxStepReached = false;
         AcademyReset();
 
-
         foreach (Brain brain in brains)
         {
             brain.Reset();
             brain.ResetDoneAndReward();
         }
-
     }
 
-    // Instructs all brains to process states to produce actions.
-    private void DecideAction()
+    /// <summary>
+    /// Instructs the Brains within the environment to take a decision.
+    /// </summary>
+    void DecideAction()
     {
-        if (communicator != null)
+        if (isCommunicatorOn)
         {
             communicator.UpdateActions();
         }
@@ -261,36 +388,36 @@ public abstract class Academy : MonoBehaviour
             brain.DecideAction();
         }
 
-        framesSinceAction = 0;
+        stepsSinceDecision = 0;
     }
 
+    /// <summary>
+    /// Monobehavior function that dictates each environment step.
+    /// </summary>
     void FixedUpdate()
     {
-        if (acceptingSteps)
-        {
-            RunMdp();
-        }
+        RunMdp();
     }
 
-    // Contains logic for taking steps in environment simulation.
-    /** Based on presence of communicator, inference mode, and frameSkip, 
-     * decides whether the environment should be stepped or reset.
-     */
+    /// <summary>
+    /// Performs a single environment update to the Academy, Brain and Agent
+    /// objects within the environment.
+    /// </summary>
     void RunMdp()
     {
-        if (isInference != _isCurrentlyInference)
+        if (modeSwitched)
         {
-            ConfigureEngine();
-            _isCurrentlyInference = isInference;
+            ConfigureEnvironment();
+            modeSwitched = false;
         }
-        
+
         if ((isInference) && (timeAtStep + waitTime > Time.time))
         {
             return;
         }
 
         timeAtStep = Time.time;
-        framesSinceAction += 1;
+        stepsSinceDecision += 1;
 
         currentStep += 1;
         if ((currentStep >= maxSteps) && maxSteps > 0)
@@ -299,21 +426,19 @@ public abstract class Academy : MonoBehaviour
             maxStepReached = true;
         }
 
-        if ((framesSinceAction > frameToSkip) || done)
+        if ((stepsSinceDecision > stepsToSkip) || done)
         {
-            skippingFrames = false;
-            framesSinceAction = 0;
+            skippingStep = false;
+            stepsSinceDecision = 0;
         }
         else
         {
-            skippingFrames = true;
+            skippingStep = true;
         }
 
-
-        if (skippingFrames == false)
+        if (!skippingStep)
         {
-
-            if (communicator != null)
+            if (isCommunicatorOn)
             {
                 if (externalCommand == ExternalCommand.STEP)
                 {
@@ -322,11 +447,8 @@ public abstract class Academy : MonoBehaviour
                 }
                 if (externalCommand == ExternalCommand.RESET)
                 {
-                    Dictionary<string, float> NewResetParameters = communicator.GetResetParameters();
-                    foreach (KeyValuePair<string, float> kv in NewResetParameters)
-                    {
-                        resetParameters[kv.Key] = kv.Value;
-                    }
+                    LoadResetParameters(communicator.GetResetParameters(),
+                                        resetParameters);
                     Reset();
                     externalCommand = ExternalCommand.STEP;
                     RunMdp();
@@ -346,14 +468,10 @@ public abstract class Academy : MonoBehaviour
                     RunMdp();
                     return;
                 }
-                else
-                {
-                    Step();
-                }
+                Step();
             }
 
             DecideAction();
-
         }
 
 
@@ -363,20 +481,60 @@ public abstract class Academy : MonoBehaviour
         {
             brain.Step();
         }
-
     }
 
-    private static void GetBrains(GameObject gameObject, List<Brain> brains)
+    /// <summary>
+    /// Helper method that loads the reset parameters from one format to
+    /// another. This method essentially copies one dictionary into another,
+    /// but its name is kept specific (for now) to indicate its purpose.
+    /// </summary>
+    /// <param name="src">Next reset parameters.</param>
+    /// <param name="dst">Reset parameters.</param>
+    static void LoadResetParameters(
+        Dictionary<string, float> src, Dictionary<string, float> dst)
     {
-        var transform = gameObject.transform;
-        
+        dst.Clear();
+        foreach (KeyValuePair<string, float> kv in src)
+        {
+            dst[kv.Key] = kv.Value;
+        }
+    }
+
+    /// <summary>
+    /// Helper method that loads the reset parameters from one format to
+    /// another. 
+    /// </summary>
+    /// <param name="src">Next reset parameters.</param>
+    /// <param name="dst">Reset parameters.</param>
+    static void LoadResetParameters(
+        ResetParameter[] src, Dictionary<string, float> dst)
+    {
+        dst.Clear();
+        foreach (ResetParameter kv in src)
+        {
+            dst[kv.key] = kv.value;
+        }
+    }
+
+    /// <summary>
+    /// Helper method that loads the Brain objects that are currently
+    /// specified as children of the Academy within the Inspector.
+    /// </summary>
+    /// <param name="academy">Academy.</param>
+    /// <param name="brains">Placeholder object to load the brains to.</param>
+    static void LoadBrains(GameObject academy, List<Brain> brains)
+    {
+        brains.Clear();
+        var transform = academy.transform;
         for (var i = 0; i < transform.childCount; i++)
         {
             var child = transform.GetChild(i);
             var brain = child.GetComponent<Brain>();
 
             if (brain != null && child.gameObject.activeSelf)
+            {
                 brains.Add(brain);
+            }
         }
     }
 }
