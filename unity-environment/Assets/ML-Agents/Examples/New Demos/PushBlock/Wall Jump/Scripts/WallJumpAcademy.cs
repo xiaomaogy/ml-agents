@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class WallJumpAcademy : Academy {
 
-
 	public float agentRunSpeed; 
 	public float agentRotationSpeed;
 	public float spawnAreaMarginMultiplier; //ex: .9 means 90% of spawn area will be used.... .1 margin will be left (so players don't spawn off of the edge). the higher this value, the longer training time required
