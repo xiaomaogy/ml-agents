@@ -112,7 +112,7 @@ public class CoreBrainPlayer : ScriptableObject, CoreBrain
     {
         if (coord != null)
         {
-            coord.GiveBrainInfo(brain);
+            coord.SendBrainInfo(brain);
         }
         else
         {

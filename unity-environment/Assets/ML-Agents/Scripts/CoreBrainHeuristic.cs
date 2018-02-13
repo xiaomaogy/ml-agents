@@ -86,7 +86,7 @@ public class CoreBrainHeuristic : ScriptableObject, CoreBrain
     {
         if (coord != null)
         {
-            coord.GiveBrainInfo(brain);
+            coord.SendBrainInfo(brain);
         }
     }
 

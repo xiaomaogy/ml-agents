@@ -52,7 +52,7 @@ public class CoreBrainExternal : ScriptableObject, CoreBrain
     {
         if (coord != null)
         {
-            coord.GiveBrainInfo(brain);
+            coord.SendBrainInfo(brain);
         }
     }
 

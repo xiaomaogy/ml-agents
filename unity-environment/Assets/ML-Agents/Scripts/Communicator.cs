@@ -90,8 +90,8 @@ public interface Communicator
 
     /// <summary>
     /// Initialize the communicator. Must be called before any of the
-    /// communication-methods are called, <see cref="UpdateActions"/>,
-    /// <see cref="GetCommand"/>, and <see cref="GetResetParameters"/>.
+    /// communication-methods are called, <see cref="ReceiveActions"/>,
+    /// <see cref="ReceiveCommand"/>, and <see cref="ReceiveResetParameters"/>.
     /// </summary>
     void InitializeCommunicator();
 
@@ -99,17 +99,17 @@ public interface Communicator
     /// Receives actions from the Python API for all the brains that have
     /// been subscribed.
     /// </summary>
-    void UpdateActions();
+    void ReceiveActions();
 
     /// <summary>
     /// Receives the next command from the Python API.
     /// </summary>
     /// <returns>The command.</returns>
-    ExternalCommand GetCommand();
+    ExternalCommand ReceiveCommand();
 
     /// <summary>
     /// Receives the new dictionary of reset parameters from the Python API. 
     /// </summary>
     /// <returns>The next reset parameters.</returns>
-    Dictionary<string, float> GetResetParameters();
+    Dictionary<string, float> ReceiveResetParameters();
 }

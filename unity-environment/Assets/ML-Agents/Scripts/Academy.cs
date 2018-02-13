@@ -220,7 +220,7 @@ public abstract class Academy : MonoBehaviour
             communicator.InitializeCommunicator();
             // Retrieve first command from external communicator (expected
             // to be a RESET command)
-            externalCommand = communicator.GetCommand();
+            externalCommand = communicator.ReceiveCommand();
         }
 
         // If a communicator is enabled/provided, then we assume we are in
@@ -380,7 +380,7 @@ public abstract class Academy : MonoBehaviour
     {
         if (isCommunicatorOn)
         {
-            communicator.UpdateActions();
+            communicator.ReceiveActions();
         }
 
         foreach (Brain brain in brains)
@@ -443,11 +443,11 @@ public abstract class Academy : MonoBehaviour
                 if (externalCommand == ExternalCommand.STEP)
                 {
                     Step();
-                    externalCommand = communicator.GetCommand();
+                    externalCommand = communicator.ReceiveCommand();
                 }
                 if (externalCommand == ExternalCommand.RESET)
                 {
-                    LoadResetParameters(communicator.GetResetParameters(),
+                    LoadResetParameters(communicator.ReceiveResetParameters(),
                                         resetParameters);
                     Reset();
                     externalCommand = ExternalCommand.STEP;

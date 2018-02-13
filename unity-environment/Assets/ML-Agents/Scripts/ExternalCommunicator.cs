@@ -130,7 +130,7 @@ public class ExternalCommunicator : Communicator
 
     /// Maps Brain name to whether it has sent its state (information about all
     /// its Agent objects attached to the brain). The value is flipped to True
-    /// in <see cref="GiveBrainInfo"/> as that is where all the Brain info is
+    /// in <see cref="SendBrainInfo"/> as that is where all the Brain info is
     /// sent. Size of dictionary corresponds to the number of brains defined
     /// in the Unity environment.
     Dictionary<string, bool> hasSentState;
@@ -139,21 +139,21 @@ public class ExternalCommunicator : Communicator
     /// an array of actions. Size of outer dictionary corresponds to the number
     /// of brains defined in the Unity environment. Size of inner dictionary
     /// corresponds to the number of agents attached to the corresponding brain.
-    /// Updated following <see cref="UpdateActions"/>. 
+    /// Updated following <see cref="ReceiveActions"/>. 
     Dictionary<string, Dictionary<int, float[]>> storedActions;
 
     /// Maps Brain name to a dictionary which in turn maps each Agent ID to
     /// an array of memories. Size of outer dictionary corresponds to the
     /// number of brains defined in the Unity environment. Size of inner
     /// dictionary corresponds to the number of agents attached to the
-    /// corresponding brain. Updated following <see cref="UpdateActions"/>.
+    /// corresponding brain. Updated following <see cref="ReceiveActions"/>.
     Dictionary<string, Dictionary<int, float[]>> storedMemories;
 
     /// Maps Brain name to a dictionary which in turn maps each Agent ID to an
     /// array of value estimates. Size of outer dictionary corresponds to the
     /// number of brains defined in the Unity environment. Size of inner 
     /// dictionary corresponds to the number of agents attached to the 
-    /// corresponding brain. Updated following <see cref="UpdateActions"/>.
+    /// corresponding brain. Updated following <see cref="ReceiveActions"/>.
     Dictionary<string, Dictionary<int, float>> storedValues;
 
     /// Socket used to send and receive messages with Python API.
@@ -307,7 +307,7 @@ public class ExternalCommunicator : Communicator
         socket.Connect(args.server, args.port);
 
         // Initialize and populate the academy parameters.
-        var academyParamerters = new AcademyParameters
+        var academyParams = new AcademyParameters
         {
             AcademyName = academy.gameObject.name,
             resetParameters = academy.resetParameters,
@@ -317,20 +317,18 @@ public class ExternalCommunicator : Communicator
             apiNumber = API_VERSION,
             logPath = logPath
         };
-        foreach (Brain b in brains)
+        foreach (Brain brain in brains)
         {
-            academyParamerters.brainParameters.Add(b.brainParameters);
-            academyParamerters.brainNames.Add(b.gameObject.name);
-            if (b.brainType == BrainType.External)
+            academyParams.brainParameters.Add(brain.brainParameters);
+            academyParams.brainNames.Add(brain.gameObject.name);
+            if (brain.brainType == BrainType.External)
             {
-                academyParamerters.externalBrainNames.Add(b.gameObject.name);
+                academyParams.externalBrainNames.Add(brain.gameObject.name);
             }
         }
 
         // Send academy parameters.
-        SendParameters(academyParamerters);
-
-        stepMessageBuffer = new StepMessage();
+        SendParameters(academyParams);
     }
 
     /// Callback method attached to the logMessageReceived event. Simply prints
@@ -349,10 +347,9 @@ public class ExternalCommunicator : Communicator
     /// If the command received is not recognized, it defaults to QUIT.
     /// </remarks>
     /// <returns>The command received from the socket.</returns>
-    public ExternalCommand GetCommand()
+    public ExternalCommand ReceiveCommand()
     {
-        int location = socket.Receive(messageBuffer);
-        string message = Encoding.ASCII.GetString(messageBuffer, 0, location);
+        string message = ReceiveShortMessage();
         switch (message)
         {
             case "STEP":
@@ -367,10 +364,10 @@ public class ExternalCommunicator : Communicator
     }
 
     /// <summary> <inheritdoc/> </summary>
-    public Dictionary<string, float> GetResetParameters()
+    public Dictionary<string, float> ReceiveResetParameters()
     {
-        socket.Send(Encoding.ASCII.GetBytes("CONFIG_REQUEST"));
-        string message = Receive();
+        SendShortMessage("CONFIG_REQUEST");
+        string message = ReceiveShortMessage();
         var resetParams =
             JsonConvert.DeserializeObject<ResetParametersMessage>(message);
         academy.SetInference(!resetParams.train_model);
@@ -380,20 +377,20 @@ public class ExternalCommunicator : Communicator
     /// Sends Academy parameters to Python API.
     void SendParameters(AcademyParameters academyParameters)
     {
-        string message = JsonConvert.SerializeObject(
-            academyParameters, Formatting.Indented);
-        socket.Send(Encoding.ASCII.GetBytes(message));
+        SendShortMessage(
+            JsonConvert.SerializeObject(
+                academyParameters, Formatting.Indented));
     }
 
     /// Receives a short message from the Python API.
-    string Receive()
+    string ReceiveShortMessage()
     {
         int location = socket.Receive(messageBuffer);
         return Encoding.ASCII.GetString(messageBuffer, 0, location);
     }
 
     /// Receives a long message from the Python API by piecing multiple chunks.
-    string ReceiveAll()
+    string ReceiveLongMessage()
     {
         socket.Receive(lengthBuffer);
         int totalLength = System.BitConverter.ToInt32(lengthBuffer, 0);
@@ -406,6 +403,33 @@ public class ExternalCommunicator : Communicator
             message.Append(Encoding.ASCII.GetString(messageBuffer, 0, fragment));
         }
         return message.ToString();
+    }
+
+    /// Sends a short message to the Python API. Performs the necessary
+    /// conversion from string to byte array.
+    void SendShortMessage(string message)
+    {
+        SendShortMessage(Encoding.ASCII.GetBytes(message));
+    }
+
+    /// Sends a short message to the Python API.
+    void SendShortMessage(byte[] message)
+    {
+        socket.Send(message);
+    }
+
+    /// Sends a long message to the Python API. Performs the necessary
+    /// conversion from string to byte array in addition to prepending
+    /// the message length.
+    void SendLongMessage(string message)
+    {
+        SendLongMessage(Encoding.ASCII.GetBytes(message));
+    }
+
+    /// Sends a long message to the Python API. Prepends the message length.
+    void SendLongMessage(byte[] message)
+    {
+        socket.Send(PrependLength(message));
     }
 
     /// Ends connection and closes environment.
@@ -446,7 +470,7 @@ public class ExternalCommunicator : Communicator
     /// if the academy is done.
     /// </summary>
     /// <param name="brain">Brain.</param>
-    public void GiveBrainInfo(Brain brain)
+    public void SendBrainInfo(Brain brain)
     {
         var brainName = brain.gameObject.name;
         brainAgents[brainName] = new List<int>(brain.agents.Keys);
@@ -477,22 +501,20 @@ public class ExternalCommunicator : Communicator
                 brain.currentActions[id].ToList());
         }
 
-        string sMessageString = JsonUtility.ToJson(stepMessageBuffer);
-        socket.Send(PrependLength(Encoding.ASCII.GetBytes(sMessageString)));
-        Receive();
+        SendLongMessage(JsonUtility.ToJson(stepMessageBuffer));
+        ReceiveShortMessage();
         int i = 0;
         foreach (resolution res in brain.brainParameters.cameraResolutions)
         {
-            foreach (int id in brainAgents[brainName])
+            foreach (int agentId in brainAgents[brainName])
             {
-                socket.Send(
-                    PrependLength(
-                        TextureToByteArray(
-                            brain.ObservationToTex(
-                                brain.currentCameras[id][i],
-                                res.width,
-                                res.height))));
-                Receive();
+                SendLongMessage(
+                    TextureToByteArray(
+                        brain.ObservationToTex(
+                            brain.currentCameras[agentId][i],
+                            res.width,
+                            res.height)));
+                ReceiveShortMessage();
             }
             i++;
         }
@@ -502,14 +524,22 @@ public class ExternalCommunicator : Communicator
         if (hasSentState.Values.All(x => x))
         {
             // if all the brains listed have sent their state
-            socket.Send(Encoding.ASCII.GetBytes((academy.IsDone() ? "True" : "False")));
-            List<string> brainNames = hasSentState.Keys.ToList();
-            foreach (string k in brainNames)
-            {
-                hasSentState[k] = false;
-            }
+            SendShortMessage(academy.IsDone() ? "True" : "False");
+            ResetSentState();
         }
 
+    }
+
+    /// <summary>
+    /// Sets the sent state to false for all subscribed Brain objects.
+    /// </summary>
+    void ResetSentState()
+    {
+        List<string> brainNames = hasSentState.Keys.ToList();
+        foreach (string brainName in brainNames)
+        {
+            hasSentState[brainName] = false;
+        }
     }
 
     /// <summary>
@@ -519,10 +549,10 @@ public class ExternalCommunicator : Communicator
     /// <see cref="storedActions"/>, <see cref="storedMemories"/>, and
     /// <see cref="storedValues"/>.
     /// </summary>
-    public void UpdateActions()
+    public void ReceiveActions()
     {
-        socket.Send(Encoding.ASCII.GetBytes("STEPPING"));
-        string message = ReceiveAll();
+        SendShortMessage("STEPPING");
+        string message = ReceiveLongMessage();
         var agentMessage =
             JsonConvert.DeserializeObject<AgentMessage>(message);
 
@@ -579,7 +609,7 @@ public class ExternalCommunicator : Communicator
     /// <summary>
     /// Returns the actions corresponding to the provided Brain that were
     /// received from the Python API during the last call to
-    /// <see cref="UpdateActions"></see>
+    /// <see cref="ReceiveActions"></see>
     /// </summary>
     /// <returns>The actions for all agents attached to the brain,
     /// indexed by the agent ids.</returns>
@@ -592,7 +622,7 @@ public class ExternalCommunicator : Communicator
     /// <summary>
     /// Returns the memories corresponding to the provided Brain that were
     /// received from the Python API during the last call to
-    /// <see cref="UpdateActions"></see>
+    /// <see cref="ReceiveActions"></see>
     /// </summary>
     /// <returns>The memories for all agents attached to the brain,
     /// indexed by the agent ids.</returns>
@@ -605,7 +635,7 @@ public class ExternalCommunicator : Communicator
     /// <summary>
     /// Returns the values corresponding to the provided Brain that were
     /// received from the Python API during the last call to
-    /// <see cref="UpdateActions"></see>
+    /// <see cref="ReceiveActions"></see>
     /// </summary>
     /// <returns>The values for all agents attached to the brain,
     /// indexed by the agent ids.</returns>
