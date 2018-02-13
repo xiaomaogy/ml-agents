@@ -157,7 +157,7 @@ public class CoreBrainInternal : ScriptableObject, CoreBrain
 
             if (coord != null)
             {
-                coord.giveBrainInfo(brain);
+                coord.GiveBrainInfo(brain);
             }
             return;
         }

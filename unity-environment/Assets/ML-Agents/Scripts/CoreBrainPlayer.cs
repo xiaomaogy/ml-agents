@@ -27,7 +27,7 @@ public class CoreBrainPlayer : ScriptableObject, CoreBrain
         public int index;
         public float value;
     }
-        
+
     ExternalCommunicator coord;
 
     [SerializeField]
@@ -35,7 +35,7 @@ public class CoreBrainPlayer : ScriptableObject, CoreBrain
     /// Contains the mapping from input to continuous actions
     private ContinuousPlayerAction[] continuousPlayerActions;
     [SerializeField]
-	[Tooltip("The list of keys and the value they correspond to for discrete control.")]
+    [Tooltip("The list of keys and the value they correspond to for discrete control.")]
     /// Contains the mapping from input to discrete actions
     private DiscretePlayerAction[] discretePlayerActions;
     [SerializeField]
@@ -112,7 +112,7 @@ public class CoreBrainPlayer : ScriptableObject, CoreBrain
     {
         if (coord != null)
         {
-            coord.giveBrainInfo(brain);
+            coord.GiveBrainInfo(brain);
         }
         else
         {
@@ -126,8 +126,8 @@ public class CoreBrainPlayer : ScriptableObject, CoreBrain
     {
 #if UNITY_EDITOR
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-		broadcast = EditorGUILayout.Toggle(new GUIContent("Broadcast",
-					  "If checked, the brain will broadcast states and actions to Python."), broadcast);
+        broadcast = EditorGUILayout.Toggle(new GUIContent("Broadcast",
+                      "If checked, the brain will broadcast states and actions to Python."), broadcast);
         var serializedBrain = new SerializedObject(this);
         if (brain.brainParameters.actionSpaceType == StateType.continuous)
         {

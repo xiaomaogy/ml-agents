@@ -84,9 +84,9 @@ public class CoreBrainHeuristic : ScriptableObject, CoreBrain
     /// Nothing needs to be implemented, the states are collected in DecideAction
     public void SendState()
     {
-        if (coord!=null)
+        if (coord != null)
         {
-            coord.giveBrainInfo(brain);
+            coord.GiveBrainInfo(brain);
         }
     }
 
@@ -95,8 +95,8 @@ public class CoreBrainHeuristic : ScriptableObject, CoreBrain
     {
 #if UNITY_EDITOR
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-		broadcast = EditorGUILayout.Toggle(new GUIContent("Broadcast",
-					  "If checked, the brain will broadcast states and actions to Python."), broadcast);
+        broadcast = EditorGUILayout.Toggle(new GUIContent("Broadcast",
+                      "If checked, the brain will broadcast states and actions to Python."), broadcast);
         if (brain.gameObject.GetComponent<Decision>() == null)
         {
             EditorGUILayout.HelpBox("You need to add a 'Decision' component to this gameObject", MessageType.Error);

@@ -1,37 +1,64 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
-/** \brief AcademyParameters is a structure containing basic information about the 
- * training environment. */
-/** The AcademyParameters will be sent via socket at the start of the Environment.
- * This structure does not need to be modified.
- */
+/// <summary>
+/// AcademyParameters is a struct containing basic information about the 
+/// learning environment. This contains the information needed by the 
+/// Python API at start-up, which is sent through the Communicator.
+/// </summary>
 public struct AcademyParameters
 {
-    /**< \brief The name of the Academy. If the communicator is External, 
-     * it will be the name of the Academy GameObject */
+    /// <summary>
+    /// The name of the Academy GameObject as defined by the user in the
+    /// Unity Editor.
+    /// </summary>
     public string AcademyName;
 
-    /**< \brief The API number for the communicator. */
+    /// <summary>
+    /// The API version for the communicator. This defines the API contract
+    /// between the learning environment and Python API. Any changes to
+    /// the API warrant a new, updated verion.
+    /// </summary>
     public string apiNumber;
 
-    /**< \brief The location of the logfile*/
+    /// <summary>
+    /// The location of the logfile. This logfile is created and written
+    /// to by the learning environment, but shared between the
+    /// learning environment and the Python API.
+    /// </summary>
     public string logPath;
 
-    /**< \brief The default reset parameters are sent via socket*/
-	public Dictionary<string, float> resetParameters;
+    /// <summary>
+    /// The default reset parameters as specified by the user in the Unity
+    /// Editor.
+    /// </summary>
+    public Dictionary<string, float> resetParameters;
 
-    /**< \brief A list of the all the brains names sent via socket*/
+    /// <summary>
+    /// A list of the names of all the Brain GameObjects specified as children
+    /// of the Academy GameObject within the Unity Editor.
+    /// </summary>
     public List<string> brainNames;
 
-    /**< \brief  A list of the External brains parameters sent via socket*/
+    /// <summary>
+    /// A list of the BrainParameter values of all the Brain GameObjects
+    /// specified as children of the Academy GameObject within the Unity
+    /// Editor. Each entry in this list corresponds to the respective entry
+    /// in <see cref="brainNames"/>, that is the 3rd entry in both lists
+    /// correspond to the same brain.
+    /// </summary>
     public List<BrainParameters> brainParameters;
 
-    /**< \brief  A list of the External brains names sent via socket*/
+    /// <summary>
+    /// A list of the names of all the External Brain GameObjects specified as
+    /// children of the Academy GameObject within the Unity Editor. This list
+    /// will contain a subset of the names in <see cref="brainNames"/>.
+    /// </summary>
     public List<string> externalBrainNames;
 }
 
+/// <summary>
+/// Lists the commands that can be sent from a communicator.
+/// </summary>
 public enum ExternalCommand
 {
     STEP,
@@ -39,35 +66,50 @@ public enum ExternalCommand
     QUIT
 }
 
-/**
- * This is the interface used to generate coordinators. 
- * This does not need to be modified nor implemented to create a 
- * Unity environment.
- */
+/// <summary>
+/// A Communicator is a layer that handles communication between the 
+/// Unity learning environment (specifically, the Academy) and the Python API. 
+/// </summary>
 public interface Communicator
 {
-
-    /// Implement this method to allow brains to subscribe to the 
-    /// decisions made outside of Unity
+    /// <summary>
+    /// Register a Brain with the Python API. One call is needed for each 
+    /// Brain.
+    /// </summary>
+    /// <param name="brain">Brain to register.</param>
     void SubscribeBrain(Brain brain);
 
-    /// First contact between Communicator and external process
+    /// <summary>
+    /// First contact between the learning environment and communicator. Tests
+    /// that the communicator is alive and functioning.
+    /// </summary>
+    /// <returns>
+    /// <c>true</c>, if handshake was successful; <c>false</c> otherwise.
+    /// </returns>
     bool CommunicatorHandShake();
 
-    /// Implement this method to initialize the communicator
+    /// <summary>
+    /// Initialize the communicator. Must be called before any of the
+    /// communication-methods are called, <see cref="UpdateActions"/>,
+    /// <see cref="GetCommand"/>, and <see cref="GetResetParameters"/>.
+    /// </summary>
     void InitializeCommunicator();
 
-    /// Implement this method to receive actions from outside of Unity and 
-    /// update the actions of the brains that subscribe
+    /// <summary>
+    /// Receives actions from the Python API for all the brains that have
+    /// been subscribed.
+    /// </summary>
     void UpdateActions();
 
-    /// Implement this method to return the ExternalCommand that 
-    /// was given outside of Unity
+    /// <summary>
+    /// Receives the next command from the Python API.
+    /// </summary>
+    /// <returns>The command.</returns>
     ExternalCommand GetCommand();
 
-    /// Implement this method to return the new dictionary of resetParameters 
-    /// that was given outside of Unity
+    /// <summary>
+    /// Receives the new dictionary of reset parameters from the Python API. 
+    /// </summary>
+    /// <returns>The next reset parameters.</returns>
     Dictionary<string, float> GetResetParameters();
-
-
 }

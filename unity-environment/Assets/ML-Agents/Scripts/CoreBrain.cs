@@ -7,7 +7,6 @@ using UnityEngine;
  */
 public interface CoreBrain
 {
-
     /// Implement setBrain so let the coreBrain know what brain is using it
     void SetBrain(Brain b);
     /// Implement this method to initialize CoreBrain
@@ -18,5 +17,4 @@ public interface CoreBrain
     void SendState();
     /// Implement this method to define what should be displayed in the brain Inspector
     void OnInspector();
-
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// CoreBrain which decides actions via communication with an external system such as Python.
 public class CoreBrainExternal : ScriptableObject, CoreBrain
@@ -54,7 +52,7 @@ public class CoreBrainExternal : ScriptableObject, CoreBrain
     {
         if (coord != null)
         {
-            coord.giveBrainInfo(brain);
+            coord.GiveBrainInfo(brain);
         }
     }
 
