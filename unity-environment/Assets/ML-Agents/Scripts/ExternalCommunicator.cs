@@ -87,7 +87,8 @@ class CommunicatorArgs
 
 /// <summary>
 /// Implements the Communicator interface by using sockets to communicate
-/// with the Python API.
+/// with the Python API. Currently, this class is not minimal, as it implements
+/// other public facing methods that are not defined as part of the interface.
 /// </summary>
 public class ExternalCommunicator : Communicator
 {
@@ -523,7 +524,7 @@ public class ExternalCommunicator : Communicator
 
         if (hasSentState.Values.All(x => x))
         {
-            // if all the brains listed have sent their state
+            // If all the brains listed have sent their state.
             SendShortMessage(academy.IsDone() ? "True" : "False");
             ResetSentState();
         }
@@ -562,46 +563,48 @@ public class ExternalCommunicator : Communicator
             {
                 var brainName = brain.gameObject.name;
 
-                var actionDict = new Dictionary<int, float[]>();
-                var memoryDict = new Dictionary<int, float[]>();
-                var valueDict = new Dictionary<int, float>();
+                storedActions[brainName].Clear();
+                storedMemories[brainName].Clear();
+                storedValues[brainName].Clear();
 
-                for (int i = 0; i < brainAgents[brainName].Count; i++)
+                int numAgents = brainAgents[brainName].Count;
+                for (int agentId = 0; agentId < numAgents; agentId++)
                 {
+                    // Update action depending on whether action space is
+                    // discrete or continuous.
                     if (brain.brainParameters.actionSpaceType ==
                         StateType.continuous)
                     {
-                        actionDict.Add(
-                            brainAgents[brainName][i],
+                        storedActions[brainName].Add(
+                            brainAgents[brainName][agentId],
                             agentMessage.action[brainName]
                                 .GetRange(
-                                    i * brain.brainParameters.actionSize,
+                                    agentId * brain.brainParameters.actionSize,
                                     brain.brainParameters.actionSize)
                                 .ToArray());
                     }
                     else
                     {
-                        actionDict.Add(
-                            brainAgents[brainName][i],
+                        storedActions[brainName].Add(
+                            brainAgents[brainName][agentId],
                             agentMessage.action[brainName]
-                                .GetRange(i, 1)
+                                .GetRange(agentId, 1)
                             .ToArray());
                     }
 
-                    memoryDict.Add(
-                        brainAgents[brainName][i],
+                    // Update memories (entire array for each agent).
+                    storedMemories[brainName].Add(
+                        brainAgents[brainName][agentId],
                         agentMessage.memory[brainName]
-                            .GetRange(i * brain.brainParameters.memorySize,
+                            .GetRange(agentId * brain.brainParameters.memorySize,
                                       brain.brainParameters.memorySize)
                             .ToArray());
 
-                    valueDict.Add(
-                        brainAgents[brainName][i],
-                        agentMessage.value[brainName][i]);
+                    // Update value estimates (one value for each agent)
+                    storedValues[brainName].Add(
+                        brainAgents[brainName][agentId],
+                        agentMessage.value[brainName][agentId]);
                 }
-                storedActions[brainName] = actionDict;
-                storedMemories[brainName] = memoryDict;
-                storedValues[brainName] = valueDict;
             }
         }
     }
