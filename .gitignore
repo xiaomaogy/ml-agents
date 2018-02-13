@@ -69,4 +69,7 @@
 *.eggs*
 *.gitignore.swp
 
+# unity-volume
+/unity-volume/*
+
 .DS_Store
