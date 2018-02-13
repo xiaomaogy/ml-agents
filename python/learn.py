@@ -20,14 +20,21 @@ if __name__ == '__main__':
       --load                     Whether to load the model or randomly initialize [default: False].
       --run-id=<path>            The sub-directory name for model and summary statistics [default: ppo]. 
       --save-freq=<n>            Frequency at which to save model [default: 50000].
-      --seed=<n>                 Random seed used for training [default: None].
+      --seed=<n>                 Random seed used for training [default: -1].
       --slow                     Whether to run the game at training speed [default: False].
       --train                    Whether to train model, or only run inference [default: False].
       --worker-id=<n>            Number to add to communication port (5005). Used for multi-environment [default: 0].
+      --volume-prefix=<vp>       Volume for curriculum, executable and model from (when containerized) [default: Empty].
     '''
 
     options = docopt(_USAGE)
     logger.info(options)
+    # Docker Parameters
+    if options['--volume-prefix'] == 'Empty':
+        volume_prefix = ''
+    else:
+        volume_prefix = options['--volume-prefix']
+    print(volume_prefix)
 
     # General parameters
     run_id = options['--run-id']
@@ -35,7 +42,7 @@ if __name__ == '__main__':
     load_model = options['--load']
     train_model = options['--train']
     save_freq = int(options['--save-freq'])
-    env_name = options['<env>']
+    env_path = options['<env>']
     keep_checkpoints = int(options['--keep-checkpoints'])
     worker_id = int(options['--worker-id'])
     curriculum_file = str(options['--curriculum'])
@@ -44,6 +51,6 @@ if __name__ == '__main__':
     lesson = int(options['--lesson'])
     fast_simulation = not bool(options['--slow'])
 
-    tc = TrainerController(env_name, run_id, save_freq, curriculum_file, fast_simulation, load_model, train_model,
-                           worker_id, keep_checkpoints, lesson, seed)
-    tc.start_learning()
+    tc = TrainerController(env_path, run_id, save_freq, curriculum_file, fast_simulation, load_model, train_model,
+                           worker_id, keep_checkpoints, lesson, seed, volume_prefix)
+    #tc.start_learning()
