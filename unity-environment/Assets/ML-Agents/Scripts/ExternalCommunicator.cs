@@ -156,20 +156,6 @@ public class ExternalCommunicator : Communicator
     /// corresponding brain. Updated following <see cref="UpdateActions"/>.
     Dictionary<string, Dictionary<int, float>> storedValues;
 
-    // For Messages
-    List<float> concatenatedStates =
-        new List<float>(DEFAULT_NUM_AGENTS * DEFAULT_NUM_OBSERVATIONS);
-    List<float> concatenatedRewards =
-        new List<float>(DEFAULT_NUM_AGENTS);
-    List<float> concatenatedMemories =
-        new List<float>(DEFAULT_NUM_AGENTS * DEFAULT_NUM_OBSERVATIONS);
-    List<bool> concatenatedDones =
-        new List<bool>(DEFAULT_NUM_AGENTS);
-    List<bool> concatenatedMaxes =
-        new List<bool>(DEFAULT_NUM_AGENTS);
-    List<float> concatenatedActions =
-        new List<float>(DEFAULT_NUM_AGENTS * DEFAULT_NUM_OBSERVATIONS);
-
     /// Socket used to send and receive messages with Python API.
     Socket socket;
 
@@ -243,6 +229,29 @@ public class ExternalCommunicator : Communicator
         storedActions = new Dictionary<string, Dictionary<int, float[]>>();
         storedMemories = new Dictionary<string, Dictionary<int, float[]>>();
         storedValues = new Dictionary<string, Dictionary<int, float>>();
+
+        messageBuffer = new byte[MESSAGE_BUFFER_SIZE];
+        lengthBuffer = new byte[LENGTH_BUFFER_SIZE];
+
+        // Capacity for collection objects is intended to avoid initial
+        // repeated resizing.
+        stepMessageBuffer = new StepMessage
+        {
+            agents =
+                new List<int>(DEFAULT_NUM_AGENTS),
+            states =
+                new List<float>(DEFAULT_NUM_AGENTS * DEFAULT_NUM_OBSERVATIONS),
+            rewards =
+                new List<float>(DEFAULT_NUM_AGENTS),
+            actions =
+                new List<float>(DEFAULT_NUM_AGENTS * DEFAULT_NUM_OBSERVATIONS),
+            memories =
+                new List<float>(DEFAULT_NUM_AGENTS * DEFAULT_NUM_OBSERVATIONS),
+            maxes =
+                new List<bool>(DEFAULT_NUM_AGENTS),
+            dones =
+                new List<bool>(DEFAULT_NUM_AGENTS)
+        };
     }
 
     /// <summary> <inheritdoc/> </summary>
@@ -295,8 +304,6 @@ public class ExternalCommunicator : Communicator
         logWriter.WriteLine(System.DateTime.Now.ToString());
         logWriter.WriteLine(" ");
         logWriter.Close();
-        messageBuffer = new byte[MESSAGE_BUFFER_SIZE];
-        lengthBuffer = new byte[LENGTH_BUFFER_SIZE];
 
         // Create a TCP/IP socket connection.
         socket = new Socket(
@@ -447,31 +454,30 @@ public class ExternalCommunicator : Communicator
         brainAgents[brainName] = new List<int>(brain.agents.Keys);
         brain.CollectEverything();
 
-        concatenatedStates.Clear();
-        concatenatedRewards.Clear();
-        concatenatedMemories.Clear();
-        concatenatedDones.Clear();
-        concatenatedMaxes.Clear();
-        concatenatedActions.Clear();
+        stepMessageBuffer.brain_name = brainName;
+        stepMessageBuffer.agents = brainAgents[brainName];
+        stepMessageBuffer.states.Clear();
+        stepMessageBuffer.rewards.Clear();
+        stepMessageBuffer.memories.Clear();
+        stepMessageBuffer.dones.Clear();
+        stepMessageBuffer.maxes.Clear();
+        stepMessageBuffer.actions.Clear();
 
         foreach (int id in brainAgents[brainName])
         {
-            concatenatedStates.AddRange(brain.currentStates[id]);
-            concatenatedRewards.Add(brain.currentRewards[id]);
-            concatenatedMemories.AddRange(brain.currentMemories[id].ToList());
-            concatenatedDones.Add(brain.currentDones[id]);
-            concatenatedMaxes.Add(brain.currentMaxes[id]);
-            concatenatedActions.AddRange(brain.currentActions[id].ToList());
+            stepMessageBuffer.states.AddRange(
+                brain.currentStates[id]);
+            stepMessageBuffer.rewards.Add(
+                brain.currentRewards[id]);
+            stepMessageBuffer.memories.AddRange(
+                brain.currentMemories[id].ToList());
+            stepMessageBuffer.dones.Add(
+                brain.currentDones[id]);
+            stepMessageBuffer.maxes.Add(
+                brain.currentMaxes[id]);
+            stepMessageBuffer.actions.AddRange(
+                brain.currentActions[id].ToList());
         }
-
-        stepMessageBuffer.brain_name = brainName;
-        stepMessageBuffer.agents = brainAgents[brainName];
-        stepMessageBuffer.states = concatenatedStates;
-        stepMessageBuffer.rewards = concatenatedRewards;
-        stepMessageBuffer.actions = concatenatedActions;
-        stepMessageBuffer.memories = concatenatedMemories;
-        stepMessageBuffer.dones = concatenatedDones;
-        stepMessageBuffer.maxes = concatenatedMaxes;
 
         sMessageString = JsonUtility.ToJson(stepMessageBuffer);
         socket.Send(PrependLength(Encoding.ASCII.GetBytes(sMessageString)));
