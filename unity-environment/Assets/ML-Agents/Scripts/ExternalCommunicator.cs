@@ -172,10 +172,6 @@ public class ExternalCommunicator : Communicator
     /// logging information.
     string logPath;
 
-    StreamWriter logWriter;
-    string sMessageString;
-    string rMessage;
-
     /// Format of the Step message which is sent to the Python API.
     [System.Serializable]
     public struct StepMessage
@@ -300,7 +296,7 @@ public class ExternalCommunicator : Communicator
         // Initialize log file.
         logPath =
             Path.GetFullPath(".") + Path.DirectorySeparatorChar + LOG_FILENAME;
-        logWriter = new StreamWriter(logPath, false);
+        StreamWriter logWriter = new StreamWriter(logPath, false);
         logWriter.WriteLine(System.DateTime.Now.ToString());
         logWriter.WriteLine(" ");
         logWriter.Close();
@@ -341,7 +337,7 @@ public class ExternalCommunicator : Communicator
     /// the log message details to file.
     void HandleLog(string logString, string stackTrace, LogType type)
     {
-        logWriter = new StreamWriter(logPath, true);
+        StreamWriter logWriter = new StreamWriter(logPath, true);
         logWriter.WriteLine(type.ToString());
         logWriter.WriteLine(logString);
         logWriter.WriteLine(stackTrace);
@@ -374,24 +370,26 @@ public class ExternalCommunicator : Communicator
     public Dictionary<string, float> GetResetParameters()
     {
         socket.Send(Encoding.ASCII.GetBytes("CONFIG_REQUEST"));
-        Receive();
-        var resetParams = JsonConvert.DeserializeObject<ResetParametersMessage>(rMessage);
+        string message = Receive();
+        var resetParams =
+            JsonConvert.DeserializeObject<ResetParametersMessage>(message);
         academy.SetInference(!resetParams.train_model);
         return resetParams.parameters;
     }
 
     /// Sends Academy parameters to Python API.
-    void SendParameters(AcademyParameters envParams)
+    void SendParameters(AcademyParameters academyParameters)
     {
-        string envMessage = JsonConvert.SerializeObject(envParams, Formatting.Indented);
-        socket.Send(Encoding.ASCII.GetBytes(envMessage));
+        string message = JsonConvert.SerializeObject(
+            academyParameters, Formatting.Indented);
+        socket.Send(Encoding.ASCII.GetBytes(message));
     }
 
     /// Receives a short message from the Python API.
-    void Receive()
+    string Receive()
     {
         int location = socket.Receive(messageBuffer);
-        rMessage = Encoding.ASCII.GetString(messageBuffer, 0, location);
+        return Encoding.ASCII.GetString(messageBuffer, 0, location);
     }
 
     /// Receives a long message from the Python API by piecing multiple chunks.
@@ -400,14 +398,14 @@ public class ExternalCommunicator : Communicator
         socket.Receive(lengthBuffer);
         int totalLength = System.BitConverter.ToInt32(lengthBuffer, 0);
         int location = 0;
-        rMessage = "";
+        StringBuilder message = new StringBuilder();
         while (location != totalLength)
         {
             int fragment = socket.Receive(messageBuffer);
             location += fragment;
-            rMessage += Encoding.ASCII.GetString(messageBuffer, 0, fragment);
+            message.Append(Encoding.ASCII.GetString(messageBuffer, 0, fragment));
         }
-        return rMessage;
+        return message.ToString();
     }
 
     /// Ends connection and closes environment.
@@ -479,7 +477,7 @@ public class ExternalCommunicator : Communicator
                 brain.currentActions[id].ToList());
         }
 
-        sMessageString = JsonUtility.ToJson(stepMessageBuffer);
+        string sMessageString = JsonUtility.ToJson(stepMessageBuffer);
         socket.Send(PrependLength(Encoding.ASCII.GetBytes(sMessageString)));
         Receive();
         int i = 0;
@@ -524,9 +522,9 @@ public class ExternalCommunicator : Communicator
     public void UpdateActions()
     {
         socket.Send(Encoding.ASCII.GetBytes("STEPPING"));
-        ReceiveAll();
+        string message = ReceiveAll();
         var agentMessage =
-            JsonConvert.DeserializeObject<AgentMessage>(rMessage);
+            JsonConvert.DeserializeObject<AgentMessage>(message);
 
         foreach (Brain brain in brains)
         {
