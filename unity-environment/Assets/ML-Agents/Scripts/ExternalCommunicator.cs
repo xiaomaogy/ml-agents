@@ -9,6 +9,83 @@ using UnityEngine;
 using Newtonsoft.Json;
 
 /// <summary>
+/// Helper class to parse and represent the command-line arguments for this
+/// external communicator. The arguments can appear is any order as long
+/// as the flag value immediately follows the flag name.
+/// </summary>
+class CommunicatorArgs
+{
+    /// Default server address to use.
+    const string DEFAULT_SERVER = "localhost";
+
+    /// Server flag used within command-line arguments.
+    const string SERVER_FLAG = "--server";
+
+    /// Port flag used within command-line arguments.
+    const string PORT_FLAG = "--port";
+
+    /// Random seed flag used within command-line arguments.
+    const string SEED_FLAG = "--seed";
+
+    /// Socket server address.
+    public readonly string server;
+
+    /// Socket port number.
+    public readonly int port;
+
+    /// Random seed value.
+    public readonly int seed;
+
+    /// Initializes a new instance of the <see cref="CommunicatorArgs"/> class.
+    /// Server is optional (if not provided, we revert to default one), but
+    /// port and seed are required.
+    CommunicatorArgs(string server, int port, int seed)
+    {
+        this.server = DEFAULT_SERVER;
+        if (!string.IsNullOrEmpty(server))
+        {
+            this.server = server;
+        }
+        this.port = port;
+        this.seed = seed;
+    }
+
+    /// Parses the provided command-line arguments array and returns a 
+    /// <see cref="CommunicatorArgs"/> object that contains the arguments.
+    /// In case of any parsing errors, a runtime exception is thrown.
+    public static CommunicatorArgs Parse(string[] args)
+    {
+        string server = null;
+        int port = -1;
+        int seed = -1;
+
+        // Only iterate to second-last element to ensure no index overflow.
+        int i = 0;
+        while (i < args.Length - 1)
+        {
+            switch (args[i])
+            {
+                case PORT_FLAG:
+                    port = int.Parse(args[i + 1]);
+                    i++;
+                    break;
+                case SERVER_FLAG:
+                    server = args[i + 1];
+                    i++;
+                    break;
+                case SEED_FLAG:
+                    seed = int.Parse(args[i + 1]);
+                    i++;
+                    break;
+            }
+            i++;
+        }
+
+        return new CommunicatorArgs(server, port, seed);
+    }
+}
+
+/// <summary>
 /// Implements the Communicator interface by using sockets to communicate
 /// with the Python API.
 /// </summary>
@@ -33,6 +110,9 @@ public class ExternalCommunicator : Communicator
     /// Default number of observations per agent - used to initialize data
     /// structure capacity.
     const int DEFAULT_NUM_OBSERVATIONS = 32;
+
+    /// Contains the command-line arguments passed to communicator.
+    CommunicatorArgs args;
 
     /// The Academy for the learning environment that is communicating with
     /// the Python API.
@@ -106,8 +186,6 @@ public class ExternalCommunicator : Communicator
     /// logging information.
     string logPath;
 
-    int comPort;
-    int randomSeed;
     StreamWriter logWriter;
     string sMessageString;
     string rMessage;
@@ -190,12 +268,14 @@ public class ExternalCommunicator : Communicator
     {
         try
         {
-            ReadArgs();
+            args = CommunicatorArgs.Parse(
+                System.Environment.GetCommandLineArgs());
         }
         catch
         {
             return false;
         }
+        Random.InitState(args.seed);
         return true;
     }
 
@@ -221,7 +301,7 @@ public class ExternalCommunicator : Communicator
         // Create a TCP/IP socket connection.
         socket = new Socket(
             AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        socket.Connect("localhost", comPort);
+        socket.Connect(args.server, args.port);
 
         // Initialize and populate the academy parameters.
         var academyParamerters = new AcademyParameters
@@ -291,29 +371,6 @@ public class ExternalCommunicator : Communicator
         var resetParams = JsonConvert.DeserializeObject<ResetParametersMessage>(rMessage);
         academy.SetInference(!resetParams.train_model);
         return resetParams.parameters;
-    }
-
-    /// Used to read Python-provided environment parameters.
-    void ReadArgs()
-    {
-        string[] args = System.Environment.GetCommandLineArgs();
-        var inputPort = "";
-        var inputSeed = "";
-        for (int i = 0; i < args.Length; i++)
-        {
-            if (args[i] == "--port")
-            {
-                inputPort = args[i + 1];
-            }
-            if (args[i] == "--seed")
-            {
-                inputSeed = args[i + 1];
-            }
-        }
-
-        comPort = int.Parse(inputPort);
-        randomSeed = int.Parse(inputSeed);
-        Random.InitState(randomSeed);
     }
 
     /// Sends Academy parameters to Python API.
