@@ -184,20 +184,23 @@ public class WallJumpAgent : Agent
 		MLAgentsHelpers.CollectRotationState(state, agentRB.transform); //agent's rotation
 
 		RaycastHit hit;
-		float didWeHitSomething = 0; //1 if yes, 0 if no
-		float hitDistance = 10; //how far away was it. if nothing was hit then this will return our max raycast dist (which is 10 right now)
-		if (Physics.Raycast(agentRB.position, transform.forward, out hit, 10)) // raycast forward to look for walls
+		// float didWeHitSomething = 0; //1 if yes, 0 if no
+		float hitDistance = 5; //how far away was it. if nothing was hit then this will return our max raycast dist (which is 10 right now)
+		float hitObjectHeight = 0;
+		if (Physics.Raycast(agentRB.position, transform.forward, out hit, 5)) // raycast forward to look for walls
 		{
 			if(hit.collider.CompareTag("walkableSurface"))
 			{
-				didWeHitSomething = 1;
+				// didWeHitSomething = 1;
 				hitDistance = hit.distance;
+				hitObjectHeight = hit.transform.localScale.y;
 				// print(hit.collider.name + hit.distance);
 			}
 		}
 
-		state.Add(didWeHitSomething);
+		// state.Add(didWeHitSomething);
 		state.Add(hitDistance);
+		state.Add(hitObjectHeight);
 
 		return state;
 	}
@@ -365,7 +368,8 @@ public class WallJumpAgent : Agent
 		ResetBlock(mediumBlockRB);
 		ResetBlock(tallBlockRB);
 		transform.position =  GetRandomSpawnPos();
-		wall.transform.localScale = new Vector3(wall.transform.localScale.x, academy.wallHeight, wall.transform.localScale.z);
+		wall.transform.localScale = new Vector3(wall.transform.localScale.x, Random.Range(0, 9.5f), wall.transform.localScale.z);
+		// wall.transform.localScale = new Vector3(wall.transform.localScale.x, academy.wallHeight, wall.transform.localScale.z);
 	}
 }
 

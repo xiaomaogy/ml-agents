@@ -105,6 +105,12 @@ public abstract class Academy : MonoBehaviour
 
     void Awake()
     {
+        // Simulation autoSimulation disable code
+        // Physics.autoSimulation = false;
+        Time.captureFramerate = 30;
+        // End of Simulation autoSimulation disable code
+
+
         resetParameters = new Dictionary<string, float>();
         foreach (ResetParameter kv in defaultResetParameters)
         {
@@ -244,6 +250,11 @@ public abstract class Academy : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Simulation autoSimulation disable code
+        // Physics.Simulate(0.02f);
+        // Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        // End of Simulation autoSimulation disable code
+
         if (acceptingSteps)
         {
             RunMdp();
