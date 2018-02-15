@@ -9,7 +9,6 @@ import re
 import tensorflow as tf
 import yaml
 
-from datetime import datetime
 from tensorflow.python.tools import freeze_graph
 from trainers.ghost_trainer import GhostTrainer
 from trainers.ppo_trainer import PPOTrainer
@@ -19,7 +18,7 @@ from unityagents import UnityEnvironment, UnityEnvironmentException
 
 class TrainerController(object):
     def __init__(self, env_path, run_id, save_freq, curriculum_file, fast_simulation, load, train,
-                 worker_id, keep_checkpoints, lesson, seed, volume_prefix):
+                 worker_id, keep_checkpoints, lesson, seed, docker_target_name):
         """
 
         :param env_path: Location to the environment executable to be loaded.
@@ -33,28 +32,33 @@ class TrainerController(object):
         :param keep_checkpoints: How many model checkpoints to keep
         :param lesson: Start learning from this lesson
         :param seed: Random seed used for training.
-        :param volume_prefix: Name of docker volume that will contain all data.
+        :param docker_target_name: Name of docker volume that will contain all data.
         """
+        # Assumption that this yaml is present in same dir as this file
+        self.TRAINER_CONFIG_FILE_NAME = "trainer_config.yaml"
         env_path = (env_path.strip()
                     .replace('.app', '')
                     .replace('.exe', '')
                     .replace('.x86_64', '')
                     .replace('.x86', ''))  # Strip out executable extensions if passed
         # Recognize and use docker volume if one is passed as an argument
-        if volume_prefix == '':
+        if docker_target_name == '':
             self.model_path = './models/{run_id}'.format(run_id=run_id)
             self.curriculum_file = curriculum_file
+            self.summaries_dir = './summaries'
         else:
-            self.model_path = '/{volume_prefix}/models/{run_id}'.format(volume_prefix=volume_prefix,
-                                                                        run_id=run_id)
-            env_path = '/{volume_prefix}/{env_name}'.format(volume_prefix=volume_prefix, env_name=env_path)
+            self.model_path = '/{docker_target_name}/models/{run_id}'.format(
+                docker_target_name=docker_target_name,
+                run_id=run_id)
+            env_path = '/{docker_target_name}/{env_name}'.format(docker_target_name=docker_target_name,
+                                                                 env_name=env_path)
             if curriculum_file is None:
                 self.curriculum_file = None
             else:
-                self.curriculum_file = '/{volume_prefix}/{curriculum_file}'.format(volume_prefix=volume_prefix,
-                                                                                   curriculum_file=curriculum_file)
-        print(self.model_path)         # TODO delete
-        print(self.curriculum_file)  # TODO delete
+                self.curriculum_file = '/{docker_target_name}/{curriculum_file}'.format(
+                    docker_target_name=docker_target_name,
+                    curriculum_file=curriculum_file)
+            self.summaries_dir = '/{docker_target_name}/summaries'.format(docker_target_name=docker_target_name)
         self.logger = logging.getLogger("unityagents")
         self.run_id = run_id
         self.save_freq = save_freq
@@ -70,11 +74,9 @@ class TrainerController(object):
         self.seed = seed
         np.random.seed(self.seed)
         tf.set_random_seed(self.seed)
-        print(env_path)  # TODO delete
         self.env = UnityEnvironment(file_name=env_path, worker_id=self.worker_id,
                                     curriculum=self.curriculum_file, seed=self.seed)
-        self.env_name = os.path.basename(os.path.normpath(env_path)) # Extract out name of environment
-        print(self.env_name)  # TODO delete
+        self.env_name = os.path.basename(os.path.normpath(env_path))  # Extract out name of environment
 
     def _get_progress(self):
         if self.curriculum_file is not None:
@@ -150,11 +152,14 @@ class TrainerController(object):
             if len(self.env.external_brain_names) > 1:
                 graph_scope = re.sub('[^0-9a-zA-Z]+', '-', brain_name)
                 trainer_parameters['graph_scope'] = graph_scope
-                trainer_parameters['summary_path'] = './summaries/{}'.format(
-                    str(self.run_id)) + '_' + graph_scope
+                trainer_parameters['summary_path'] = '{basedir}/{name}'.format(
+                    basedir=self.summaries_dir,
+                    name=str(self.run_id) + '_' + graph_scope)
             else:
                 trainer_parameters['graph_scope'] = ''
-                trainer_parameters['summary_path'] = './summaries/{}'.format(self.run_id)
+                trainer_parameters['summary_path'] = '{basedir}/{name}'.format(
+                    basedir=self.summaries_dir,
+                    name=str(self.run_id))
             if brain_name in trainer_config:
                 _brain_key = brain_name
                 while not isinstance(trainer_config[_brain_key], dict):
@@ -194,13 +199,16 @@ class TrainerController(object):
         tf.reset_default_graph()
 
         try:
-            with open("trainer_config.yaml") as data_file:
+            base_path = os.path.dirname(__file__)
+            trainer_file_path = os.path.abspath(os.path.join(base_path, self.TRAINER_CONFIG_FILE_NAME))
+            with open(trainer_file_path) as data_file:
                 trainer_config = yaml.load(data_file)
         except IOError:
-            raise UnityEnvironmentException("The file {} could not be found. Will use default Hyperparameters"
-                                            .format("trainer_config.yaml"))
+            raise UnityEnvironmentException("""Parameter file {} could not be found here {}. 
+                                            Will use default Hyper parameters"""
+                                            .format(self.TRAINER_CONFIG_FILE_NAME, base_path))
         except UnicodeDecodeError:
-            raise UnityEnvironmentException("There was an error decoding {}".format("trainer_config.yaml"))
+            raise UnityEnvironmentException("There was an error decoding {}".format(self.TRAINER_CONFIG_FILE_NAME))
 
         try:
             if not os.path.exists(self.model_path):
