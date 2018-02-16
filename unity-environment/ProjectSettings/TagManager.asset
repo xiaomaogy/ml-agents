@@ -6,14 +6,11 @@ TagManager:
   tags:
   - agent
   - iWall
-  - blueGoal
-  - redGoal
-  - ball
+  - banana
   - wall
-  - goal
-  - walkableSurface
-  - seed
-  - avoidObstacle
+  - badBanana
+  - pit
+  - frozenAgent
   layers:
   - Default
   - TransparentFX
@@ -23,8 +20,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - invisible
+  - ball
   - 
   - 
   - 

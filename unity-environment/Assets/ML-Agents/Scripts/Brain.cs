@@ -61,26 +61,41 @@ public struct resolution
 [System.Serializable]
 public class BrainParameters
 {
+    [Tooltip("Length of state vector for brain (In Continuous state space)." +
+             "Or number of possible values (in Discrete state space).")]
     public int stateSize = 1;
     /**< \brief If continuous : The length of the float vector that represents 
      * the state
      * <br> If discrete : The number of possible values the state can take*/
+    [Tooltip("Number of states that will be staked before beeing fed to the neural network.")]
+    [Range(1, 10)]
+    public int stackedStates = 1;
+
+    [Tooltip("Length of action vector for brain (In Continuous state space)." +
+             "Or number of possible values (in Discrete action space).")]
     public int actionSize = 1;
     /**< \brief If continuous : The length of the float vector that represents the action
      * <br> If discrete : The number of possible values the action can take*/
+    [Tooltip("Length of memory vector for brain. Used with Recurrent networks.")]
     public int memorySize = 0;
     /**< \brief The length of the float vector that holds the memory for the agent */
+    [Tooltip("Describes height, width, and whether to greyscale visual observations for the Brain.")]
     public resolution[] cameraResolutions;
     /**<\brief  The list of observation resolutions for the brain */
-
-    public string[] actionDescriptions;
+    [Tooltip("A list of strings used to name the available actions for the Brain.")]
+	public string[] actionDescriptions;
     /**< \brief The list of strings describing what the actions correpond to */
+    [Tooltip("Corresponds to whether state vector contains a single integer (Discrete) " +
+             "or a series of real-valued floats (Continuous).")]
     public StateType actionSpaceType = StateType.discrete;
     /**< \brief Defines if the action is discrete or continuous */
+    [Tooltip("Corresponds to whether action vector contains a single integer (Discrete)" +
+             " or a series of real-valued floats (Continuous).")]
     public StateType stateSpaceType = StateType.continuous;
     /**< \brief Defines if the state is discrete or continuous */
 }
 
+[HelpURL("https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Agents-Editor-Interface.md#brain")]
 /**
  * Contains all high-level Brain logic. 
  * Add this component to an empty GameObject in your scene and drag this 
@@ -95,14 +110,18 @@ public class Brain : MonoBehaviour
     public Dictionary<int, List<Camera>> currentCameras = new Dictionary<int, List<Camera>>(32);
     public Dictionary<int, float> currentRewards = new Dictionary<int, float>(32);
     public Dictionary<int, bool> currentDones = new Dictionary<int, bool>(32);
+    public Dictionary<int, bool> currentMaxes = new Dictionary<int, bool>(32);
     public Dictionary<int, float[]> currentActions = new Dictionary<int, float[]>(32);
     public Dictionary<int, float[]> currentMemories = new Dictionary<int, float[]>(32);
 
+	[Tooltip("Define state, observation, and action spaces for the Brain.")]
     /**< \brief Defines brain specific parameters such as the state size*/
     public BrainParameters brainParameters = new BrainParameters();
 
-    /**<  \brief Defines what is the type of the brain : 
+
+	/**<  \brief Defines what is the type of the brain : 
      * External / Internal / Player / Heuristic*/
+	[Tooltip("Describes how the Brain will decide actions.")]
     public BrainType brainType;
 
     [HideInInspector]
@@ -209,6 +228,7 @@ public class Brain : MonoBehaviour
         currentCameras.Clear();
         currentRewards.Clear();
         currentDones.Clear();
+        currentMaxes.Clear();
         currentActions.Clear();
         currentMemories.Clear();
 
@@ -216,12 +236,12 @@ public class Brain : MonoBehaviour
         {
             idAgent.Value.SetCumulativeReward();
             List<float> states = idAgent.Value.ClearAndCollectState();
-            if ((states.Count != brainParameters.stateSize) && (brainParameters.stateSpaceType == StateType.continuous))
+            if ((states.Count != brainParameters.stateSize * brainParameters.stackedStates) && (brainParameters.stateSpaceType == StateType.continuous))
             {
                 throw new UnityAgentsException(string.Format(@"The number of states does not match for agent {0}:
     Was expecting {1} continuous states but received {2}.", idAgent.Value.gameObject.name, brainParameters.stateSize, states.Count));
             }
-            if ((states.Count != 1) && (brainParameters.stateSpaceType == StateType.discrete))
+            if ((states.Count != brainParameters.stackedStates) && (brainParameters.stateSpaceType == StateType.discrete))
             {
                 throw new UnityAgentsException(string.Format(@"The number of states does not match for agent {0}:
     Was expecting 1 discrete states but received {1}.", idAgent.Value.gameObject.name, states.Count));
@@ -238,6 +258,7 @@ public class Brain : MonoBehaviour
             currentCameras.Add(idAgent.Key, observations);
             currentRewards.Add(idAgent.Key, idAgent.Value.reward);
             currentDones.Add(idAgent.Key, idAgent.Value.done);
+            currentMaxes.Add(idAgent.Key, idAgent.Value.maxStepReached);
             currentActions.Add(idAgent.Key, idAgent.Value.agentStoredAction);
             currentMemories.Add(idAgent.Key, idAgent.Value.memory);
         }
@@ -253,15 +274,15 @@ public class Brain : MonoBehaviour
         {
             idAgent.Value.SetCumulativeReward();
             List<float> states = idAgent.Value.ClearAndCollectState();
-            if ((states.Count != brainParameters.stateSize) && (brainParameters.stateSpaceType == StateType.continuous))
+            if ((states.Count != brainParameters.stateSize * brainParameters.stackedStates) && (brainParameters.stateSpaceType == StateType.continuous))
             {
                 throw new UnityAgentsException(string.Format(@"The number of states does not match for agent {0}:
-    Was expecting {1} continuous states but received {2}.", idAgent.Value.gameObject.name, brainParameters.stateSize, states.Count));
+    Was expecting {1} continuous states but received {2}.", idAgent.Value.gameObject.name, brainParameters.stateSize * brainParameters.stackedStates, states.Count));
             }
-            if ((states.Count != 1) && (brainParameters.stateSpaceType == StateType.discrete))
+            if ((states.Count != brainParameters.stackedStates) && (brainParameters.stateSpaceType == StateType.discrete))
             {
                 throw new UnityAgentsException(string.Format(@"The number of states does not match for agent {0}:
-    Was expecting 1 discrete states but received {1}.", idAgent.Value.gameObject.name, states.Count));
+    Was expecting {1} discrete states but received {2}.", idAgent.Value.gameObject.name, brainParameters.stackedStates, states.Count));
             }
             currentStates.Add(idAgent.Key, states);
         }
@@ -310,6 +331,19 @@ public class Brain : MonoBehaviour
         }
         return currentDones;
     }
+
+    /// Collects the done flag of all the agents which subscribe to this brain
+    ///  and returns a dictionary {id -> done}
+    public Dictionary<int, bool> CollectMaxes()
+    {
+        currentMaxes.Clear();
+        foreach (KeyValuePair<int, Agent> idAgent in agents)
+        {
+            currentMaxes.Add(idAgent.Key, idAgent.Value.maxStepReached);
+        }
+        return currentMaxes;
+    }
+
 
     /// Collects the actions of all the agents which subscribe to this brain 
     /// and returns a dictionary {id -> action}
@@ -376,6 +410,15 @@ public class Brain : MonoBehaviour
         }
     }
 
+    ///Sets all the agents which subscribe to the brain to maxStepReached
+    public void SendMaxReached()
+    {
+        foreach (KeyValuePair<int, Agent> idAgent in agents)
+        {
+            idAgent.Value.maxStepReached = true;
+        }
+    }
+
     /// Uses coreBrain to call SendState on the CoreBrain
     public void SendState()
     {
@@ -429,6 +472,7 @@ public class Brain : MonoBehaviour
         {
             agent.Reset();
             agent.done = false;
+            agent.maxStepReached = false;
         }
     }
 
@@ -442,6 +486,7 @@ public class Brain : MonoBehaviour
             {
                 agent.ResetReward();
                 agent.done = false;
+                agent.maxStepReached = false;
             }
         }
     }

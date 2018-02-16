@@ -3,34 +3,44 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+[HelpURL("https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Agents-Editor-Interface.md#agent")]
 /** Generic functions for parent Agent class.
  * Contains all logic for Brain-Agent communication and Agent-Environment 
  * interaction.
  */
 public abstract class Agent : MonoBehaviour
 {
+    [Tooltip("The brain to register this agent to. Can be dragged into the inspector using the Editor.")]
     /**<  \brief  The brain that will control this agent. */
     /**< Use the inspector to drag the desired brain gameObject into
 	 * the Brain field */
     public Brain brain;
 
+    [Tooltip("A list of Cameras which will be used to generate observations.")]
     /**<  \brief  The list of the cameras the Agent uses as observations. */
     /**< These cameras will be used to generate the observations */
     public List<Camera> observations;
 
+    [Tooltip("The per-agent maximum number of steps.")]
     /**<  \brief  The number of steps the agent takes before being done. */
     /**< If set to 0, the agent can only be set to done via a script.
     * If set to any positive integer, the agent will be set to done after that
     * many steps each episode. */
     public int maxStep;
 
+    [Tooltip("If checked, the agent will reset on done. Else, AgentOnDone() will be called.")]
     /**<  \brief Determines the behaviour of the Agent when done.*/
     /**< If true, the agent will reset when done. 
 	 * If not, the agent will remain done, and no longer take actions.*/
     public bool resetOnDone = true;
 
     // State list for the agent.
+    [HideInInspector]
     public List<float> state;
+
+    //List of last n states.
+    [HideInInspector]
+    public List<float> stackedStates;
 
     /**< \brief Describes the reward for the given step of the agent.*/
     /**< It is reset to 0 at the beginning of every step. 
@@ -46,6 +56,10 @@ public abstract class Agent : MonoBehaviour
      * episode for the given agent. */
     [HideInInspector]
     public bool done;
+
+    /**< \brief Whether or not the max step is reached*/
+    [HideInInspector]
+    public bool maxStepReached;
 
     /**< \brief The current value estimate of the agent */
     /**<  When using an External brain, you can pass value estimates to the
@@ -144,6 +158,8 @@ public abstract class Agent : MonoBehaviour
     public virtual void InitializeAgent()
     {
         state = new List<float>(brain.brainParameters.stateSize);
+        stackedStates = new List<float>(brain.brainParameters.stateSize * brain.brainParameters.stackedStates);
+        stackedStates.AddRange(new float[brain.brainParameters.stateSize * brain.brainParameters.stackedStates]);
     }
 
     /// Collect the states of the agent with this method
@@ -158,7 +174,9 @@ public abstract class Agent : MonoBehaviour
     public List<float> ClearAndCollectState() {
         state.Clear();
         CollectState();
-        return state;
+        stackedStates.RemoveRange(0, brain.brainParameters.stateSize);
+        stackedStates.AddRange(state);
+        return stackedStates;
     }
 
     public virtual List<float> CollectState()
@@ -203,6 +221,8 @@ public abstract class Agent : MonoBehaviour
     public void Reset()
     {
         memory = new float[brain.brainParameters.memorySize];
+        stackedStates.Clear();
+        stackedStates.AddRange(new float[brain.brainParameters.stateSize * brain.brainParameters.stackedStates]);
         stepCounter = 0;
         AgentReset();
         CumulativeReward = -reward;
@@ -244,6 +264,7 @@ public abstract class Agent : MonoBehaviour
         if ((stepCounter > maxStep) && (maxStep > 0))
         {
             done = true;
+            maxStepReached = true;
         }
     }
 
