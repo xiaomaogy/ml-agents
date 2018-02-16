@@ -19,6 +19,7 @@ public class ObstacleCourseAcademy : Academy {
 	public float wallHeight;
 
 	public LayerMask avoidObstacleLayer;
+	public float agentRaycastDistance;
 	public override void AcademyReset()
 	{
 		// wallHeight = 

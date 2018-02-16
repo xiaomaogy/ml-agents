@@ -48,6 +48,10 @@ public class ObstacleCourseAgent : Agent
 	public bool showRaycastRays;
 	
 	public float furthestXPos;
+	string[] detectableObjects  = {"walkableSurface", "avoidObstacle", "agent"};
+	float[] stateArray; //bit array to collect state
+	// float rayc
+	// string[] detectableObjects;
 
 	void Awake()
 	{
@@ -56,6 +60,9 @@ public class ObstacleCourseAgent : Agent
 		brain = FindObjectOfType<Brain>(); //only one brain in the scene so this should find our brain. BRAAAINS.
 		// wall.transform.localScale = new Vector3(wall.transform.localScale.x, academy.wallHeight, wall.transform.localScale.z); //set the wall height to match the slider
 		transform.position =  GetRandomSpawnPos();
+		stateArray = new float[detectableObjects.Length + 2];
+
+        // detectableObjects = { "banana", "agent", "wall", "badBanana", "frozenAgent" };
 
 	}
 
@@ -130,17 +137,22 @@ public class ObstacleCourseAgent : Agent
 			grounded = false;
 			foreach(Collider col in hitGroundColliders)
 			{
-				if(col != null && col.transform != this.transform && col.CompareTag("walkableSurface"))
+				if(col != null && col.transform != this.transform)
 				{
-					//build a random position to use for a groundcheck raycast
-					Vector3 randomRaycastPos = agentRB.position;
-					randomRaycastPos += agentRB.transform.forward * Random.Range(-.5f, .5f); // random forward/back
-					randomRaycastPos += agentRB.transform.right * Random.Range(-.5f, .5f); // plus a random left/right
-					if (Physics.Raycast(randomRaycastPos, Vector3.down, .8f)) //if we hit
+					if(col.CompareTag("walkableSurface") || col.CompareTag("avoidObstacle"))
 					{
-						grounded = true; //then we're grounded
-						break;
+						//build a random position to use for a groundcheck raycast
+						Vector3 randomRaycastPos = agentRB.position;
+						randomRaycastPos += agentRB.transform.forward * Random.Range(-.5f, .5f); // random forward/back
+						randomRaycastPos += agentRB.transform.right * Random.Range(-.5f, .5f); // plus a random left/right
+						if (Physics.Raycast(randomRaycastPos, Vector3.down, .8f)) //if we hit
+						{
+							grounded = true; //then we're grounded
+							break;
+						}
+
 					}
+
 				}
 			}
 		}
@@ -175,25 +187,73 @@ public class ObstacleCourseAgent : Agent
 	public void RaycastAndAddState(Vector3 pos, Vector3 dir)
 	{
 		RaycastHit hit;
-		float hitDist = 5; //how far away was it. if nothing was hit then this will return our max raycast dist (which is 10 right now)
-		float hitObjHeight = 0;
+		// float hitDist = 5; //how far away was it. if nothing was hit then this will return our max raycast dist (which is 10 right now)
+		// float hitObjHeight = 0;
+		// float raycastDist;
 		if(showRaycastRays)
 		{
 			Debug.DrawRay(pos, dir * 5, Color.green, 0f, true);
 		}
 
-		if (Physics.Raycast(pos, dir, out hit, 5)) // raycast forward to look for walls
+		float[] subList = new float[detectableObjects.Length + 2];
+		//bit array looks like this
+		// [walkableSurface, avoidObstacle, nothing hit, distance] if true 1, else 0
+		// [0] walkableSurface
+		// [1] walkableSurface
+		// [2] no hit
+		// [3] hit distance
+		var noHitIndex = detectableObjects.Length; //if we didn't hit anything this will be 1
+		var hitDistIndex = detectableObjects.Length + 1; //if we hit something the distance will be stored here.
+
+		// string[] detectableObjects  = { "banana", "agent", "wall", "badBanana", "frozenAgent" };
+
+		// if (Physics.SphereCast(transform.position, 1.0f, position, out hit, rayDistance))
+		if (Physics.Raycast(pos, dir, out hit, academy.agentRaycastDistance)) // raycast forward to look for walls
+		// if (Physics.SphereCast(transform.position, 1.0f, position, out hit, rayDistance))
 		{
-			if(hit.collider.CompareTag("walkableSurface"))
+			for (int i = 0; i < detectableObjects.Length; i++)
 			{
-				hitDist = hit.distance;
-				hitObjHeight = hit.transform.localScale.y;
-				// print(hit.collider.name + hit.distance);
+				if (hit.collider.gameObject.CompareTag(detectableObjects[i]))
+				{
+					stateArray[i] = 1;  //tag hit
+					// print("raycast hit: " + detectableObjects[i]);
+					stateArray[hitDistIndex] = hit.distance / academy.agentRaycastDistance; //hit distance is stored in second to last pos
+					break;
+				}
 			}
 		}
-		// state.Add(didWeHitSomething);
-		state.Add(hitDist);
-		state.Add(hitObjHeight);
+		else
+		{
+			stateArray[noHitIndex] = 1f; //nothing hit
+		}
+
+		// print(stateArray);
+		state.AddRange(new List<float>(stateArray));  //adding n = detectableObjects.Length + 2 items to the state
+
+
+
+		// if (Physics.Raycast(pos, dir, out hit, 5)) // raycast forward to look for walls
+		// {
+		// 	if(hit.collider.CompareTag("walkableSurface"))
+		// 	{
+		// 		hitDist = hit.distance;
+		// 		hitObjHeight = hit.transform.localScale.y;
+		// 		// print(hit.collider.name + hit.distance);
+		// 	}
+		// 	if(hit.collider.CompareTag("avoidObstacle"))
+		// 	{
+		// 		hitDist = hit.distance;
+		// 		hitObjHeight = hit.transform.localScale.y;
+		// 		// print(hit.collider.name + hit.distance);
+		// 	}
+		// }
+		// else //nothing hit
+		// {
+
+		// }
+		// // state.Add(didWeHitSomething);
+		// state.Add(hitDist);
+		// state.Add(hitObjHeight);
 	}
 
 
@@ -378,7 +438,7 @@ public class ObstacleCourseAgent : Agent
 			if(act[2] > 0 && !jumping && grounded)
 			{
 				//jump
-				reward -= .005f; //energy conservation penalty
+				reward -= .1f; //energy conservation penalty
 				StartCoroutine(Jump());
 			}
 
@@ -405,7 +465,7 @@ public class ObstacleCourseAgent : Agent
 	public override void AgentStep(float[] act)
 	{
 
-		reward = agentRB.velocity.x;
+		reward = agentRB.velocity.x/100;
 		// if(agentRB.position.x > furthestXPos)
 		// {
 		// 	furthestXPos = agentRB.position.x;
@@ -468,16 +528,22 @@ public class ObstacleCourseAgent : Agent
 
 
 
-	// // detect when we touch the goal
-	// void OnCollisionEnter(Collision col)
-	// {
-	// 	if(col.gameObject.CompareTag("goal")) //touched goal
-	// 	{
-	// 		reward += 1; //you get a point
-	// 		done = true; //if we mark an agent as done it will be reset automatically. AgentReset() will be called.
-	// 		// StartCoroutine(GoalScoredSwapGroundMaterial(academy.goalScoredMaterial, 2)); //swap ground material for a bit to indicate we scored.
-	// 	}
-	// }
+	// detect when we touch the goal
+	void OnCollisionEnter(Collision col)
+	{
+		if(col.gameObject.CompareTag("avoidObstacle")) //touched goal
+		{
+			reward -= 1; //you get a point
+			done = true; //if we mark an agent as done it will be reset automatically. AgentReset() will be called.
+			// StartCoroutine(GoalScoredSwapGroundMaterial(academy.goalScoredMaterial, 2)); //swap ground material for a bit to indicate we scored.
+		}
+		// if(col.gameObject.CompareTag("goal")) //touched goal
+		// {
+		// 	reward += 1; //you get a point
+		// 	done = true; //if we mark an agent as done it will be reset automatically. AgentReset() will be called.
+		// 	// StartCoroutine(GoalScoredSwapGroundMaterial(academy.goalScoredMaterial, 2)); //swap ground material for a bit to indicate we scored.
+		// }
+	}
 	
 
 
