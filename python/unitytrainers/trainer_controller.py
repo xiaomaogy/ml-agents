@@ -17,7 +17,7 @@ from unityagents import UnityEnvironment, UnityEnvironmentException
 
 class TrainerController(object):
     def __init__(self, env_path, run_id, save_freq, curriculum_file, fast_simulation, load, train,
-                 worker_id, keep_checkpoints, lesson, seed, docker_target_name):
+                 worker_id, keep_checkpoints, lesson, seed, docker_target_name, trainer_config_path):
         """
 
         :param env_path: Location to the environment executable to be loaded.
@@ -32,9 +32,9 @@ class TrainerController(object):
         :param lesson: Start learning from this lesson
         :param seed: Random seed used for training.
         :param docker_target_name: Name of docker volume that will contain all data.
+        :param trainer_config_path: Fully qualified path to location of trainer configuration file
         """
-        # Assumption that this yaml is present in same dir as this file
-        self.TRAINER_CONFIG_FILE_NAME = "trainer_config.yaml"
+        self.trainer_config_path = trainer_config_path
         env_path = (env_path.strip()
                     .replace('.app', '')
                     .replace('.exe', '')
@@ -185,16 +185,15 @@ class TrainerController(object):
         tf.reset_default_graph()
 
         try:
-            base_path = os.path.dirname(__file__)
-            trainer_file_path = os.path.abspath(os.path.join(base_path, self.TRAINER_CONFIG_FILE_NAME))
-            with open(trainer_file_path) as data_file:
+            with open(self.trainer_config_path) as data_file:
                 trainer_config = yaml.load(data_file)
         except IOError:
-            raise UnityEnvironmentException("""Parameter file {} could not be found here {}. 
+            raise UnityEnvironmentException("""Parameter file could not be found here {}.
                                             Will use default Hyper parameters"""
-                                            .format(self.TRAINER_CONFIG_FILE_NAME, base_path))
+                                            .format(self.trainer_config_path))
         except UnicodeDecodeError:
-            raise UnityEnvironmentException("There was an error decoding {}".format(self.TRAINER_CONFIG_FILE_NAME))
+            raise UnityEnvironmentException("There was an error decoding Trainer Config from this path : {}"
+                                            .format(self.trainer_config_path))
 
         try:
             if not os.path.exists(self.model_path):

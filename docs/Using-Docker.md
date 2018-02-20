@@ -14,7 +14,7 @@ We are currently offering an experimental solution for people who'd like to do t
 - Docker typically runs a container sharing a (linux) kernel with the host machine, this means that the Unity environment has to be built for the linux platform. Please select the architecture to be `x86_64` and choose the build to be `headless` (_this is important because we are running it in a container that doesn't have graphics drivers installed_). Save the generated environment in the directory to be mounted (e.g. `unity-volume`). This means your local directory will contain `unity-volume/environment-name.x86_64`
 
 
-- Build the docker container by running `docker build  -t <image_name>` in the source directory. Replace `<image_name>` by the name of the image that you'd prefer, e.g. `balance.ball.v0.1`.
+- Build the docker container by running `docker build  -t <image_name>` in the source directory. Replace `<image_name>` by the name of the image that you want to use, e.g. `balance.ball.v0.1`.
 
 - Run the container, for e.g.:
 ```

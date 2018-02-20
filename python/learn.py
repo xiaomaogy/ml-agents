@@ -3,6 +3,7 @@
 
 import logging
 
+import os
 from docopt import docopt
 
 from unitytrainers.trainer_controller import TrainerController
@@ -51,6 +52,12 @@ if __name__ == '__main__':
         curriculum_file = None
     lesson = int(options['--lesson'])
     fast_simulation = not bool(options['--slow'])
+
+    # Constants
+    # Assumption that this yaml is present in same dir as this file
+    base_path = os.path.dirname(__file__)
+    TRAINER_CONFIG_PATH = os.path.abspath(os.path.join(base_path, "trainer_config.yaml"))
+
     tc = TrainerController(env_path, run_id, save_freq, curriculum_file, fast_simulation, load_model, train_model,
-                           worker_id, keep_checkpoints, lesson, seed, docker_target_name)
+                           worker_id, keep_checkpoints, lesson, seed, docker_target_name, TRAINER_CONFIG_PATH)
     tc.start_learning()
