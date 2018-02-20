@@ -8,8 +8,8 @@
 /unity-environment/Assets/AssetStoreTools*
 
 # Tensorflow Model Info
-/python/models
-/python/summaries
+/models
+/summaries
 
 # Environemnt logfile
 *unity-environment.log
@@ -69,7 +69,5 @@
 *.eggs*
 *.gitignore.swp
 
-# unity-volume
-/unity-volume/*
 
 .DS_Store
